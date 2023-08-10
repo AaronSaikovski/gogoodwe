@@ -28,7 +28,6 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	//check if the UserLogin struct is empty
 	usererr := CheckUserLoginInfo(UserLogin)
 	if usererr != nil {
-		utils.HandleError(usererr)
 		return usererr
 	}
 
@@ -38,7 +37,6 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	// Create a new http request
 	req, err := http.NewRequest(http.MethodPost, constants.AuthLoginUrL, bytes.NewBuffer(jsonData))
 	if err != nil {
-		utils.HandleError(err)
 		return err
 	}
 
@@ -49,7 +47,6 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	client := &http.Client{Timeout: constants.HTTPTimeout * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		utils.HandleError(err)
 		return err
 	}
 
@@ -60,10 +57,18 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	respBody, _ := utils.FetchResponseBody(resp.Body)
 
 	//marshall response to SemsRespInfo struct
-	utils.UnmarshalDataToStruct(respBody, &SemsResponseData)
+	dataErr := utils.UnmarshalDataToStruct(respBody, &SemsResponseData)
+	if dataErr != nil {
+		return dataErr
+	}
 
 	// check for successful login return value..return a login error
-	CheckUserLoginResponse(SemsResponseData.Msg)
+	loginErr := CheckUserLoginResponse(SemsResponseData.Msg)
+
+	// Return the loginerror
+	if loginErr != nil {
+		return loginErr
+	}
 
 	return nil
 

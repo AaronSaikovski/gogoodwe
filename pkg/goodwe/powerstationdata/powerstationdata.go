@@ -37,7 +37,7 @@ func FetchData(SemsResponseData *types.SemsResponseData,
 	// Create a new http request
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationMapJSONData))
 	if err != nil {
-		utils.HandleError(err)
+		return err
 	}
 
 	//Add headers pass in the pointer to set the headers on the request object
@@ -47,7 +47,6 @@ func FetchData(SemsResponseData *types.SemsResponseData,
 	client := &http.Client{Timeout: constants.HTTPTimeout * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		utils.HandleError(err)
 		return err
 	}
 

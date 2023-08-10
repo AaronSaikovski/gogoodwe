@@ -11,7 +11,6 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/constants"
 	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
 )
 
 // CheckUserLoginInfo - Check user login struct is valid/not null
@@ -25,9 +24,10 @@ func CheckUserLoginInfo(UserLogin *types.SemsLoginCreds) error {
 }
 
 // CheckUserLoginResponse - check for successful login return value..return a login error
-func CheckUserLoginResponse(loginResponse string) {
+func CheckUserLoginResponse(loginResponse string) error {
 	if strings.Compare(loginResponse, constants.SemsLoginSuccessResponse) != 0 {
-		authErr := errors.New("API Login Error: " + loginResponse)
-		utils.HandleError(authErr)
+		return errors.New("API Login Error: " + loginResponse)
+	} else {
+		return nil
 	}
 }

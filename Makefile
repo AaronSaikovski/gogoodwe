@@ -12,7 +12,7 @@ help:
 	@cat Makefile | grep '^## ' --color=never | cut -c4- | sed -e "`printf 's/ - /\t- /;'`" | column -s "`printf '\t'`" -t
 
 ## localrelease -  Builds the project in preparation for (local)release
-localrelease:
+localrelease: vet lint staticcheck seccheck
 	go build $(GOFLAGS) -o bin/${TARGET} main.go
 	file bin/${TARGET}
 
@@ -59,7 +59,6 @@ staticcheck:
 
 ## seccheck - Code vulnerability check
 seccheck:	
-	brew install govulncheck
 	govulncheck ./...
 
 ## lint - format code and tidy modules
