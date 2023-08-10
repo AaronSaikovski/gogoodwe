@@ -9,8 +9,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/AaronSaikovski/gogoodwe/goodwe/constants"
-	"github.com/AaronSaikovski/gogoodwe/goodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
 )
 
 // CheckUserLoginInfo - Check user login struct is valid/not null

@@ -10,6 +10,7 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
+)
 
 // DataTokenJSON - Makes a map for the token to be passed to the Data API header and returns a JSON string
 func DataTokenJSON(SemsResponseData *types.SemsResponseData) ([]byte, error) {

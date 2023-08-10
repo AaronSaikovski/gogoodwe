@@ -9,9 +9,7 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/authentication"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/powerstationdata"
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
-
-	"github.com/AaronSaikovski/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
 	"github.com/logrusorgru/aurora"
 )
 

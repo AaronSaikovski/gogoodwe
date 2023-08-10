@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 )
 
 // SetHeaders - Set the login headers for the SEMS API login
