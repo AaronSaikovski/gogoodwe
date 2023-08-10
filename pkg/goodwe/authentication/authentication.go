@@ -32,7 +32,10 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	}
 
 	// User login struct to be converted to JSON
-	jsonData, _ := utils.MarshalStructToJSON(UserLogin)
+	jsonData, jsonErr := utils.MarshalStructToJSON(UserLogin)
+	if jsonErr != nil {
+		return jsonErr
+	}
 
 	// Create a new http request
 	req, err := http.NewRequest(http.MethodPost, constants.AuthLoginUrL, bytes.NewBuffer(jsonData))
@@ -54,7 +57,10 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	defer resp.Body.Close()
 
 	// Get the response body
-	respBody, _ := utils.FetchResponseBody(resp.Body)
+	respBody, respErr := utils.FetchResponseBody(resp.Body)
+	if respErr != nil {
+		return respErr
+	}
 
 	//marshall response to SemsRespInfo struct
 	dataErr := utils.UnmarshalDataToStruct(respBody, &SemsResponseData)
@@ -64,8 +70,6 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 
 	// check for successful login return value..return a login error
 	loginErr := CheckUserLoginResponse(SemsResponseData.Msg)
-
-	// Return the loginerror
 	if loginErr != nil {
 		return loginErr
 	}

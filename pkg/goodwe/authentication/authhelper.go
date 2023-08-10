@@ -15,7 +15,6 @@ import (
 
 // CheckUserLoginInfo - Check user login struct is valid/not null
 func CheckUserLoginInfo(UserLogin *types.SemsLoginCreds) error {
-	//check if the UserLogin struct is empty
 	if (*UserLogin == types.SemsLoginCreds{}) {
 		return errors.New("**Error: User Login details are empty or invalid..**")
 	} else {
@@ -26,7 +25,7 @@ func CheckUserLoginInfo(UserLogin *types.SemsLoginCreds) error {
 // CheckUserLoginResponse - check for successful login return value..return a login error
 func CheckUserLoginResponse(loginResponse string) error {
 	if strings.Compare(loginResponse, constants.SemsLoginSuccessResponse) != 0 {
-		return errors.New("API Login Error: " + loginResponse)
+		return errors.New("**API Login Error: " + loginResponse)
 	} else {
 		return nil
 	}
