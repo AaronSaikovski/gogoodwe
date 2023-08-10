@@ -8,10 +8,10 @@ package main
 import (
 	"os"
 
-	"github.com/AaronSaikovski/gogoodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/fetchdata"
-	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 	"github.com/alexflint/go-arg"
 )
 

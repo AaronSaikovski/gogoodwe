@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/constants"
-	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 )
 
 // setHeaders - Set the headers for the SEMS Data API
