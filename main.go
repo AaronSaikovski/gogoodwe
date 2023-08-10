@@ -24,7 +24,7 @@ type args struct {
 
 // Description - App description
 func (args) Description() string {
-	return "A command line tool and GoLang package to query the GOODWE SEMS Portal APIs and Solar SEMS API."
+	return "A command line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API."
 }
 
 // Version - Version info
