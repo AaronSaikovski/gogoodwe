@@ -1,5 +1,11 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+    # you may remove this if you don't need go generate
+    - go generate ./...
 builds:
   - env:
       - CGO_ENABLED=0
@@ -7,6 +13,7 @@ builds:
       - linux
       - windows
       - darwin
+    main: ./cmd/gostarter ##change this for your package
 
 archives:
   - format: tar.gz
