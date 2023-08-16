@@ -13,7 +13,7 @@ builds:
       - linux
       - windows
       - darwin
-    main: ./cmd/gostarter ##change this for your package
+    main: ./ ##change this for your package
 
 archives:
   - format: tar.gz

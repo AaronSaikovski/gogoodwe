@@ -2,7 +2,6 @@
 GO = go
 GOFLAGS = -ldflags="-s -w"
 
-
 # Define the target executable
 TARGET = gogoodwe
 
