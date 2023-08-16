@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/constants"
-	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 )
 
 // setHeaders - Set the headers for the SEMS Data API
@@ -26,10 +26,16 @@ func FetchData(SemsResponseData *types.SemsResponseData,
 	PowerstationOutputData *types.StationResponseData) error {
 
 	// get the Token header data
-	tokenMapJSONData, _ := DataTokenJSON(SemsResponseData)
+	tokenMapJSONData, tokenMapJSONErr := DataTokenJSON(SemsResponseData)
+	if tokenMapJSONErr != nil {
+		return tokenMapJSONErr
+	}
 
 	// get the Powerstation ID header data
-	powerStationMapJSONData, _ := PowerStationIDJSON(UserLogin)
+	powerStationMapJSONData, powerStationMapJSONErr := PowerStationIDJSON(UserLogin)
+	if powerStationMapJSONErr != nil {
+		return powerStationMapJSONErr
+	}
 
 	//Get the url from the Auth API and append the data url part
 	url := SemsResponseData.API + constants.PowerStationURL
@@ -37,7 +43,7 @@ func FetchData(SemsResponseData *types.SemsResponseData,
 	// Create a new http request
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationMapJSONData))
 	if err != nil {
-		utils.HandleError(err)
+		return err
 	}
 
 	//Add headers pass in the pointer to set the headers on the request object
@@ -47,7 +53,6 @@ func FetchData(SemsResponseData *types.SemsResponseData,
 	client := &http.Client{Timeout: constants.HTTPTimeout * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		utils.HandleError(err)
 		return err
 	}
 
@@ -55,12 +60,15 @@ func FetchData(SemsResponseData *types.SemsResponseData,
 	defer resp.Body.Close()
 
 	// Get the response body
-	respBody, _ := utils.FetchResponseBody(resp.Body)
+	respBody, respBodyErr := utils.FetchResponseBody(resp.Body)
+	if respBodyErr != nil {
+		return respBodyErr
+	}
 
 	//marshall response to SemsRespInfo struct
-	dataerr := utils.UnmarshalDataToStruct(respBody, &PowerstationOutputData)
-	if dataerr != nil {
-		return dataerr
+	dataStructErr := utils.UnmarshalDataToStruct(respBody, &PowerstationOutputData)
+	if dataStructErr != nil {
+		return dataStructErr
 	}
 
 	return nil

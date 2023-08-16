@@ -10,9 +10,8 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/authentication"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/powerstationdata"
-
-	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 	"github.com/logrusorgru/aurora"
 )
 
@@ -30,7 +29,7 @@ func doLogin(SemsUserLogin *types.SemsLoginCreds, SemsResponseData *types.SemsRe
 }
 
 // GetData - Main process data function
-func GetData(SemsUserLogin *types.SemsLoginCreds) {
+func GetData(SemsUserLogin *types.SemsLoginCreds) error {
 
 	// Data types
 	var SemsResponseData types.SemsResponseData
@@ -44,11 +43,13 @@ func GetData(SemsUserLogin *types.SemsLoginCreds) {
 		dataerr := powerstationdata.FetchData(&SemsResponseData, SemsUserLogin, &PowerstationData)
 		if dataerr != nil {
 			utils.HandleError(errors.New("error: fetching powerstation data, check powerstationid is correct"))
+			return dataerr
 		} else {
 			// Get output
 			dataOutput, jsonerr := powerstationdata.GetDataJSON(&PowerstationData)
 			if jsonerr != nil {
 				utils.HandleError(errors.New("error: converting powerstation data"))
+				return jsonerr
 
 			} else {
 				//Display output
@@ -58,5 +59,8 @@ func GetData(SemsUserLogin *types.SemsLoginCreds) {
 
 	} else {
 		utils.HandleError(err)
+		return err
 	}
+
+	return nil
 }

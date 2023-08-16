@@ -6,10 +6,12 @@ package main
 
 // Main package - This is the main program entry point
 import (
-	"github.com/AaronSaikovski/gogoodwe/constants"
+	"os"
+
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/fetchdata"
-	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 	"github.com/alexflint/go-arg"
 )
 
@@ -22,7 +24,7 @@ type args struct {
 
 // Description - App description
 func (args) Description() string {
-	return "A command line tool and GoLang package to query the GOODWE SEMS Portal APIs and Solar SEMS API."
+	return "A command line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API."
 }
 
 // Version - Version info
@@ -30,9 +32,8 @@ func (args) Version() string {
 	return constants.VersionString
 }
 
-// main - program main
-func main() {
-
+// run - main program entry point
+func run() error {
 	//Get the args input data
 	var args args
 	p := arg.MustParse(&args)
@@ -54,6 +55,14 @@ func main() {
 		PowerStationID: args.PowerStationID,
 	}
 
-	// Get the data from the API
-	fetchdata.GetData(&SemsUserLogin)
+	// Get the data from the API, return an errors
+	return fetchdata.GetData(&SemsUserLogin)
+}
+
+// main - program main
+func main() {
+	if err := run(); err != nil {
+		utils.HandleError(err)
+		os.Exit(1)
+	}
 }

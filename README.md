@@ -5,7 +5,6 @@
 A command line tool and Go packages to query the GOODWE SEMS Portal APIs - written in 100% Go.
 
 [![Build Status](https://github.com/AaronSaikovski/gogoodwe/workflows/build/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions)
-[![Coverage Status](https://coveralls.io/repos/github/AaronSaikovski/gogoodwe/badge.svg?branch=main)](https://coveralls.io/github/AaronSaikovski/gogoodwe?branch=main)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)
 
 </div>
@@ -24,7 +23,7 @@ The toolchain is mainly driven by the Makefile.
 * test - executes unit test
 * dep - fetches any external dependencies
 * vet - Vet examines Go source code and reports suspicious constructs
-* staticcheck - Runs static code analyzer staticcheck
+* staticcheck - Runs static code analyzer staticcheck - Currently disabled due to a bug with Go v1.21.0
 * lint - format code and tidy modules
 ```
 
