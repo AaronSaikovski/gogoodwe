@@ -2,7 +2,6 @@
 GO = go
 GOFLAGS = -ldflags="-s -w"
 
-#export PATH=$PATH:$HOME/go/bin;
 
 # Define the target executable
 TARGET = gogoodwe
