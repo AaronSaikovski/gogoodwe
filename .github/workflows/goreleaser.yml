@@ -24,13 +24,9 @@ jobs:
       # on your needs.
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
-        with:
-          # either 'goreleaser' (default) or 'goreleaser-pro':
+        with:         
           distribution: goreleaser
           version: latest
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Your GoReleaser Pro key, if you are using the 'goreleaser-pro'
-          # distribution:
-          # GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
