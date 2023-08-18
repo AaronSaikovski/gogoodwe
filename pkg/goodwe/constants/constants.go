@@ -2,7 +2,7 @@ package constants
 
 const (
 	// Auth Login Url
-	AuthLoginUrL string = "https://www.semsportal.com/api/v2/Common/CrossLogin"
+	AuthLoginUrl string = "https://www.semsportal.com/api/v2/Common/CrossLogin"
 
 	// Powerstation API Url
 	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
@@ -11,7 +11,7 @@ const (
 	HTTPTimeout = 20
 
 	// Version string
-	VersionString string = "gogoodwe v1.1.0"
+	VersionString string = "gogoodwe v1.2.0"
 
 	//API login success response message
 	SemsLoginSuccessResponse string = "Successful"

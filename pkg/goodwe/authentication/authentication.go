@@ -38,7 +38,7 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	}
 
 	// Create a new http request
-	req, err := http.NewRequest(http.MethodPost, constants.AuthLoginUrL, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest(http.MethodPost, constants.AuthLoginUrl, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return err
 	}

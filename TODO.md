@@ -7,6 +7,8 @@
 - [ ] Add Golang contexts for API calls
 - [ ] replace command line parameter handler with cobra
 
+
 ### In Progress
+- [ ] add unit tests
 
 ### Done ✓
