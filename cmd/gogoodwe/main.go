@@ -17,7 +17,7 @@ import (
 // run - main program entry point
 func run() error {
 	//Get the args input data
-	var args args
+	var args utils.Args
 	p := arg.MustParse(&args)
 
 	//check for valid email address input

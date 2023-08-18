@@ -16,7 +16,7 @@ import (
 )
 
 // SetHeaders - Set the login headers for the SEMS API login
-func SetHeaders(r *http.Request) {
+func setHeaders(r *http.Request) {
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
 }
@@ -26,8 +26,7 @@ func SetHeaders(r *http.Request) {
 func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLoginCreds) error {
 
 	//check if the UserLogin struct is empty
-	usererr := CheckUserLoginInfo(UserLogin)
-	if usererr != nil {
+	if usererr := CheckUserLoginInfo(UserLogin); usererr != nil {
 		return usererr
 	}
 
@@ -44,7 +43,7 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	}
 
 	//Add headers pass in the pointer to set the headers on the request object
-	SetHeaders(req)
+	setHeaders(req)
 
 	//make the API Call
 	client := &http.Client{Timeout: constants.HTTPTimeout * time.Second}
