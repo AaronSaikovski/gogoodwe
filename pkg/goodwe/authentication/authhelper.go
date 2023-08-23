@@ -1,5 +1,5 @@
 /*
-# Name: authhelper - auth helper functions
+# Name: authentication - auth helper functions
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
 

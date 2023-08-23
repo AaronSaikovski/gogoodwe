@@ -15,8 +15,8 @@ import (
 	"github.com/logrusorgru/aurora"
 )
 
-// doLogin -  Login to the API
-func doLogin(SemsUserLogin *types.SemsLoginCreds, SemsResponseData *types.SemsResponseData) error {
+// apiLogin -  Login to the API
+func apiLogin(SemsUserLogin *types.SemsLoginCreds, SemsResponseData *types.SemsResponseData) error {
 
 	// Do the login - update the pointer to the struct SemsResponseData
 	autherr := authentication.DoLogin(SemsResponseData, SemsUserLogin)
@@ -36,7 +36,7 @@ func GetData(SemsUserLogin *types.SemsLoginCreds) error {
 	var PowerstationData types.StationResponseData
 
 	// Do the login..check for errors
-	err := doLogin(SemsUserLogin, &SemsResponseData)
+	err := apiLogin(SemsUserLogin, &SemsResponseData)
 	if err == nil {
 
 		// Fetch the data
