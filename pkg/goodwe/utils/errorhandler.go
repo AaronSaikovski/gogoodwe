@@ -10,7 +10,3 @@ import (
 func HandleError(err error) {
 	log.Fatal(aurora.BrightRed(err.Error()))
 }
-
-// func HandleError(err error) {
-// 	slog.Error("Error: ", err.Error())
-// }

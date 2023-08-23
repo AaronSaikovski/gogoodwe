@@ -8,34 +8,16 @@ package main
 import (
 	"os"
 
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/fetchdata"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
 	"github.com/alexflint/go-arg"
 )
 
-// args - srtruct using go-arg- https://github.com/alexflint/go-arg
-type args struct {
-	Account        string `arg:"required,-a,--account" help:"SEMS Email Account."`
-	Pwd            string `arg:"required,-p,--pwd" help:"SEMS Account password."`
-	PowerStationID string `arg:"required,-i,--powerstationid" help:"SEMS Powerstation ID."`
-}
-
-// Description - App description
-func (args) Description() string {
-	return "A command line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API."
-}
-
-// Version - Version info
-func (args) Version() string {
-	return constants.VersionString
-}
-
 // run - main program entry point
 func run() error {
 	//Get the args input data
-	var args args
+	var args utils.Args
 	p := arg.MustParse(&args)
 
 	//check for valid email address input
