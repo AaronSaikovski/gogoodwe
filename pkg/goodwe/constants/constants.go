@@ -11,7 +11,7 @@ const (
 	HTTPTimeout = 20
 
 	// Version string
-	VersionString string = "gogoodwe v1.2.0"
+	VersionString string = "gogoodwe v1.3.1"
 
 	//API login success response message
 	SemsLoginSuccessResponse string = "Successful"
