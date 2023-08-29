@@ -33,7 +33,7 @@ func run() error {
 	// Create a new SemsLoginCreds object via a struct literal
 	SemsUserLogin := types.SemsLoginCreds{
 		Account:        args.Account,
-		Pwd:            args.Pwd,
+		Password:       args.Password,
 		PowerStationID: args.PowerStationID,
 	}
 
