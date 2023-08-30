@@ -1,19 +1,26 @@
 /*
-# Name: powerstationdatahelper - helper functions to get the Powerstation Data from the API
+# Name: powerstationhelper - helper functions to get the Powerstation Data from the API
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
-package powerstationdata
+package powerstation
 
 import (
 	"encoding/json"
+	"net/http"
 	"strconv"
 
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/entities"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/utils"
 )
 
+// setHeaders - Set the headers for the SEMS Data API
+func setHeaders(r *http.Request, tokenstring []byte) {
+	r.Header.Add("Content-Type", "application/json")
+	r.Header.Add("Token", string(tokenstring))
+}
+
 // DataTokenJSON - Makes a map for the token to be passed to the Data API header and returns a JSON string
-func DataTokenJSON(SemsResponseData *types.SemsResponseData) ([]byte, error) {
+func dataTokenJSON(SemsResponseData *entities.SemsResponseData) ([]byte, error) {
 
 	tokenMap := make(map[string]string)
 	tokenMap["version"] = "v2.1.0"
@@ -29,7 +36,7 @@ func DataTokenJSON(SemsResponseData *types.SemsResponseData) ([]byte, error) {
 }
 
 // PowerStationIDJSON - Makes a map for the powerStationId to be passed to the Data API header and returns a JSON string
-func PowerStationIDJSON(UserLogin *types.SemsLoginCreds) ([]byte, error) {
+func powerStationIDJSON(UserLogin *entities.SemsLoginCreds) ([]byte, error) {
 	powerStationMap := make(map[string]string)
 	powerStationMap["powerStationId"] = UserLogin.PowerStationID
 
@@ -39,7 +46,7 @@ func PowerStationIDJSON(UserLogin *types.SemsLoginCreds) ([]byte, error) {
 }
 
 // GetDataJSON - Returns the PowerstationOutputData as JSON
-func GetDataJSON(PowerstationOutputData *types.StationResponseData) ([]byte, error) {
+func GetDataJSON(PowerstationOutputData *entities.StationResponseData) ([]byte, error) {
 
 	// Get the response and return any errors
 	resp, err := utils.MarshalStructToJSON(&PowerstationOutputData)

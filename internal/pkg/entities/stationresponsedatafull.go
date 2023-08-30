@@ -1,4 +1,10 @@
-package types
+/*
+# Name: StationResponseData - Struct to hold data returned from the Powerstation API
+# Full version - contains sensitive data
+# Author: Aaron Saikovski - asaikovski@outlook.com
+*/
+
+package entities
 
 // // StationResponseData - Struct to hold data returned from the Powerstation API
 // type StationResponseData struct {

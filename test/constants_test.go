@@ -1,8 +1,9 @@
 package testing
 
 import (
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
 	"testing"
+
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/constants"
 )
 
 // TestAuthLoginUrl Test Auth Login Url
