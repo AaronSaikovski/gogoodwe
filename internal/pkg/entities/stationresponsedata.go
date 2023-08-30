@@ -1,6 +1,11 @@
-package types
+/*
+# Name: StationResponseData - Struct to hold data returned from the Powerstation API
+# Minimised version - removed any sensitive data
+# Author: Aaron Saikovski - asaikovski@outlook.com
+*/
+package entities
 
-// StationResponseData - Struct to hold data returned from the Powerstation API - sanitised version
+// StationResponseData - Struct to hold data returned from the Powerstation API
 type StationResponseData struct {
 	Language string   `json:"language"`
 	Function []string `json:"function"`

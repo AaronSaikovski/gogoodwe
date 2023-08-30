@@ -1,4 +1,8 @@
-package types
+/*
+# Name: SemsLoginCreds - Struct to hold User login data
+# Author: Aaron Saikovski - asaikovski@outlook.com
+*/
+package entities
 
 // SemsLoginCreds - Struct to hold User login data
 type SemsLoginCreds struct {

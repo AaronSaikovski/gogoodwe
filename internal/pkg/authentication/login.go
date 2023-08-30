@@ -10,23 +10,17 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/constants"
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/constants"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/entities"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/utils"
 )
-
-// SetHeaders - Set the login headers for the SEMS API login
-func setHeaders(r *http.Request) {
-	r.Header.Add("Content-Type", "application/json")
-	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
-}
 
 // DoLogin - Main public login function
 // Logs into the SEMs API
-func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLoginCreds) error {
+func DoLogin(SemsResponseData *entities.SemsResponseData, UserLogin *entities.SemsLoginCreds) error {
 
 	//check if the UserLogin struct is empty
-	if usererr := CheckUserLoginInfo(UserLogin); usererr != nil {
+	if usererr := checkUserLoginInfo(UserLogin); usererr != nil {
 		return usererr
 	}
 
@@ -68,7 +62,7 @@ func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLogi
 	}
 
 	// check for successful login return value..return a login error
-	loginErr := CheckUserLoginResponse(SemsResponseData.Msg)
+	loginErr := checkUserLoginResponse(SemsResponseData.Msg)
 	if loginErr != nil {
 		return loginErr
 	}

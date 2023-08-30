@@ -8,9 +8,8 @@ package main
 import (
 	"os"
 
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/fetchdata"
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/pkg/goodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/fetchdata"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/utils"
 	"github.com/alexflint/go-arg"
 )
 
@@ -30,15 +29,8 @@ func run() error {
 		p.Fail("Invalid Powerstation ID format: - should be: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'.")
 	}
 
-	// Create a new SemsLoginCreds object via a struct literal
-	SemsUserLogin := types.SemsLoginCreds{
-		Account:        args.Account,
-		Password:       args.Password,
-		PowerStationID: args.PowerStationID,
-	}
-
-	// Get the data from the API, return an errors
-	return fetchdata.GetData(&SemsUserLogin)
+	// Get the data from the API, return any errors. Pass in args as string
+	return fetchdata.GetData(args.Account, args.Password, args.PowerStationID)
 }
 
 // main - program main
