@@ -13,7 +13,7 @@ import (
 	"github.com/alexflint/go-arg"
 )
 
-// run - main program entry point
+// run - main program runner
 func run() error {
 	//Get the args input data
 	var args utils.Args
