@@ -8,7 +8,7 @@ MAINAPPPATH = ./cmd/${TARGET}/main.go
 help:
 	@cat Makefile | grep '^## ' --color=never | cut -c4- | sed -e "`printf 's/ - /\t- /;'`" | column -s "`printf '\t'`" -t
 
-## localrelease -  Builds the project in preparation for (local)release
+## localrelease -  Builds the project in preparation for (local) release
 localrelease: vet lint seccheck unittest
 	go build $(GOFLAGS) -o bin/${TARGET} ${MAINAPPPATH}
 	file bin/${TARGET}

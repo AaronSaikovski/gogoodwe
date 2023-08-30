@@ -14,17 +14,19 @@ A command line tool and Go packages to query the GOODWE SEMS Portal APIs - writt
 The toolchain is mainly driven by the Makefile.
 
 ```bash
-* help - Display help about make targets for this Makefile
-* release - Builds the project in preparation for release
-* debug - Builds the project in preparation for debug
-* buildandrun - builds and runs the program on the target platform
-* run - runs main.go for testing
-* clean - Remove the old builds and any debug information
-* test - executes unit test
-* dep - fetches any external dependencies
-* vet - Vet examines Go source code and reports suspicious constructs
-* staticcheck - Runs static code analyzer staticcheck - Currently disabled due to a bug with Go v1.21.0
-* lint - format code and tidy modules
+help          - Display help about make targets for this Makefile
+localrelease  -  Builds the project in preparation for (local) release
+release       - Builds the project in preparation for release
+debug         - Builds the project in preparation for debug
+buildandrun   - builds and runs the program on the target platform
+run           - runs main.go for testing
+clean         - Remove the old builds and any debug information
+unittest      - executes unit tests
+dep           - fetches any external dependencies
+vet           - Vet examines Go source code and reports suspicious constructs
+staticcheck   - Runs static code analyzer staticcheck - currently broken
+seccheck      - Code vulnerability check
+lint          - format code and tidy modules
 ```
 
 To get started type,
