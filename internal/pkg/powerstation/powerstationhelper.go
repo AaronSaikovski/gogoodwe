@@ -21,7 +21,6 @@ func setHeaders(r *http.Request, tokenstring []byte) {
 
 // DataTokenJSON - Makes a map for the token to be passed to the Data API header and returns a JSON string
 func dataTokenJSON(SemsResponseData *entities.SemsResponseData) ([]byte, error) {
-
 	tokenMap := make(map[string]string)
 	tokenMap["version"] = "v2.1.0"
 	tokenMap["client"] = "ios"
