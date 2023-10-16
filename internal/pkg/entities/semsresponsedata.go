@@ -13,7 +13,7 @@ type SemsResponseData struct {
 	Msg      string `json:"msg"`
 	Data     struct {
 		UID       string `json:"uid"`
-		Timestamp int    `json:"timestamp"`
+		Timestamp int64  `json:"timestamp"`
 		Token     string `json:"token"`
 		Client    string `json:"client"`
 		Version   string `json:"version"`
