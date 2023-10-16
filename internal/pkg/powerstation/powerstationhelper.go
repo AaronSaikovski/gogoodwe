@@ -26,7 +26,7 @@ func dataTokenJSON(SemsResponseData *entities.SemsResponseData) ([]byte, error) 
 	tokenMap["version"] = "v2.1.0"
 	tokenMap["client"] = "ios"
 	tokenMap["language"] = "en"
-	tokenMap["timestamp"] = strconv.Itoa(SemsResponseData.Data.Timestamp)
+	tokenMap["timestamp"] = strconv.FormatInt(SemsResponseData.Data.Timestamp, 10)
 	tokenMap["uid"] = SemsResponseData.Data.UID
 	tokenMap["token"] = SemsResponseData.Data.Token
 
