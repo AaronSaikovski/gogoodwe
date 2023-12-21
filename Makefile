@@ -62,3 +62,7 @@ seccheck:
 lint:
 	go fmt ./...
 	go mod tidy -v
+
+## depupdate - Update dependencies
+depupdate:
+	go get -u ./...
