@@ -10,14 +10,14 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/constants"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/entities"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/utils"
+	"github.com/AaronSaikovski/gogoodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/utils"
 )
 
 // DoLogin - Main public login function
 // Logs into the SEMs API
-func DoLogin(SemsResponseData *entities.SemsResponseData, UserLogin *entities.SemsLoginCreds) error {
+func DoLogin(SemsResponseData *types.LoginResponse, UserLogin *types.LoginCredentials) error {
 
 	//check if the UserLogin struct is empty
 	if usererr := checkUserLoginInfo(UserLogin); usererr != nil {

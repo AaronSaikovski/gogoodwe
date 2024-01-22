@@ -1,13 +1,13 @@
 /*
-# Name: SemsResponseData - SEMS API Response Data struct
+# Name: LoginResponse - SEMS API Response Data struct
 # Contains all the JSON Response data returned from the authentication API - "https://www.semsportal.com/api/v2/Common/CrossLogin"
-# Will be unmarshalled to a struct via a pointer// Will be unmarshalled to a struct via a pointer
+# Will be unmarshalled to a struct via a pointer
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
-package entities
+package types
 
-// SemsResponseData - SEMS API Response Data struct
-type SemsResponseData struct {
+// LoginResponse - SEMS API Response Data struct
+type LoginResponse struct {
 	HasError bool   `json:"hasError"`
 	Code     int32  `json:"code"`
 	Msg      string `json:"msg"`

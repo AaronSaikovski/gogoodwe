@@ -1,6 +1,6 @@
 package utils
 
-import "github.com/AaronSaikovski/gogoodwe/internal/pkg/constants"
+import "github.com/AaronSaikovski/gogoodwe/constants"
 
 // Args - struct using go-arg- https://github.com/alexflint/go-arg
 type Args struct {

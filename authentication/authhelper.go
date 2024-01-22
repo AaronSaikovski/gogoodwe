@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/constants"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/entities"
+	"github.com/AaronSaikovski/gogoodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/types"
 )
 
 // SetHeaders - Set the login headers for the SEMS API login
@@ -21,8 +21,8 @@ func setHeaders(r *http.Request) {
 }
 
 // CheckUserLoginInfo - Check user login struct is valid/not null
-func checkUserLoginInfo(UserLogin *entities.SemsLoginCreds) error {
-	if (*UserLogin == entities.SemsLoginCreds{}) {
+func checkUserLoginInfo(UserLogin *types.LoginCredentials) error {
+	if (*UserLogin == types.LoginCredentials{}) {
 		return errors.New("**Error: User Login details are empty or invalid..**")
 	} else {
 		return nil

@@ -1,9 +1,14 @@
 # GoGoodwe - CHANGELOG
 
+## v2.0.0 (2024-01-22)
+
+- Major refactoring to cleanup project structure
+- Simplified package structure
+
 ## v1.4.0 (2023-08-30)
 
 - Major refactoring to move non-shared code to /internal folder
-- Abstracted coe away from main()
+- Abstracted core away from main()
 
 ## v1.1.0 (2023-08-16)
 

@@ -1,20 +1,15 @@
-/*
-# Name: main package - Authenticates to and queries the SEMS Solar inverter API
-# Author: Aaron Saikovski - asaikovski@outlook.com
-*/
-package main
+package app
 
 // Main package - This is the main program entry point
 import (
-	"os"
-
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/fetchdata"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/utils"
+	"github.com/AaronSaikovski/gogoodwe/inverter"
+	"github.com/AaronSaikovski/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
 )
 
-// run - main program runner
-func run() error {
+// Run - main program runner
+func Run() error {
+
 	//Get the args input data
 	var args utils.Args
 	p := arg.MustParse(&args)
@@ -30,13 +25,5 @@ func run() error {
 	}
 
 	// Get the data from the API, return any errors. Pass in args as string
-	return fetchdata.GetData(args.Account, args.Password, args.PowerStationID)
-}
-
-// main - program main
-func main() {
-	if err := run(); err != nil {
-		utils.HandleError(err)
-		os.Exit(1)
-	}
+	return inverter.FetchData(args.Account, args.Password, args.PowerStationID)
 }

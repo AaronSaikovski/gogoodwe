@@ -1,11 +1,11 @@
 /*
-# Name: SemsLoginCreds - Struct to hold User login data
+# Name: LoginCredentials - Struct to hold User login data
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
-package entities
+package types
 
-// SemsLoginCreds - Struct to hold User login data
-type SemsLoginCreds struct {
+// LoginCredentials - Struct to hold User login data
+type LoginCredentials struct {
 	Account        string `json:"account"`
 	Password       string `json:"pwd"`
 	PowerStationID string `json:"powerstationid"`

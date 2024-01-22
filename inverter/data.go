@@ -1,22 +1,21 @@
 /*
-# Name: fetchdata - fetches data from the goodwe API - and processes it to pass back to caller
+# Name: data - fetches data from the goodwe API - and processes it to pass back to caller
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
-package fetchdata
+package inverter
 
 import (
 	"errors"
 	"fmt"
 
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/authentication"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/entities"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/powerstation"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/utils"
+	"github.com/AaronSaikovski/gogoodwe/authentication"
+	"github.com/AaronSaikovski/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/utils"
 	"github.com/logrusorgru/aurora"
 )
 
 // apiLogin -  Login to the API
-func apiLogin(SemsUserLogin *entities.SemsLoginCreds, SemsResponseData *entities.SemsResponseData) error {
+func apiLogin(SemsUserLogin *types.LoginCredentials, SemsResponseData *types.LoginResponse) error {
 
 	// Do the login - update the pointer to the struct SemsResponseData
 	autherr := authentication.DoLogin(SemsResponseData, SemsUserLogin)
@@ -28,15 +27,15 @@ func apiLogin(SemsUserLogin *entities.SemsLoginCreds, SemsResponseData *entities
 	}
 }
 
-// GetData - Main process data function
-func GetData(Account string, Password string, PowerStationID string) error {
+// FetchData - Main API fetch function
+func FetchData(Account string, Password string, PowerStationID string) error {
 
 	// Data types
-	var SemsResponseData entities.SemsResponseData
-	var PowerstationData entities.StationResponseData
+	var SemsResponseData types.LoginResponse
+	var PowerstationData types.InverterResponseData
 
 	// Create a new SemsLoginCreds object via a struct literal
-	var SemsUserLogin = entities.SemsLoginCreds{
+	var SemsUserLogin = types.LoginCredentials{
 		Account:        Account,
 		Password:       Password,
 		PowerStationID: PowerStationID,
@@ -47,13 +46,13 @@ func GetData(Account string, Password string, PowerStationID string) error {
 	if err == nil {
 
 		// Fetch the data
-		dataerr := powerstation.FetchData(&SemsResponseData, &SemsUserLogin, &PowerstationData)
+		dataerr := fetchInverterData(&SemsResponseData, &SemsUserLogin, &PowerstationData)
 		if dataerr != nil {
 			utils.HandleError(errors.New("error: fetching powerstation data, check powerstationid is correct"))
 			return dataerr
 		} else {
 			// Get output
-			dataOutput, jsonerr := powerstation.GetDataJSON(&PowerstationData)
+			dataOutput, jsonerr := GetDataJSON(&PowerstationData)
 			if jsonerr != nil {
 				utils.HandleError(errors.New("error: converting powerstation data"))
 				return jsonerr
