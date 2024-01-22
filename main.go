@@ -1,10 +1,9 @@
 /*
-# Name: main package - Authenticates to and queries the SEMS Solar inverter API
+# Name: GoGoodwe - Authenticates to and queries the SEMS Solar inverter API
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
 package main
 
-// Main package - This is the main program entry point
 import (
 	"github.com/AaronSaikovski/gogoodwe/app"
 )
