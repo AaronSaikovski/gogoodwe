@@ -1,12 +1,12 @@
 /*
-# Name: InverterResponseData - Struct to hold data returned from the Powerstation API
+# Name: InverterData - Struct to hold data returned from the Powerstation API
 # Minimised version - removed any sensitive data
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
 package types
 
-// InverterResponseData - Struct to hold data returned from the Inverter Powerstation API
-type InverterResponseData struct {
+// InverterData - Struct to hold data returned from the Inverter Powerstation API
+type InverterData struct {
 	Language string   `json:"language"`
 	Function []string `json:"function"`
 	HasError bool     `json:"hasError"`

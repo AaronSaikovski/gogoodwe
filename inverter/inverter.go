@@ -15,7 +15,7 @@ import (
 )
 
 // fetchInverterData - Fetches Data from the Inverter via the specified PowerstationID using theSEMs API
-func fetchInverterData(SemsResponseData *types.LoginResponse, UserLogin *types.LoginCredentials, PowerstationOutputData *types.InverterResponseData) error {
+func fetchInverterData(SemsResponseData *types.LoginResponse, UserLogin *types.LoginCredentials, PowerstationOutputData *types.InverterData) error {
 
 	// get the Token header data
 	tokenMapJSONData, tokenMapJSONErr := dataTokenJSON(SemsResponseData)

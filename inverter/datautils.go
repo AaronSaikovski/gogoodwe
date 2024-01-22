@@ -45,7 +45,7 @@ func powerStationIDJSON(UserLogin *types.LoginCredentials) ([]byte, error) {
 }
 
 // GetDataJSON - Returns the PowerstationOutputData as JSON
-func GetDataJSON(PowerstationOutputData *types.InverterResponseData) ([]byte, error) {
+func GetDataJSON(PowerstationOutputData *types.InverterData) ([]byte, error) {
 
 	// Get the response and return any errors
 	resp, err := utils.MarshalStructToJSON(&PowerstationOutputData)

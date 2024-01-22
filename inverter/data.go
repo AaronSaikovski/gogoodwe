@@ -32,7 +32,7 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 
 	// Data types
 	var SemsResponseData types.LoginResponse
-	var PowerstationData types.InverterResponseData
+	var PowerstationData types.InverterData
 
 	// Create a new SemsLoginCreds object via a struct literal
 	var SemsUserLogin = types.LoginCredentials{
