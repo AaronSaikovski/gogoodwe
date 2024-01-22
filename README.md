@@ -14,19 +14,19 @@ A command line tool and query the GOODWE SEMS Inverter APIs - written in 100% Go
 The toolchain is mainly driven by the Makefile.
 
 ```bash
-help          - Display help about make targets for this Makefile
-localrelease  -  Builds the project in preparation for (local) release
-release       - Builds the project in preparation for release
-debug         - Builds the project in preparation for debug
-buildandrun   - builds and runs the program on the target platform
-run           - runs main.go for testing
-clean         - Remove the old builds and any debug information
-unittest      - executes unit tests
-dep           - fetches any external dependencies
-vet           - Vet examines Go source code and reports suspicious constructs
-staticcheck   - Runs static code analyzer staticcheck - currently broken
-seccheck      - Code vulnerability check
-lint          - format code and tidy modules
+help         - Display help about make targets for this Makefile
+release      - Builds the project in preparation for (local)release
+goreleaser   - Builds the project in preparation for release
+docs         - updates the swagger docs
+build        - Builds the project in preparation for debug
+run          - builds and runs the program on the target platform
+clean        - Remove the old builds and any debug information
+test         - executes unit tests
+deps         - fetches any external dependencies and updates
+vet          - Vet examines Go source code and reports suspicious constructs
+staticcheck  - Runs static code analyzer staticcheck - currently broken
+seccheck     - Code vulnerability check
+lint         - format code and tidy modules
 ```
 
 To get started type,
