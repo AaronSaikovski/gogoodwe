@@ -15,34 +15,41 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/utils"
 )
 
+// SetHeaders - Set the login headers for the SEMS API login
+func SetHeaders(r *http.Request) {
+	r.Header.Add("Content-Type", "application/json")
+	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
+}
+
 // DoLogin - Main public login function
 // Logs into the SEMs API
-func DoLogin(SemsResponseData *types.LoginResponse, UserLogin *types.LoginCredentials) error {
+func DoLogin(SemsResponseData *types.SemsResponseData, UserLogin *types.SemsLoginCreds) error {
 
 	//check if the UserLogin struct is empty
-	if usererr := checkUserLoginInfo(UserLogin); usererr != nil {
+	usererr := CheckUserLoginInfo(UserLogin)
+	if usererr != nil {
+		utils.HandleError(usererr)
 		return usererr
 	}
 
 	// User login struct to be converted to JSON
-	jsonData, jsonErr := utils.MarshalStructToJSON(UserLogin)
-	if jsonErr != nil {
-		return jsonErr
-	}
+	jsonData, _ := utils.MarshalStructToJSON(UserLogin)
 
 	// Create a new http request
-	req, err := http.NewRequest(http.MethodPost, constants.AuthLoginUrl, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest(http.MethodPost, constants.AuthLoginUrL, bytes.NewBuffer(jsonData))
 	if err != nil {
+		utils.HandleError(err)
 		return err
 	}
 
 	//Add headers pass in the pointer to set the headers on the request object
-	setHeaders(req)
+	SetHeaders(req)
 
 	//make the API Call
 	client := &http.Client{Timeout: constants.HTTPTimeout * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
+		utils.HandleError(err)
 		return err
 	}
 
@@ -50,22 +57,13 @@ func DoLogin(SemsResponseData *types.LoginResponse, UserLogin *types.LoginCreden
 	defer resp.Body.Close()
 
 	// Get the response body
-	respBody, respErr := utils.FetchResponseBody(resp.Body)
-	if respErr != nil {
-		return respErr
-	}
+	respBody, _ := utils.FetchResponseBody(resp.Body)
 
 	//marshall response to SemsRespInfo struct
-	dataErr := utils.UnmarshalDataToStruct(respBody, &SemsResponseData)
-	if dataErr != nil {
-		return dataErr
-	}
+	utils.UnmarshalDataToStruct(respBody, &SemsResponseData)
 
 	// check for successful login return value..return a login error
-	loginErr := checkUserLoginResponse(SemsResponseData.Msg)
-	if loginErr != nil {
-		return loginErr
-	}
+	CheckUserLoginResponse(SemsResponseData.Msg)
 
 	return nil
 
