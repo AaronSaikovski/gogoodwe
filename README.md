@@ -1,6 +1,6 @@
 <div align="center">
 
-# GoGgoodwe
+# GoGoodwe
 
 A command line tool and Go packages to query the GOODWE SEMS Portal APIs - written in 100% Go.
 
