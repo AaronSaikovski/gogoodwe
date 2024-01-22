@@ -1,8 +1,13 @@
+/*
+# Name: constants - shared constants
+# Author: Aaron Saikovski - asaikovski@outlook.com
+*/
+
 package constants
 
 const (
 	// Auth Login Url
-	AuthLoginUrL string = "https://www.semsportal.com/api/v2/Common/CrossLogin"
+	AuthLoginUrl string = "https://www.semsportal.com/api/v2/Common/CrossLogin"
 
 	// Powerstation API Url
 	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
@@ -11,7 +16,7 @@ const (
 	HTTPTimeout = 20
 
 	// Version string
-	VersionString string = "gogoodwe v0.0.7"
+	VersionString string = "gogoodwe v2.0.0"
 
 	//API login success response message
 	SemsLoginSuccessResponse string = "Successful"
