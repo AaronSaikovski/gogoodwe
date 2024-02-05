@@ -2,13 +2,13 @@
 # Name: data - fetches data from the goodwe API - and processes it to pass back to caller
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
-package inverter
+package powerstation
 
 import (
 	"errors"
 	"fmt"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/login"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/semsapi"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/logrusorgru/aurora"
@@ -29,7 +29,7 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 	}
 
 	// Do the login..check for errors
-	err := login.ApiLogin(&SemsUserLogin, &SemsResponseData)
+	err := semsapi.ApiLogin(&SemsUserLogin, &SemsResponseData)
 	if err == nil {
 
 		// Fetch the data

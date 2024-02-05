@@ -2,7 +2,7 @@ package app
 
 // Main package - This is the main program entry point
 import (
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/inverter"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/powerstation"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
 )
@@ -25,5 +25,5 @@ func Run() error {
 	}
 
 	// Get the data from the API, return any errors. Pass in args as string
-	return inverter.FetchData(args.Account, args.Password, args.PowerStationID)
+	return powerstation.FetchData(args.Account, args.Password, args.PowerStationID)
 }

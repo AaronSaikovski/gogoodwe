@@ -2,7 +2,7 @@
 # Name: inverter - gets data from the goodwe API - "v2/PowerStation/GetMonitorDetailByPowerstationId"
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
-package inverter
+package powerstation
 
 import (
 	"bytes"
