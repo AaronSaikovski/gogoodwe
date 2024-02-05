@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/AaronSaikovski/gogoodwe/constants"
-	"github.com/AaronSaikovski/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 )
 
 // SetHeaders - Set the login headers for the SEMS API login

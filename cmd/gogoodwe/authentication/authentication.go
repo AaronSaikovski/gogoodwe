@@ -10,9 +10,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/constants"
-	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
 // DoLogin - Main public login function

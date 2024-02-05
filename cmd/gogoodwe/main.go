@@ -5,7 +5,9 @@
 package main
 
 import (
-	"github.com/AaronSaikovski/gogoodwe/app"
+	"os"
+
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
 )
 
 // main - program main
@@ -16,5 +18,7 @@ func main() {
 
 	if err != nil {
 		panic(err)
+		os.Exit(1)
 	}
+	os.Exit(0)
 }

@@ -2,8 +2,8 @@ package app
 
 // Main package - This is the main program entry point
 import (
-	"github.com/AaronSaikovski/gogoodwe/inverter"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/inverter"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
 )
 

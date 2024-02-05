@@ -2,7 +2,7 @@
 GO = go
 GOFLAGS = -ldflags="-s -w"
 TARGET = gogoodwe
-MAINAPPPATH = ./main.go
+MAINAPPPATH = ./cmd/${TARGET}/main.go
 
 default: help
 

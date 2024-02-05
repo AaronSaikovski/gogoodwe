@@ -8,24 +8,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/AaronSaikovski/gogoodwe/authentication"
-	"github.com/AaronSaikovski/gogoodwe/types"
-	"github.com/AaronSaikovski/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/login"
 	"github.com/logrusorgru/aurora"
 )
-
-// apiLogin -  Login to the API
-func apiLogin(SemsUserLogin *types.LoginCredentials, SemsResponseData *types.LoginResponse) error {
-
-	// Do the login - update the pointer to the struct SemsResponseData
-	autherr := authentication.DoLogin(SemsResponseData, SemsUserLogin)
-	if autherr != nil {
-		utils.HandleError(autherr)
-		return autherr
-	} else {
-		return nil
-	}
-}
 
 // FetchData - Main API fetch function
 func FetchData(Account string, Password string, PowerStationID string) error {
@@ -42,7 +29,7 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 	}
 
 	// Do the login..check for errors
-	err := apiLogin(&SemsUserLogin, &SemsResponseData)
+	err := login.ApiLogin(&SemsUserLogin, &SemsResponseData)
 	if err == nil {
 
 		// Fetch the data
@@ -52,7 +39,7 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 			return dataerr
 		} else {
 			// Get output
-			dataOutput, jsonerr := GetDataJSON(&PowerstationData)
+			dataOutput, jsonerr := utils.GetDataJSON(&PowerstationData)
 			if jsonerr != nil {
 				utils.HandleError(errors.New("error: converting powerstation data"))
 				return jsonerr
