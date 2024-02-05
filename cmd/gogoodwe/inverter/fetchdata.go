@@ -8,9 +8,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/login"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/login"
 	"github.com/logrusorgru/aurora"
 )
 

@@ -3,7 +3,7 @@ package testing
 import (
 	"testing"
 
-	"github.com/AaronSaikovski/gogoodwe/constants"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/constants"
 )
 
 // TestAuthLoginUrl Test Auth Login Url
