@@ -17,8 +17,8 @@ import (
 // fetchInverterData - Fetches Data from the Inverter via the specified PowerstationID using the SEMs API
 func FetchData(Account string, Password string, PowerStationID string) error {
 
-	// Data types
-	var PowerstationData types.InverterData
+	// Powerstation Output Data
+	PowerstationData := types.InverterData{}
 
 	// User account struct
 	creds := &types.LoginCredentials{
