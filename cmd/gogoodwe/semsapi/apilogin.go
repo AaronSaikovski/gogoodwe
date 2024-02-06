@@ -22,3 +22,15 @@ func ApiLogin(UserLoginCreds *types.LoginCredentials, UserLoginResponse *types.L
 		return nil
 	}
 }
+
+func ApiLoginV2(UserLoginFlow *types.LoginDataFlow) error {
+
+	// Do the login - update the pointer to the struct SemsResponseData
+	err := authentication.DoLoginv2(UserLoginFlow)
+	if err != nil {
+		utils.HandleError(err)
+		return err
+	} else {
+		return nil
+	}
+}
