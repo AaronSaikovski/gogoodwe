@@ -9,64 +9,17 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/constants"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-//old ver
-// fetchInverterData - Fetches Data from the Inverter via the specified PowerstationID using theSEMs API
-// func fetchInverterData(SemsResponseData *types.LoginResponse, UserLogin *types.LoginCredentials, PowerstationOutputData *types.InverterData) error {
+var (
+	// Powerstation API Url
+	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
 
-// 	// get the Token header data
-// 	tokenMapJSONData, err := utils.DataTokenJSON(SemsResponseData)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	// get the Powerstation ID header data
-// 	powerStationMapJSONData, err := utils.PowerStationIDJSON(UserLogin)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	//Get the url from the Auth API and append the data url part
-// 	url := SemsResponseData.API + constants.PowerStationURL
-
-// 	// Create a new http request
-// 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationMapJSONData))
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	//Add headers pass in the pointer to set the headers on the request object
-// 	utils.SetHeaders(req, tokenMapJSONData)
-
-// 	//make the API Call
-// 	client := &http.Client{Timeout: constants.HTTPTimeout * time.Second}
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	//cleanup
-// 	defer resp.Body.Close()
-
-// 	// Get the response body
-// 	respBody, err := utils.FetchResponseBody(resp.Body)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	//marshall response to SemsRespInfo struct
-// 	dataStructErr := utils.UnmarshalDataToStruct(respBody, &PowerstationOutputData)
-// 	if dataStructErr != nil {
-// 		return dataStructErr
-// 	}
-
-// 	return nil
-
-// }
+	// Default timeout value
+	HTTPTimeout int = 20
+)
 
 // fetchInverterData - Fetches Data from the Inverter via the specified PowerstationID using the SEMs API
 func fetchInverterData(UserLoginFlow *types.LoginDataFlow, PowerstationOutputData *types.InverterData) error {
@@ -84,7 +37,7 @@ func fetchInverterData(UserLoginFlow *types.LoginDataFlow, PowerstationOutputDat
 	}
 
 	//Get the url from the Auth API and append the data url part
-	url := UserLoginFlow.LoginResp.API + constants.PowerStationURL
+	url := (UserLoginFlow.LoginResp.API + PowerStationURL)
 
 	// Create a new http request
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationMapJSONData))
@@ -96,7 +49,7 @@ func fetchInverterData(UserLoginFlow *types.LoginDataFlow, PowerstationOutputDat
 	utils.SetHeaders(req, tokenMapJSONData)
 
 	//make the API Call
-	client := &http.Client{Timeout: constants.HTTPTimeout * time.Second}
+	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err

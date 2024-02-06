@@ -1,6 +1,9 @@
 package utils
 
-import "github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/constants"
+var (
+	// Version string
+	VersionString string = "gogoodwe v2.0.0"
+)
 
 // Args - struct using go-arg- https://github.com/alexflint/go-arg
 type Args struct {
@@ -16,5 +19,5 @@ func (Args) Description() string {
 
 // Version - Version info
 func (Args) Version() string {
-	return constants.VersionString
+	return VersionString
 }

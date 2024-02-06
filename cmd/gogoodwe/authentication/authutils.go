@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/constants"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 )
 
@@ -31,7 +30,7 @@ func checkUserLoginInfo(UserLogin *types.LoginCredentials) error {
 
 // CheckUserLoginResponse - check for successful login return value..return a login error
 func checkUserLoginResponse(loginResponse string) error {
-	if strings.Compare(loginResponse, constants.SemsLoginSuccessResponse) != 0 {
+	if strings.Compare(loginResponse, "Successful") != 0 {
 		return errors.New("**API Login Error: " + loginResponse)
 	} else {
 		return nil
