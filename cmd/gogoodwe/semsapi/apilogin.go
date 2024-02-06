@@ -10,23 +10,11 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-// SemsApiLogin -  Login to the GoodWe Sems Portal API
-func ApiLogin(UserLoginCreds *types.LoginCredentials, UserLoginResponse *types.LoginResponse) error {
+// ApiLogin -  Login to the SEMS API
+func ApiLogin(UserLoginFlow *types.LoginDataFlow) error {
 
 	// Do the login - update the pointer to the struct SemsResponseData
-	err := authentication.DoLogin(UserLoginResponse, UserLoginCreds)
-	if err != nil {
-		utils.HandleError(err)
-		return err
-	} else {
-		return nil
-	}
-}
-
-func ApiLoginV2(UserLoginFlow *types.LoginDataFlow) error {
-
-	// Do the login - update the pointer to the struct SemsResponseData
-	err := authentication.DoLoginv2(UserLoginFlow)
+	err := authentication.DoLogin(UserLoginFlow)
 	if err != nil {
 		utils.HandleError(err)
 		return err

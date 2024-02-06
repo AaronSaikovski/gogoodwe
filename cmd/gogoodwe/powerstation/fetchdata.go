@@ -37,7 +37,7 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 	}
 
 	// Do the login..check for errors
-	err := semsapi.ApiLoginV2(LoginDataFlow)
+	err := semsapi.ApiLogin(LoginDataFlow)
 	if err == nil {
 
 		// Fetch the data
