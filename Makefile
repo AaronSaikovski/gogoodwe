@@ -47,6 +47,7 @@ run:
 .PHONY: clean
 ## clean - Remove the old builds and any debug information
 clean:
+	go clean -cache
 	go clean
 	rm -rf dist
 	rm bin/${TARGET}
