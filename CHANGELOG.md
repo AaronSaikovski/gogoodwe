@@ -2,8 +2,9 @@
 
 ## v2.0.0 (2024-01-22)
 
-- Major refactoring to cleanup project structure
-- Simplified package structure
+- Major refactoring to cleanup project structure.
+- Simplified package structure.
+- refactored structs to use pointers more efficiently.
 
 ## v1.4.0 (2023-08-30)
 
