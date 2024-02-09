@@ -12,6 +12,7 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/logrusorgru/aurora"
+	"github.com/valyala/fastjson"
 )
 
 // fetchInverterData - Fetches Data from the Inverter via the specified PowerstationID using the SEMs API
@@ -48,14 +49,21 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 	}
 
 	// Get output
-	dataOutput, jsonerr := utils.GetDataJSON(&powerstationData)
-	if jsonerr != nil {
+	dataOutput, err := utils.GetDataJSON(&powerstationData)
+	if err != nil {
 		utils.HandleError(errors.New("error: converting powerstation data"))
-		return jsonerr
+		return err
 	}
 
-	//Display output
-	fmt.Println(aurora.BrightYellow(string(dataOutput)))
+	//parse JSON output
+	var parser fastjson.Parser
+	output, err := parser.Parse(string(dataOutput))
+	if err != nil {
+		utils.HandleError(errors.New("error: parsing powerstation data"))
+		return err
+	}
+
+	fmt.Println(aurora.BrightYellow(output))
 
 	return nil
 }

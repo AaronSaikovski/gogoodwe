@@ -1,8 +1,3 @@
-// /*
-// # Name: DoLogin - authenticates to the goodwe API - https://www.semsportal.com/api/v2/Common/CrossLogin
-// # Author: Aaron Saikovski - asaikovski@outlook.com
-// */
-
 package authentication
 
 import (
