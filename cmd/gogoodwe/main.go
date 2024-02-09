@@ -1,23 +1,19 @@
 /*
-# Name: GoGoodwe - Authenticates to and queries the SEMS Solar inverter API
-# Author: Aaron Saikovski - asaikovski@outlook.com
+Package main implements a program that authenticates to and queries the SEMS Solar inverter API.
 */
 package main
 
 import (
-	"os"
-
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
+	"log"
 )
 
-// main - program main
 func main() {
-
-	//setup and run app
-	err := app.Run()
-
-	if err != nil {
-		panic(err)
+	if err := runApp(); err != nil {
+		log.Fatalf("error: %v", err)
 	}
-	os.Exit(0)
+}
+
+func runApp() error {
+	return app.Run()
 }

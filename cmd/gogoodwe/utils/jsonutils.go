@@ -26,8 +26,8 @@ func DataTokenJSON(SemsResponseData *types.LoginResponse) ([]byte, error) {
 	return jsonStr, err
 }
 
-// PowerStationIDJSON - Makes a map for the powerStationId to be passed to the Data API header and returns a JSON string
-func PowerStationIDJSON(UserLogin *types.LoginCredentials) ([]byte, error) {
+// PowerStationIdJSON - Makes a map for the powerStationId to be passed to the Data API header and returns a JSON string
+func PowerStationIdJSON(UserLogin *types.LoginCredentials) ([]byte, error) {
 	powerStationMap := make(map[string]string)
 	powerStationMap["powerStationId"] = UserLogin.PowerStationID
 

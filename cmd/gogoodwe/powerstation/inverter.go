@@ -31,7 +31,7 @@ func fetchInverterData(UserLoginFlow *types.LoginDataFlow, PowerstationOutputDat
 	}
 
 	// get the Powerstation ID header data
-	powerStationMapJSONData, err := utils.PowerStationIDJSON(UserLoginFlow.LoginCreds)
+	powerStationMapJSONData, err := utils.PowerStationIdJSON(UserLoginFlow.LoginCreds)
 	if err != nil {
 		return err
 	}

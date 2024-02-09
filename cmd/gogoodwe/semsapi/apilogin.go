@@ -17,8 +17,7 @@ func ApiLogin(UserLoginFlow *types.LoginDataFlow) error {
 	err := authentication.DoLogin(UserLoginFlow)
 	if err != nil {
 		utils.HandleError(err)
-		return err
-	} else {
-		return nil
 	}
+
+	return err
 }

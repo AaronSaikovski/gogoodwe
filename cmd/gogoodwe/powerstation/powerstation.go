@@ -17,9 +17,6 @@ import (
 // fetchInverterData - Fetches Data from the Inverter via the specified PowerstationID using the SEMs API
 func FetchData(Account string, Password string, PowerStationID string) error {
 
-	// Powerstation Output Data
-	PowerstationData := types.InverterData{}
-
 	// User account struct
 	creds := &types.LoginCredentials{
 		Account:        Account,
@@ -27,41 +24,38 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 		PowerStationID: PowerStationID,
 	}
 
-	// Login API Response object
-	resp := &types.LoginResponse{}
-
 	// Create a new LoginDataFlow object reference
-	LoginDataFlow := &types.LoginDataFlow{
+	loginDataFlow := &types.LoginDataFlow{
 		LoginCreds: creds,
-		LoginResp:  resp,
+		LoginResp:  &types.LoginResponse{},
 	}
 
 	// Do the login..check for errors
-	err := semsapi.ApiLogin(LoginDataFlow)
-	if err == nil {
-
-		// Fetch the data
-		dataerr := fetchInverterData(LoginDataFlow, &PowerstationData)
-		if dataerr != nil {
-			utils.HandleError(errors.New("error: fetching powerstation data, check powerstationid is correct"))
-			return dataerr
-		} else {
-			// Get output
-			dataOutput, jsonerr := utils.GetDataJSON(&PowerstationData)
-			if jsonerr != nil {
-				utils.HandleError(errors.New("error: converting powerstation data"))
-				return jsonerr
-
-			} else {
-				//Display output
-				fmt.Println(aurora.BrightYellow(string(dataOutput)))
-			}
-		}
-
-	} else {
+	err := semsapi.ApiLogin(loginDataFlow)
+	if err != nil {
 		utils.HandleError(err)
 		return err
 	}
+
+	// Powerstation Output Data
+	powerstationData := types.InverterData{}
+
+	// Fetch the data
+	fetchDataerr := fetchInverterData(loginDataFlow, &powerstationData)
+	if fetchDataerr != nil {
+		utils.HandleError(errors.New("error: fetching powerstation data, check powerstationid is correct"))
+		return fetchDataerr
+	}
+
+	// Get output
+	dataOutput, jsonerr := utils.GetDataJSON(&powerstationData)
+	if jsonerr != nil {
+		utils.HandleError(errors.New("error: converting powerstation data"))
+		return jsonerr
+	}
+
+	//Display output
+	fmt.Println(aurora.BrightYellow(string(dataOutput)))
 
 	return nil
 }

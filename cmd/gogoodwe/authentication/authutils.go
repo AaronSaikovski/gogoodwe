@@ -21,18 +21,16 @@ func setHeaders(r *http.Request) {
 
 // CheckUserLoginInfo - Check user login struct is valid/not null
 func checkUserLoginInfo(UserLogin *types.LoginCredentials) error {
-	if (*UserLogin == types.LoginCredentials{}) {
+	if *UserLogin == (types.LoginCredentials{}) {
 		return errors.New("**Error: User Login details are empty or invalid..**")
-	} else {
-		return nil
 	}
+	return nil
 }
 
 // CheckUserLoginResponse - check for successful login return value..return a login error
 func checkUserLoginResponse(loginResponse string) error {
 	if strings.Compare(loginResponse, "Successful") != 0 {
 		return errors.New("**API Login Error: " + loginResponse)
-	} else {
-		return nil
 	}
+	return nil
 }
