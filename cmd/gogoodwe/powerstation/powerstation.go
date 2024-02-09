@@ -1,75 +1,67 @@
 /*
-# Name: inverter - gets data from the goodwe API - "v2/PowerStation/GetMonitorDetailByPowerstationId"
+# Name: data - fetches data from the goodwe API - and processes it to pass back to caller
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
 package powerstation
 
 import (
-	"bytes"
-	"net/http"
-	"time"
+	"errors"
+	"fmt"
 
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/semsapi"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-)
-
-var (
-	// Powerstation API Url
-	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
-
-	// Default timeout value
-	HTTPTimeout int = 20
+	"github.com/logrusorgru/aurora"
 )
 
 // fetchInverterData - Fetches Data from the Inverter via the specified PowerstationID using the SEMs API
-func fetchInverterData(UserLoginFlow *types.LoginDataFlow, PowerstationOutputData *types.InverterData) error {
+func FetchData(Account string, Password string, PowerStationID string) error {
 
-	// get the Token header data
-	tokenMapJSONData, err := utils.DataTokenJSON(UserLoginFlow.LoginResp)
-	if err != nil {
-		return err
+	// Powerstation Output Data
+	PowerstationData := types.InverterData{}
+
+	// User account struct
+	creds := &types.LoginCredentials{
+		Account:        Account,
+		Password:       Password,
+		PowerStationID: PowerStationID,
 	}
 
-	// get the Powerstation ID header data
-	powerStationMapJSONData, err := utils.PowerStationIDJSON(UserLoginFlow.LoginCreds)
-	if err != nil {
-		return err
+	// Login API Response object
+	resp := &types.LoginResponse{}
+
+	// Create a new LoginDataFlow object reference
+	LoginDataFlow := &types.LoginDataFlow{
+		LoginCreds: creds,
+		LoginResp:  resp,
 	}
 
-	//Get the url from the Auth API and append the data url part
-	url := (UserLoginFlow.LoginResp.API + PowerStationURL)
+	// Do the login..check for errors
+	err := semsapi.ApiLogin(LoginDataFlow)
+	if err == nil {
 
-	// Create a new http request
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationMapJSONData))
-	if err != nil {
+		// Fetch the data
+		dataerr := fetchInverterData(LoginDataFlow, &PowerstationData)
+		if dataerr != nil {
+			utils.HandleError(errors.New("error: fetching powerstation data, check powerstationid is correct"))
+			return dataerr
+		} else {
+			// Get output
+			dataOutput, jsonerr := utils.GetDataJSON(&PowerstationData)
+			if jsonerr != nil {
+				utils.HandleError(errors.New("error: converting powerstation data"))
+				return jsonerr
+
+			} else {
+				//Display output
+				fmt.Println(aurora.BrightYellow(string(dataOutput)))
+			}
+		}
+
+	} else {
+		utils.HandleError(err)
 		return err
-	}
-
-	//Add headers pass in the pointer to set the headers on the request object
-	utils.SetHeaders(req, tokenMapJSONData)
-
-	//make the API Call
-	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	//cleanup
-	defer resp.Body.Close()
-
-	// Get the response body
-	respBody, err := utils.FetchResponseBody(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	//marshall response to SemsRespInfo struct
-	dataStructErr := utils.UnmarshalDataToStruct(respBody, &PowerstationOutputData)
-	if dataStructErr != nil {
-		return dataStructErr
 	}
 
 	return nil
-
 }
