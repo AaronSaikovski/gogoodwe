@@ -1,7 +1,7 @@
-/*
-# Name: DoLogin - authenticates to the goodwe API - https://www.semsportal.com/api/v2/Common/CrossLogin
-# Author: Aaron Saikovski - asaikovski@outlook.com
-*/
+// /*
+// # Name: DoLogin - authenticates to the goodwe API - https://www.semsportal.com/api/v2/Common/CrossLogin
+// # Author: Aaron Saikovski - asaikovski@outlook.com
+// */
 
 package authentication
 
@@ -14,12 +14,9 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-var (
-	// Auth Login Url
-	AuthLoginUrl string = "https://www.semsportal.com/api/v2/Common/CrossLogin"
-
-	// Default timeout value
-	HTTPTimeout int = 20
+const (
+	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"
+	HTTPTimeout  = 20 // seconds
 )
 
 // Login - Login to the SEMS API
@@ -37,7 +34,7 @@ func DoLogin(UserLoginFlow *types.LoginDataFlow) error {
 	}
 
 	// Create a new http request
-	req, err := http.NewRequest(http.MethodPost, AuthLoginUrl, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest(http.MethodPost, AuthLoginURL, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return err
 	}

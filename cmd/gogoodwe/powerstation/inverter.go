@@ -13,7 +13,7 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-var (
+const (
 	// Powerstation API Url
 	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
 
