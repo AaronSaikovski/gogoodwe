@@ -1,9 +1,4 @@
-/*
-# Name: authentication - auth helper functions
-# Author: Aaron Saikovski - asaikovski@outlook.com
-*/
-
-package authentication
+package semsapi
 
 import (
 	"errors"
@@ -19,18 +14,18 @@ func setHeaders(r *http.Request) {
 	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
 }
 
-// CheckUserLoginInfo - Check user login struct is valid/not null
-func checkUserLoginInfo(UserLogin *types.LoginCredentials) error {
-	if *UserLogin == (types.LoginCredentials{}) {
-		return errors.New("**Error: User Login details are empty or invalid..**")
-	}
-	return nil
-}
-
 // CheckUserLoginResponse - check for successful login return value..return a login error
 func checkUserLoginResponse(loginResponse string) error {
 	if strings.Compare(loginResponse, "Successful") != 0 {
 		return errors.New("**API Login Error: " + loginResponse)
+	}
+	return nil
+}
+
+// CheckUserLoginInfo - Check user login struct is valid/not null
+func checkUserLoginInfo(UserLogin *types.LoginCredentials) error {
+	if *UserLogin == (types.LoginCredentials{}) {
+		return errors.New("**Error: User Login details are empty or invalid..**")
 	}
 	return nil
 }
