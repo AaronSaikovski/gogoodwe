@@ -5,17 +5,12 @@
 package powerstation
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/semsapi"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-	"github.com/logrusorgru/aurora"
-	"github.com/valyala/fastjson"
 )
 
-func FetchData(Account string, Password string, PowerStationID string) error {
+func FetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
 
 	// User account struct
 	creds := &types.LoginCredentials{
@@ -31,27 +26,14 @@ func FetchData(Account string, Password string, PowerStationID string) error {
 		return err
 	}
 
-	powerstationData, err := getMonitorDetailByPowerstationId(creds, loginApiResponse)
-	if err != nil {
-		utils.HandleError(err)
-		return err
-	}
+	//fetch data based on
+	if DailySummary {
+		getMonitorSummaryByPowerstationId(creds, loginApiResponse)
 
-	dataOutput, err := getDataJSON(powerstationData)
-	if err != nil {
-		utils.HandleError(errors.New("error: converting powerstation data"))
-		return err
+	} else {
+		//powerstationData = types.InverterData
+		getMonitorDetailByPowerstationId(creds, loginApiResponse)
 	}
-
-	//parse JSON output
-	var parser fastjson.Parser
-	output, err := parser.Parse(string(dataOutput))
-	if err != nil {
-		utils.HandleError(errors.New("error: parsing powerstation data"))
-		return err
-	}
-
-	fmt.Println(aurora.BrightYellow(output))
 
 	return nil
 }

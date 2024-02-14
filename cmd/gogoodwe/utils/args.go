@@ -10,6 +10,7 @@ type Args struct {
 	Account        string `arg:"required,-a,--account" help:"SEMS Email Account."`
 	Password       string `arg:"required,-p,--password" help:"SEMS Account password."`
 	PowerStationID string `arg:"required,-i,--powerstationid" help:"SEMS Powerstation ID."`
+	DailySummary   bool   `arg:"-d,--dailysummary" help:"Output as a daily summary."`
 }
 
 // Description - App description

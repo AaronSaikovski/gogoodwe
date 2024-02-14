@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/interfaces"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
@@ -43,9 +44,12 @@ func dataTokenJSON(SemsResponseData *types.LoginResponse) ([]byte, error) {
 	return jsonStr, err
 }
 
-func getDataJSON(PowerstationOutputData *types.InverterData) ([]byte, error) {
+
+
+// parse json data
+func getDataJSON[T interfaces.ISemsDataConstraint](data T) ([]byte, error) {
 
 	// Get the response and return any errors
-	resp, err := utils.MarshalStructToJSON(&PowerstationOutputData)
+	resp, err := utils.MarshalStructToJSON(&data)
 	return resp, err
 }

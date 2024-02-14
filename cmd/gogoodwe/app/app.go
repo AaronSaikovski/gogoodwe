@@ -25,5 +25,6 @@ func Run() error {
 	}
 
 	// Get the data from the API, return any errors. Pass in args as string
-	return powerstation.FetchData(args.Account, args.Password, args.PowerStationID)
+	return powerstation.FetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
+
 }
