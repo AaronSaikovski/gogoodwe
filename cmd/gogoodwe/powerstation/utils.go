@@ -44,8 +44,6 @@ func dataTokenJSON(SemsResponseData *types.LoginResponse) ([]byte, error) {
 	return jsonStr, err
 }
 
-
-
 // parse json data
 func getDataJSON[T interfaces.ISemsDataConstraint](data T) ([]byte, error) {
 

@@ -4,11 +4,10 @@
 package types
 
 type DailySummaryData struct {
-	Language string   `json:"language"`
-	Function []string `json:"function"`
-	HasError bool     `json:"hasError"`
-	Msg      string   `json:"msg"`
-	Code     string   `json:"code"`
+	Language string `json:"language"`
+	HasError bool   `json:"hasError"`
+	Msg      string `json:"msg"`
+	Code     string `json:"code"`
 	Data     struct {
 		Kpi struct {
 			MonthGeneration float64 `json:"month_generation"`
