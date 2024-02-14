@@ -1,8 +1,8 @@
 <div align="center">
-# GoGoodwe V2.0
-=======
 
-A command line tool and query the GOODWE SEMS Inverter APIs - written in 100% Go.
+## GoGoodwe V2.0
+
+A command line tool to query the GOODWE SEMS Inverter APIs - written in 100% Go.
 
 [![Build Status](https://github.com/AaronSaikovski/gogoodwe/workflows/build/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)
