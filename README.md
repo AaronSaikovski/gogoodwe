@@ -1,11 +1,10 @@
 <div align="center">
+# GoGoodwe V2.0
+=======
 
-# GoGoodwe
-
-A command line tool and Go packages to query the GOODWE SEMS Portal APIs - written in 100% Go.
+A command line tool and query the GOODWE SEMS Inverter APIs - written in 100% Go.
 
 [![Build Status](https://github.com/AaronSaikovski/gogoodwe/workflows/build/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions)
-[![Coverage Status](https://coveralls.io/repos/github/AaronSaikovski/gogoodwe/badge.svg?branch=main)](https://coveralls.io/github/AaronSaikovski/gogoodwe?branch=main)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)
 
 </div>
@@ -15,17 +14,19 @@ A command line tool and Go packages to query the GOODWE SEMS Portal APIs - writt
 The toolchain is mainly driven by the Makefile.
 
 ```bash
-* help - Display help about make targets for this Makefile
-* release - Builds the project in preparation for release
-* debug - Builds the project in preparation for debug
-* buildandrun - builds and runs the program on the target platform
-* run - runs main.go for testing
-* clean - Remove the old builds and any debug information
-* test - executes unit test
-* dep - fetches any external dependencies
-* vet - Vet examines Go source code and reports suspicious constructs
-* staticcheck - Runs static code analyzer staticcheck
-* lint - format code and tidy modules
+help         - Display help about make targets for this Makefile
+release      - Builds the project in preparation for (local)release
+goreleaser   - Builds the project in preparation for release
+docs         - updates the swagger docs
+build        - Builds the project in preparation for debug
+run          - builds and runs the program on the target platform
+clean        - Remove the old builds and any debug information
+test         - executes unit tests
+deps         - fetches any external dependencies and updates
+vet          - Vet examines Go source code and reports suspicious constructs
+staticcheck  - Runs static code analyzer staticcheck - currently broken
+seccheck     - Code vulnerability check
+lint         - format code and tidy modules
 ```
 
 To get started type,
@@ -46,10 +47,12 @@ From the command line the usage is pretty simple:
 
 ```bash
 ##Note the use of single quotes ''
-./gogoodwe --account '<user@email.com>' --pwd '<password>' --powerstationid '<powerstation id>'
+./gogoodwe --account '<user@email.com>' --pwd '<password>' --powerstationid '<powerstation id>' --dailysummary
 
 # Or
-./gogoodwe -a '<user@email.com>' -p '<password>' -i '<powerstation id>'
+./gogoodwe -a '<user@email.com>' -p '<password>' -i '<powerstation id>' -d
+
+##where daily summary provides a shorter daily view of the inverter data
 ```
 
 To get the help on using the command line tool, type:

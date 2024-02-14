@@ -1,15 +1,12 @@
+/*
+# Name: jsonutils - helper functions to get the Powerstation Data from the API
+# Author: Aaron Saikovski - asaikovski@outlook.com
+*/
 package utils
 
 import (
 	"encoding/json"
-	"io"
 )
-
-// FetchResponseBody - Get the response body from a HTTP response
-func FetchResponseBody(resp io.Reader) ([]byte, error) {
-	respBody, err := io.ReadAll(resp)
-	return respBody, err
-}
 
 // UnmarshalDataToStruct - Unmarshall http response to target struct
 func UnmarshalDataToStruct(respBody []byte, targetStruct interface{}) error {

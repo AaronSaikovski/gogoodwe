@@ -12,7 +12,8 @@ builds:
     goos:
       - linux
       - windows
-      - darwin
+      - darwin      
+    main: ./cmd/gogoodwe
 
 archives:
   - format: tar.gz

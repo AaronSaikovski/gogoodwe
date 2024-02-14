@@ -1,43 +1,18 @@
+/*
+# Name: InverterData - Struct to hold data returned from the Powerstation API
+# Minimised version - removed any sensitive data
+# Author: Aaron Saikovski - asaikovski@outlook.com
+*/
 package types
 
-// StationResponseData - Struct to hold data returned from the Powerstation API
-type StationResponseData struct {
+// InverterData - Struct to hold data returned from the Inverter Powerstation API
+type InverterData struct {
 	Language string   `json:"language"`
 	Function []string `json:"function"`
 	HasError bool     `json:"hasError"`
 	Msg      string   `json:"msg"`
 	Code     string   `json:"code"`
 	Data     struct {
-		Info struct {
-			PowerstationID      string  `json:"powerstation_id"`
-			Time                string  `json:"time"`
-			DateFormat          string  `json:"date_format"`
-			DateFormatYm        string  `json:"date_format_ym"`
-			Stationname         string  `json:"stationname"`
-			Address             string  `json:"address"`
-			OwnerName           string  `json:"owner_name"`
-			OwnerPhone          string  `json:"owner_phone"`
-			OwnerEmail          string  `json:"owner_email"`
-			BatteryCapacity     float64 `json:"battery_capacity"`
-			TurnonTime          string  `json:"turnon_time"`
-			CreateTime          string  `json:"create_time"`
-			Capacity            float64 `json:"capacity"`
-			Longitude           float64 `json:"longitude"`
-			Latitude            float64 `json:"latitude"`
-			PowerstationType    string  `json:"powerstation_type"`
-			Status              int     `json:"status"`
-			IsStored            bool    `json:"is_stored"`
-			IsPowerflow         bool    `json:"is_powerflow"`
-			ChartsType          int     `json:"charts_type"`
-			HasPv               bool    `json:"has_pv"`
-			HasStatisticsCharts bool    `json:"has_statistics_charts"`
-			OnlyBps             bool    `json:"only_bps"`
-			OnlyBpu             bool    `json:"only_bpu"`
-			TimeSpan            float64 `json:"time_span"`
-			PrValue             string  `json:"pr_value"`
-			OrgCode             string  `json:"org_code"`
-			OrgName             string  `json:"org_name"`
-		} `json:"info"`
 		Kpi struct {
 			MonthGeneration float64 `json:"month_generation"`
 			Pac             float64 `json:"pac"`
@@ -50,80 +25,18 @@ type StationResponseData struct {
 		} `json:"kpi"`
 		PowercontrolStatus int   `json:"powercontrol_status"`
 		Images             []any `json:"images"`
-		Weather            struct {
-			HeWeather6 []struct {
-				Basic struct {
-					Cid        any `json:"cid"`
-					Location   any `json:"location"`
-					ParentCity any `json:"parent_city"`
-					AdminArea  any `json:"admin_area"`
-					Cnty       any `json:"cnty"`
-					Lat        any `json:"lat"`
-					Lon        any `json:"lon"`
-					Tz         any `json:"tz"`
-				} `json:"basic"`
-				Update struct {
-					Loc any `json:"loc"`
-					Utc any `json:"utc"`
-				} `json:"update"`
-				Status        string `json:"status"`
-				DailyForecast []struct {
-					CondCodeD string `json:"cond_code_d"`
-					CondCodeN string `json:"cond_code_n"`
-					CondTxtD  string `json:"cond_txt_d"`
-					CondTxtN  string `json:"cond_txt_n"`
-					Date      string `json:"date"`
-					Hum       string `json:"hum"`
-					Pcpn      string `json:"pcpn"`
-					Pop       string `json:"pop"`
-					Pres      string `json:"pres"`
-					TmpMax    string `json:"tmp_max"`
-					TmpMin    string `json:"tmp_min"`
-					UvIndex   string `json:"uv_index"`
-					Vis       string `json:"vis"`
-					WindDeg   string `json:"wind_deg"`
-					WindDir   string `json:"wind_dir"`
-					WindSc    string `json:"wind_sc"`
-					WindSpd   string `json:"wind_spd"`
-				} `json:"daily_forecast"`
-			} `json:"HeWeather6"`
-		} `json:"weather"`
-		Inverter []struct {
-			Sn   string `json:"sn"`
-			Dict struct {
-				Left []struct {
-					IsHT         bool   `json:"isHT"`
-					IsStoreSkip  bool   `json:"isStoreSkip"`
-					Key          string `json:"key"`
-					Value        string `json:"value"`
-					Unit         string `json:"unit"`
-					IsFaultMsg   int    `json:"isFaultMsg"`
-					FaultMsgCode int    `json:"faultMsgCode"`
-				} `json:"left"`
-				Right []struct {
-					IsHT         bool   `json:"isHT"`
-					IsStoreSkip  bool   `json:"isStoreSkip"`
-					Key          string `json:"key"`
-					Value        string `json:"value"`
-					Unit         string `json:"unit"`
-					IsFaultMsg   int    `json:"isFaultMsg"`
-					FaultMsgCode int    `json:"faultMsgCode"`
-				} `json:"right"`
-			} `json:"dict"`
-			IsStored    bool    `json:"is_stored"`
-			Name        string  `json:"name"`
-			InPac       float64 `json:"in_pac"`
-			OutPac      float64 `json:"out_pac"`
-			Eday        float64 `json:"eday"`
-			Emonth      float64 `json:"emonth"`
-			Etotal      float64 `json:"etotal"`
-			Status      int     `json:"status"`
-			TurnonTime  string  `json:"turnon_time"`
-			ReleationID string  `json:"releation_id"`
-			Type        string  `json:"type"`
-			Capacity    float64 `json:"capacity"`
-			D           struct {
-				PwID                  string  `json:"pw_id"`
+		Inverter           []struct {
+			IsStored   bool    `json:"is_stored"`
+			InPac      float64 `json:"in_pac"`
+			OutPac     float64 `json:"out_pac"`
+			Eday       float64 `json:"eday"`
+			Emonth     float64 `json:"emonth"`
+			Etotal     float64 `json:"etotal"`
+			Status     int     `json:"status"`
+			TurnonTime string  `json:"turnon_time"`
+			Type       string  `json:"type"`
+			Capacity   float64 `json:"capacity"`
+			D          struct {
 				Capacity              string  `json:"capacity"`
 				Model                 string  `json:"model"`
 				OutputPower           string  `json:"output_power"`
@@ -197,10 +110,7 @@ type StationResponseData struct {
 			InvertFull struct {
 				CtSolutionType          int     `json:"ct_solution_type"`
 				Cts                     any     `json:"cts"`
-				Sn                      string  `json:"sn"`
 				CheckCode               string  `json:"check_code"`
-				PowerstationID          string  `json:"powerstation_id"`
-				Name                    string  `json:"name"`
 				ModelType               string  `json:"model_type"`
 				ChangeType              int     `json:"change_type"`
 				ChangeTime              int     `json:"change_time"`
@@ -361,43 +271,29 @@ type StationResponseData struct {
 			BatteryCharging          string  `json:"battery_charging"`
 			LastRefreshTime          string  `json:"last_refresh_time"`
 			BmsStatus                string  `json:"bms_status"`
-			PwID                     string  `json:"pw_id"`
 			FaultMessage             string  `json:"fault_message"`
 			WarningCode              any     `json:"warning_code"`
 			BatteryPower             float64 `json:"battery_power"`
-			PointIndex               string  `json:"point_index"`
-			Points                   []struct {
-				TargetIndex   int    `json:"target_index"`
-				TargetName    string `json:"target_name"`
-				Display       string `json:"display"`
-				Unit          string `json:"unit"`
-				TargetKey     string `json:"target_key"`
-				TextCn        string `json:"text_cn"`
-				TargetSnSix   any    `json:"target_sn_six"`
-				TargetSnSeven any    `json:"target_sn_seven"`
-				TargetType    any    `json:"target_type"`
-				StorageName   any    `json:"storage_name"`
-			} `json:"points"`
-			BackupPloadS       float64 `json:"backup_pload_s"`
-			BackupVloadS       float64 `json:"backup_vload_s"`
-			BackupIloadS       float64 `json:"backup_iload_s"`
-			BackupPloadT       float64 `json:"backup_pload_t"`
-			BackupVloadT       float64 `json:"backup_vload_t"`
-			BackupIloadT       float64 `json:"backup_iload_t"`
-			EtotalBuy          any     `json:"etotal_buy"`
-			EdayBuy            float64 `json:"eday_buy"`
-			EbatteryCharge     any     `json:"ebattery_charge"`
-			EchargeDay         float64 `json:"echarge_day"`
-			EbatteryDischarge  any     `json:"ebattery_discharge"`
-			EdischargeDay      float64 `json:"edischarge_day"`
-			BattStrings        any     `json:"batt_strings"`
-			MeterConnectStatus any     `json:"meter_connect_status"`
-			MtactivepowerR     float64 `json:"mtactivepower_r"`
-			MtactivepowerS     float64 `json:"mtactivepower_s"`
-			MtactivepowerT     float64 `json:"mtactivepower_t"`
-			HasTigo            bool    `json:"has_tigo"`
-			CanStartIV         bool    `json:"canStartIV"`
-			BatteryCount       any     `json:"battery_count"`
+			BackupPloadS             float64 `json:"backup_pload_s"`
+			BackupVloadS             float64 `json:"backup_vload_s"`
+			BackupIloadS             float64 `json:"backup_iload_s"`
+			BackupPloadT             float64 `json:"backup_pload_t"`
+			BackupVloadT             float64 `json:"backup_vload_t"`
+			BackupIloadT             float64 `json:"backup_iload_t"`
+			EtotalBuy                any     `json:"etotal_buy"`
+			EdayBuy                  float64 `json:"eday_buy"`
+			EbatteryCharge           any     `json:"ebattery_charge"`
+			EchargeDay               float64 `json:"echarge_day"`
+			EbatteryDischarge        any     `json:"ebattery_discharge"`
+			EdischargeDay            float64 `json:"edischarge_day"`
+			BattStrings              any     `json:"batt_strings"`
+			MeterConnectStatus       any     `json:"meter_connect_status"`
+			MtactivepowerR           float64 `json:"mtactivepower_r"`
+			MtactivepowerS           float64 `json:"mtactivepower_s"`
+			MtactivepowerT           float64 `json:"mtactivepower_t"`
+			HasTigo                  bool    `json:"has_tigo"`
+			CanStartIV               bool    `json:"canStartIV"`
+			BatteryCount             any     `json:"battery_count"`
 		} `json:"inverter"`
 		Hjgx struct {
 			Co2  float64 `json:"co2"`
@@ -466,7 +362,6 @@ type StationResponseData struct {
 		Environmental []any `json:"environmental"`
 		Equipment     []struct {
 			Type                 string `json:"type"`
-			Title                string `json:"title"`
 			Status               int    `json:"status"`
 			Model                any    `json:"model"`
 			StatusText           any    `json:"statusText"`
@@ -479,8 +374,6 @@ type StationResponseData struct {
 			IsStored             bool   `json:"isStored"`
 			Soc                  string `json:"soc"`
 			IsChange             bool   `json:"isChange"`
-			RelationID           string `json:"relationId"`
-			Sn                   string `json:"sn"`
 			HasTigo              bool   `json:"has_tigo"`
 			IsSec                bool   `json:"is_sec"`
 			IsSecs               bool   `json:"is_secs"`
@@ -489,11 +382,4 @@ type StationResponseData struct {
 			TitleSn              any    `json:"titleSn"`
 		} `json:"equipment"`
 	} `json:"data"`
-	Components struct {
-		Para         string `json:"para"`
-		LangVer      int    `json:"langVer"`
-		TimeSpan     int    `json:"timeSpan"`
-		API          string `json:"api"`
-		MsgSocketAdr any    `json:"msgSocketAdr"`
-	} `json:"components"`
 }
