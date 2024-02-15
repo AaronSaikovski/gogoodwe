@@ -86,7 +86,7 @@ func getMonitorDetailByPowerstationId(LoginCredentials *types.LoginCredentials, 
 
 }
 
-// Get Monitor sumary data
+// Get Monitor summary data
 func getMonitorSummaryByPowerstationId(LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse) {
 
 	var powerstationData types.DailySummaryData
