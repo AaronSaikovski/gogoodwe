@@ -11,6 +11,14 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
+// func getMonitorDatav2[T interfaces.ISemsDataConstraint](LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse, InverterOutput *T) (T, error) {
+
+// 	var someValue T
+
+// 	return someValue, nil
+
+// }
+
 // Generic function to retrieve data from the API via an ISemsDataConstraint Interface of defined structs
 func getMonitorData[T interfaces.ISemsDataConstraint](LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse, InverterOutput *T) error {
 
@@ -70,7 +78,7 @@ func getMonitorDetailByPowerstationId(LoginCredentials *types.LoginCredentials, 
 
 	err := getMonitorData(LoginCredentials, LoginApiResponse, &powerstationData)
 	if err != nil {
-		utils.HandleError(err)
+		utils.HandleError(errors.New("error: fetching powerstation data"))
 	}
 
 	dataOutput, err := getDataJSON(powerstationData)
@@ -92,7 +100,7 @@ func getMonitorSummaryByPowerstationId(LoginCredentials *types.LoginCredentials,
 	var powerstationData types.DailySummaryData
 	err := getMonitorData(LoginCredentials, LoginApiResponse, &powerstationData)
 	if err != nil {
-		utils.HandleError(err)
+		utils.HandleError(errors.New("error: fetching powerstation summary data"))
 	}
 
 	dataOutput, err := getDataJSON(powerstationData)

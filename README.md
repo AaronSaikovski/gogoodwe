@@ -47,10 +47,10 @@ From the command line the usage is pretty simple:
 
 ```bash
 ##Note the use of single quotes ''
-./gogoodwe --account '<user@email.com>' --pwd '<password>' --powerstationid '<powerstation id>' --dailysummary
+./gogoodwe --account '<user@email.com>' --pwd '<password>' --powerstationid '<powerstation id>' --summary
 
 # Or
-./gogoodwe -a '<user@email.com>' -p '<password>' -i '<powerstation id>' -d
+./gogoodwe -a '<user@email.com>' -p '<password>' -i '<powerstation id>' -s
 
 ##where daily summary provides a shorter daily view of the inverter data
 ```
