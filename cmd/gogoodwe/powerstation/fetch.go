@@ -10,6 +10,14 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
+// FetchData fetches data based on user account credentials and power station ID, and can retrieve daily summary if specified.
+// Parameters:
+//     Account string - user account
+//     Password string - account password
+//     PowerStationID string - ID of the power station
+//     DailySummary bool - whether to retrieve daily summary
+// Return type:
+//     error
 func FetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
 
 	// User account struct

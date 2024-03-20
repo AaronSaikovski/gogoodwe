@@ -11,6 +11,7 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
+
 // func getMonitorDatav2[T interfaces.ISemsDataConstraint](LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse, InverterOutput *T) (T, error) {
 
 // 	var someValue T
