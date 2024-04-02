@@ -26,8 +26,7 @@ dist/
 bin/
 
 # ignore output files
-output*.*
-out*.*
+output.txt
 out.txt
 
 .idea/

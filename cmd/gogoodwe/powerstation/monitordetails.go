@@ -11,15 +11,6 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-
-// func getMonitorDatav2[T interfaces.ISemsDataConstraint](LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse, InverterOutput *T) (T, error) {
-
-// 	var someValue T
-
-// 	return someValue, nil
-
-// }
-
 // Generic function to retrieve data from the API via an ISemsDataConstraint Interface of defined structs
 func getMonitorData[T interfaces.ISemsDataConstraint](LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse, InverterOutput *T) error {
 
