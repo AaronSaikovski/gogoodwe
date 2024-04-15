@@ -82,7 +82,7 @@ staticcheck:
 .PHONY: seccheck
 ## seccheck - Code vulnerability check
 seccheck:	
-	#govulncheck ./...
+	govulncheck ./...
 
 
 .PHONY: lint
