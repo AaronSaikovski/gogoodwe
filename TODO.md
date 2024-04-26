@@ -1,4 +1,4 @@
-# GoGoodwe V2 - TODO
+# GoGoodwe V2.0.2 - TODO
 
 ### ToDo
 

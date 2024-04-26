@@ -1,5 +1,10 @@
 # GoGoodwe - CHANGELOG
 
+## v2.0.2 (2024-04-62)
+
+- Minor fixes
+-
+
 ## v2.0.0 (2024-01-22)
 
 - Major refactoring to cleanup project structure.
