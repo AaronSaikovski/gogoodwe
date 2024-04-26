@@ -1,6 +1,6 @@
 # GoGoodwe - CHANGELOG
 
-## v2.0.2 (2024-04-62)
+## v2.0.3 (2024-04-26
 
 - Minor fixes
 -
