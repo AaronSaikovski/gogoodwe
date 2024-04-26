@@ -22,30 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package semsapi
+package apilogin
 
 import (
 	"bytes"
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
 // Login -  Login to the SEMS API passing in a LoginCredentials struct and returning a LoginResponse struct.
-func Login(LoginCredentials *types.LoginCredentials) (*types.LoginResponse, error) {
+func (loginCredentials *ApiLoginCredentials) APILogin() (*ApiLoginResponse, error) {
 
 	// API Response struct
-	loginApiResponse := types.LoginResponse{}
+	loginApiResponse := ApiLoginResponse{}
 
 	//check if the UserLogin struct is empty
-	if err := checkUserLoginInfo(LoginCredentials); err != nil {
+	if err := checkUserLoginInfo(loginCredentials); err != nil {
 		return nil, err
 	}
 
 	// User login struct to be converted to JSON
-	loginData, err := utils.MarshalStructToJSON(LoginCredentials)
+	loginData, err := utils.MarshalStructToJSON(loginCredentials)
 	if err != nil {
 		return nil, err
 	}

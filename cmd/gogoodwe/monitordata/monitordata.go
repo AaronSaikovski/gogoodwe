@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package powerstation
+package monitordata
 
 import (
 	"bytes"
@@ -29,13 +29,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/interfaces"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
 // Generic function to retrieve data from the API via an ISemsDataConstraint Interface of defined structs
-func getMonitorData[T interfaces.ISemsDataConstraint](LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse, InverterOutput *T) error {
+func getMonitorData[T ISemsDataConstraint](LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse, InverterOutput *T) error {
 
 	// get the Token header data
 	apiResponseJsonData, err := dataTokenJSON(LoginApiResponse)
@@ -88,8 +87,8 @@ func getMonitorData[T interfaces.ISemsDataConstraint](LoginCredentials *types.Lo
 }
 
 // Get Monitor Detailed data
-func getMonitorDetailByPowerstationId(LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse) {
-	var powerstationData types.InverterData
+func GetMonitorDetailByPowerstationId(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse) {
+	var powerstationData InverterData
 
 	err := getMonitorData(LoginCredentials, LoginApiResponse, &powerstationData)
 	if err != nil {
@@ -110,9 +109,9 @@ func getMonitorDetailByPowerstationId(LoginCredentials *types.LoginCredentials, 
 }
 
 // Get Monitor summary data
-func getMonitorSummaryByPowerstationId(LoginCredentials *types.LoginCredentials, LoginApiResponse *types.LoginResponse) {
+func GetMonitorSummaryByPowerstationId(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse) {
 
-	var powerstationData types.DailySummaryData
+	var powerstationData DailySummaryData
 	err := getMonitorData(LoginCredentials, LoginApiResponse, &powerstationData)
 	if err != nil {
 		utils.HandleError(errors.New("error: fetching powerstation summary data"))

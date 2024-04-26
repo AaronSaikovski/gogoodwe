@@ -21,16 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package monitordata
 
-/*
-# Name: LoginCredentials - Struct to hold User login data
-# Author: Aaron Saikovski - asaikovski@outlook.com
-*/
-package types
+const (
+	// Powerstation API Url
+	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
 
-// LoginCredentials - Struct to hold User login data
-type LoginCredentials struct {
-	Account        string `json:"account"`
-	Password       string `json:"pwd"`
-	PowerStationID string `json:"powerstationid"`
-}
+	// Default timeout value
+	HTTPTimeout int = 20
+)

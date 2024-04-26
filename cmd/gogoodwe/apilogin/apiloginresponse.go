@@ -21,17 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package apilogin
 
-/*
-# Name: LoginResponse - SEMS API Response Data struct
-# Contains all the JSON Response data returned from the authentication API - "https://www.semsportal.com/api/v2/Common/CrossLogin"
-# Will be unmarshalled to a struct via a pointer
-# Author: Aaron Saikovski - asaikovski@outlook.com
-*/
-package types
-
-// LoginResponse - SEMS API Response Data struct
-type LoginResponse struct {
+// LoginResponse - SEMS API Response struct
+type ApiLoginResponse struct {
 	HasError bool   `json:"hasError"`
 	Code     int32  `json:"code"`
 	Msg      string `json:"msg"`

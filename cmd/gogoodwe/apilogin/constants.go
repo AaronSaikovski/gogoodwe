@@ -21,13 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package interfaces
 
-import (
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
+package apilogin
+
+const (
+	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"
+	HTTPTimeout  = 20 // seconds
 )
-
-// Constraints for functions that return data from the API via marshalled structs
-type ISemsDataConstraint interface {
-	types.InverterData | types.DailySummaryData
-}

@@ -25,7 +25,8 @@ package app
 
 // Main package - This is the main program entry point
 import (
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/powerstation"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/monitordata"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
 )
@@ -48,6 +49,35 @@ func Run() error {
 	}
 
 	// Get the data from the API, return any errors. Pass in args as string
-	return powerstation.FetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	//return powerstation.FetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	return fetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
 
+}
+
+// fetchData - Fetches data based on user account credentials and power station ID, and can retrieve daily summary if specified.
+func fetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
+
+	// User account struct
+	loginCreds := &apilogin.ApiLoginCredentials{
+		Account:        Account,
+		Password:       Password,
+		PowerStationID: PowerStationID,
+	}
+
+	// Do the login..check for errors
+	loginApiResponse, err := loginCreds.APILogin()
+	if err != nil {
+		utils.HandleError(err)
+		return err
+	}
+
+	//fetch data based on
+	if DailySummary {
+		monitordata.GetMonitorSummaryByPowerstationId(loginCreds, loginApiResponse)
+
+	} else {
+		monitordata.GetMonitorDetailByPowerstationId(loginCreds, loginApiResponse)
+	}
+
+	return nil
 }
