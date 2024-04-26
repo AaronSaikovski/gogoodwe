@@ -25,31 +25,43 @@ package app
 
 // Main package - This is the main program entry point
 import (
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/monitordata"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-	"github.com/alexflint/go-arg"
 )
 
-// Run is the main program runner.
+// fetchData fetches data based on user account credentials and power station ID, and can retrieve daily summary if specified.
 //
-// No parameters.
-// Returns an error.
-func Run() error {
+// Parameters:
+// - Account: the email account associated with the user.
+// - Password: the password associated with the user's account.
+// - PowerStationID: the ID of the power station.
+// - DailySummary: a boolean indicating whether to retrieve a daily summary.
+//
+// Returns:
+// - error: an error if there was a problem logging in or fetching data.
+func fetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
 
-	//Get the args input data
-	var args utils.Args
-	p := arg.MustParse(&args)
-
-	//check for valid email address input
-	if !utils.CheckValidEmail(args.Account) {
-		p.Fail("Invalid Email address format - should be: 'user@somedomain.com'.")
+	// User account struct
+	loginCreds := &apilogin.ApiLoginCredentials{
+		Account:        Account,
+		Password:       Password,
+		PowerStationID: PowerStationID,
 	}
 
-	//check for valid powerstation Id
-	if !utils.CheckValidPowerstationID(args.PowerStationID) {
-		p.Fail("Invalid Powerstation ID format: - should be: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'.")
+	// Do the login..check for errors
+	loginApiResponse, err := loginCreds.APILogin()
+	if err != nil {
+		utils.HandleError(err)
+		return err
 	}
 
-	// Get the data from the API, return any errors. Pass in args as string
-	return fetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	//fetch data and output
+	dataErr := monitordata.GetData(loginCreds, loginApiResponse, DailySummary)
+	if dataErr != nil {
+		utils.HandleError(dataErr)
+		return dataErr
+	}
 
+	return nil
 }

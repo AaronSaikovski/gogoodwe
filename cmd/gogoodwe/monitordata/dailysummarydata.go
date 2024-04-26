@@ -22,11 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*
-# Name: DailySummaryData - Struct to hold daily summary data
-*/
 package monitordata
 
+// DailySummaryData - Struct to hold daily summary data
 type DailySummaryData struct {
 	Language string `json:"language"`
 	HasError bool   `json:"hasError"`
