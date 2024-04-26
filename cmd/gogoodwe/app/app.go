@@ -25,12 +25,14 @@ package app
 
 // Main package - This is the main program entry point
 import (
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/powerstation"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
 )
 
-// Run - main program runner
+// Run is the main program runner.
+//
+// No parameters.
+// Returns an error.
 func Run() error {
 
 	//Get the args input data
@@ -48,6 +50,6 @@ func Run() error {
 	}
 
 	// Get the data from the API, return any errors. Pass in args as string
-	return powerstation.FetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	return fetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
 
 }

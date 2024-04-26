@@ -21,49 +21,46 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package app
 
-package powerstation
-
+// Main package - This is the main program entry point
 import (
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/semsapi"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/monitordata"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-// FetchData fetches data based on user account credentials and power station ID, and can retrieve daily summary if specified.
+// fetchData fetches data based on user account credentials and power station ID, and can retrieve daily summary if specified.
+//
 // Parameters:
+// - Account: the email account associated with the user.
+// - Password: the password associated with the user's account.
+// - PowerStationID: the ID of the power station.
+// - DailySummary: a boolean indicating whether to retrieve a daily summary.
 //
-//	Account string - user account
-//	Password string - account password
-//	PowerStationID string - ID of the power station
-//	DailySummary bool - whether to retrieve daily summary
-//
-// Return type:
-//
-//	error
-func FetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
+// Returns:
+// - error: an error if there was a problem logging in or fetching data.
+func fetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
 
 	// User account struct
-	creds := &types.LoginCredentials{
+	loginCreds := &apilogin.ApiLoginCredentials{
 		Account:        Account,
 		Password:       Password,
 		PowerStationID: PowerStationID,
 	}
 
 	// Do the login..check for errors
-	loginApiResponse, err := semsapi.Login(creds)
+	loginApiResponse, err := loginCreds.APILogin()
 	if err != nil {
 		utils.HandleError(err)
 		return err
 	}
 
-	//fetch data based on
-	if DailySummary {
-		getMonitorSummaryByPowerstationId(creds, loginApiResponse)
-
-	} else {
-		//powerstationData = types.InverterData
-		getMonitorDetailByPowerstationId(creds, loginApiResponse)
+	//fetch data and output
+	dataErr := monitordata.GetData(loginCreds, loginApiResponse, DailySummary)
+	if dataErr != nil {
+		utils.HandleError(dataErr)
+		return dataErr
 	}
 
 	return nil

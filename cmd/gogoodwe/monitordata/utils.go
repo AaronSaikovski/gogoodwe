@@ -21,15 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package powerstation
+package monitordata
 
 import (
 	"encoding/json"
 	"net/http"
 	"strconv"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/interfaces"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
@@ -40,7 +39,7 @@ func setHeaders(r *http.Request, tokenstring []byte) {
 }
 
 // PowerStationIdJSON - Makes a map for the powerStationId to be passed to the Data API header and returns a JSON string
-func powerStationIdJSON(UserLogin *types.LoginCredentials) ([]byte, error) {
+func powerStationIdJSON(UserLogin *apilogin.ApiLoginCredentials) ([]byte, error) {
 	powerStationMap := make(map[string]string)
 	powerStationMap["powerStationId"] = UserLogin.PowerStationID
 
@@ -49,7 +48,7 @@ func powerStationIdJSON(UserLogin *types.LoginCredentials) ([]byte, error) {
 	return jsonStr, err
 }
 
-func dataTokenJSON(SemsResponseData *types.LoginResponse) ([]byte, error) {
+func dataTokenJSON(SemsResponseData *apilogin.ApiLoginResponse) ([]byte, error) {
 	tokenMap := make(map[string]string)
 	tokenMap["version"] = "v2.1.0"
 	tokenMap["client"] = "ios"
@@ -64,7 +63,7 @@ func dataTokenJSON(SemsResponseData *types.LoginResponse) ([]byte, error) {
 }
 
 // parse json data
-func getDataJSON[T interfaces.ISemsDataConstraint](data T) ([]byte, error) {
+func getDataJSON[T ISemsDataConstraint](data T) ([]byte, error) {
 
 	// Get the response and return any errors
 	resp, err := utils.MarshalStructToJSON(&data)

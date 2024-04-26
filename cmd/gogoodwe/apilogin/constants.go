@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package semsapi
+package apilogin
 
 const (
 	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"

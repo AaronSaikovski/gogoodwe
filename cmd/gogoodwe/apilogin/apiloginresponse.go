@@ -21,13 +21,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package interfaces
+package apilogin
 
-import (
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/types"
-)
-
-// Constraints for functions that return data from the API via marshalled structs
-type ISemsDataConstraint interface {
-	types.InverterData | types.DailySummaryData
+// LoginResponse - SEMS API Response struct
+type ApiLoginResponse struct {
+	HasError bool   `json:"hasError"`
+	Code     int32  `json:"code"`
+	Msg      string `json:"msg"`
+	Data     struct {
+		UID       string `json:"uid"`
+		Timestamp int64  `json:"timestamp"`
+		Token     string `json:"token"`
+		Client    string `json:"client"`
+		Version   string `json:"version"`
+		Language  string `json:"language"`
+	} `json:"data"`
+	Components struct {
+		Para         any    `json:"para"`
+		LangVer      int    `json:"langVer"`
+		TimeSpan     int    `json:"timeSpan"`
+		API          string `json:"api"`
+		MsgSocketAdr string `json:"msgSocketAdr"`
+	} `json:"components"`
+	API string `json:"api"`
 }

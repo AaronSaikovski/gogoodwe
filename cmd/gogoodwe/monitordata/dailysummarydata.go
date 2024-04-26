@@ -22,33 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*
-# Name: LoginResponse - SEMS API Response Data struct
-# Contains all the JSON Response data returned from the authentication API - "https://www.semsportal.com/api/v2/Common/CrossLogin"
-# Will be unmarshalled to a struct via a pointer
-# Author: Aaron Saikovski - asaikovski@outlook.com
-*/
-package types
+package monitordata
 
-// LoginResponse - SEMS API Response Data struct
-type LoginResponse struct {
+// DailySummaryData - Struct to hold daily summary data
+type DailySummaryData struct {
+	Language string `json:"language"`
 	HasError bool   `json:"hasError"`
-	Code     int32  `json:"code"`
 	Msg      string `json:"msg"`
+	Code     string `json:"code"`
 	Data     struct {
-		UID       string `json:"uid"`
-		Timestamp int64  `json:"timestamp"`
-		Token     string `json:"token"`
-		Client    string `json:"client"`
-		Version   string `json:"version"`
-		Language  string `json:"language"`
+		Kpi struct {
+			MonthGeneration float64 `json:"month_generation"`
+			Power           float64 `json:"power"`
+			TotalPower      float64 `json:"total_power"`
+			DayIncome       float64 `json:"day_income"`
+			TotalIncome     float64 `json:"total_income"`
+			Currency        string  `json:"currency"`
+		} `json:"kpi"`
+		Inverter []struct {
+			TotalGeneration string `json:"total_generation"`
+			DailyGeneration string `json:"daily_generation"`
+		} `json:"inverter"`
 	} `json:"data"`
-	Components struct {
-		Para         any    `json:"para"`
-		LangVer      int    `json:"langVer"`
-		TimeSpan     int    `json:"timeSpan"`
-		API          string `json:"api"`
-		MsgSocketAdr string `json:"msgSocketAdr"`
-	} `json:"components"`
-	API string `json:"api"`
 }
