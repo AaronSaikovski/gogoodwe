@@ -33,10 +33,12 @@ import (
 //
 // No parameters.
 // Returns an error.
-func Run() error {
+func Run(versionString string) error {
 
 	//Get the args input data
 	var args utils.Args
+	//set the version build info
+	args.SetVersion(versionString)
 	p := arg.MustParse(&args)
 
 	//check for valid email address input

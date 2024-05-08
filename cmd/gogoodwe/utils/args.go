@@ -46,3 +46,8 @@ func (Args) Description() string {
 func (Args) Version() string {
 	return VersionString
 }
+
+// set version string
+func (Args) SetVersion(versionString string) {
+	VersionString = versionString
+}

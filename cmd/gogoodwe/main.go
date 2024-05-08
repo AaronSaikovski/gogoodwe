@@ -28,16 +28,24 @@ Package main implements a program that authenticates to and queries the SEMS Sol
 package main
 
 import (
+	_ "embed"
+	"os"
+
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
-	"log"
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-func main() {
-	if err := runApp(); err != nil {
-		log.Fatalf("error: %v", err)
-	}
-}
+//ref: https://levelup.gitconnected.com/a-better-way-than-ldflags-to-add-a-build-version-to-your-go-binaries-2258ce419d2d
 
-func runApp() error {
-	return app.Run()
+//go:generate bash get_version.sh
+//go:embed version.txt
+var version string
+
+func main() {
+
+	if err := app.Run(version); err != nil {
+		utils.HandleError(err)
+		os.Exit(1)
+	}
+
 }
