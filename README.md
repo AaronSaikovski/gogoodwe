@@ -1,6 +1,6 @@
 <div align="center">
 
-## GoGoodwe V2.0.3
+## GoGoodwe V2.0.4
 
 A command line tool to query the GOODWE SEMS Inverter APIs - written in 100% Go.
 
