@@ -1,8 +1,8 @@
 <div align="center">
 
-## GoGoodwe V2.0.4
+## GoGoodwe V2.0.5
 
-A command line tool to query the GOODWE SEMS Inverter APIs - written in 100% Go.
+A command line tool to query the GOODWE SEMS Solar Inverter APIs - written in 100% Go.
 
 [![Build Status](https://github.com/AaronSaikovski/gogoodwe/workflows/build/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)

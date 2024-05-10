@@ -1,6 +1,13 @@
 # GoGoodwe - CHANGELOG
 
-## v2.0.3 (2024-04-26
+
+## v2.0.5 (2024-05-10)
+
+- Optimised and refactored code to reduce CPU usage and memory pressure and increased speed.
+
+
+
+## v2.0.3 (2024-04-26)
 
 - Minor fixes
 -
