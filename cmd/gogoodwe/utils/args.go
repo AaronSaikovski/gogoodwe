@@ -37,17 +37,25 @@ type Args struct {
 	DailySummary   bool   `arg:"-s,--summary" help:"Output as a daily summary."`
 }
 
-// Description - App description
+// Description returns a command line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API.
+//
+// No parameters.
+// Returns a string.
 func (Args) Description() string {
 	return "A command line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API."
 }
 
-// Version - Version info
+// Version returns the version string of the Args struct.
+//
+// No parameters.
+// Returns a string.
 func (Args) Version() string {
 	return VersionString
 }
 
-// set version string
+// SetVersion sets the version string of the Args struct.
+//
+// versionString: the new version string to set.
 func (Args) SetVersion(versionString string) {
 	VersionString = versionString
 }

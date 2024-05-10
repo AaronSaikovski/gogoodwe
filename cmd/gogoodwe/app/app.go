@@ -32,31 +32,12 @@ import (
 
 // Run is the main program runner.
 //
-// No parameters.
-// Returns an error.
-// func Run(versionString string) error {
-
-// 	//Get the args input data
-// 	var args utils.Args
-// 	//set the version build info
-// 	args.SetVersion(versionString)
-// 	p := arg.MustParse(&args)
-
-// 	//check for valid email address input
-// 	if !utils.CheckValidEmail(args.Account) {
-// 		p.Fail("Invalid Email address format - should be: 'user@somedomain.com'.")
-// 	}
-
-// 	//check for valid powerstation Id
-// 	if !utils.CheckValidPowerstationID(args.PowerStationID) {
-// 		p.Fail("Invalid Powerstation ID format: - should be: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'.")
-// 	}
-
-// 	// Get the data from the API, return any errors. Pass in args as string
-// 	return fetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
-
-// }
-
+// It takes a version string as a parameter and returns an error.
+// The version string is used to set the build information.
+// The function parses the command line arguments using the utils.Args struct.
+// It checks if the email address and powerstation ID are in the correct format.
+// If not, it fails with an error message.
+// Finally, it calls the fetchData function to get data from the API and returns any errors.
 func Run(versionString string) error {
 	// Set version build info
 

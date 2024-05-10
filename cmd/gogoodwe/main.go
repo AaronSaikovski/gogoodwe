@@ -34,21 +34,14 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
 )
 
-//ref: https://levelup.gitconnected.com/a-better-way-than-ldflags-to-add-a-build-version-to-your-go-binaries-2258ce419d2d
-
 //go:generate bash get_version.sh
 //go:embed version.txt
 var version string
 
-// func main() {
-
-// 	if err := app.Run(version); err != nil {
-// 		utils.HandleError(err)
-// 		os.Exit(1)
-// 	}
-
-// }
-
+// main is the entry point of the Go program.
+//
+// It calls the app.Run function with the version string as a parameter.
+// If an error is returned, it logs the error message and exits the program.
 func main() {
 	if err := app.Run(version); err != nil {
 		log.Fatalf("Error: %v", err)

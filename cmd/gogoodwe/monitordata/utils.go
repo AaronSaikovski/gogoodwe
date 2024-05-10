@@ -31,39 +31,27 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
-// setHeaders - Set the headers for the SEMS Data API
+// setHeaders sets the headers for the SEMS Data API.
+//
+// It takes an http.Request pointer 'r' and a byte slice 'tokenstring' as parameters.
 func setHeaders(r *http.Request, tokenstring []byte) {
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Token", string(tokenstring))
 }
 
-// PowerStationIdJSON - Makes a map for the powerStationId to be passed to the Data API header and returns a JSON string
-// func powerStationIdJSON(UserLogin *apilogin.ApiLoginCredentials) ([]byte, error) {
-// 	powerStationMap := make(map[string]string)
-// 	powerStationMap["powerStationId"] = UserLogin.PowerStationID
-
-//		// convert to byte[]
-//		jsonStr, err := json.Marshal(powerStationMap)
-//		return jsonStr, err
-//	}
+// powerStationIdJSON generates a JSON representation of the power station ID.
+//
+// It takes an ApiLoginCredentials pointer 'userLogin' as a parameter.
+// Returns a byte slice and an error.
 func powerStationIdJSON(userLogin *apilogin.ApiLoginCredentials) ([]byte, error) {
 	powerStationMap := map[string]string{"powerStationId": userLogin.PowerStationID}
 	return json.Marshal(powerStationMap)
 }
 
-// func dataTokenJSON(SemsResponseData *apilogin.ApiLoginResponse) ([]byte, error) {
-// 	tokenMap := make(map[string]string)
-// 	tokenMap["version"] = "v2.1.0"
-// 	tokenMap["client"] = "ios"
-// 	tokenMap["language"] = "en"
-// 	tokenMap["timestamp"] = strconv.FormatInt(SemsResponseData.Data.Timestamp, 10)
-// 	tokenMap["uid"] = SemsResponseData.Data.UID
-// 	tokenMap["token"] = SemsResponseData.Data.Token
-
-//		// convert to byte[]
-//		jsonStr, err := json.Marshal(tokenMap)
-//		return jsonStr, err
-//	}
+// dataTokenJSON generates a JSON representation of the data token.
+//
+// It takes a pointer to an ApiLoginResponse struct 'semsResponseData' as a parameter.
+// Returns a byte slice and an error.
 func dataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) {
 	tokenMap := map[string]interface{}{
 		"version":   "v2.1.0",
@@ -76,14 +64,10 @@ func dataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) 
 	return json.Marshal(tokenMap)
 }
 
-// parse json data
-// func getDataJSON[T ISemsDataConstraint](data T) ([]byte, error) {
-
-// 	// Get the response and return any errors
-// 	resp, err := utils.MarshalStructToJSON(&data)
-// 	return resp, err
-// }
-
+// getDataJSON generates a JSON representation of the given data.
+//
+// The function takes a parameter 'data' of type T, which must satisfy the ISemsDataConstraint interface.
+// It returns a byte slice containing the JSON representation of the data, and an error if any occurred.
 func getDataJSON[T ISemsDataConstraint](data T) ([]byte, error) {
 
 	// Get the response and return any errors

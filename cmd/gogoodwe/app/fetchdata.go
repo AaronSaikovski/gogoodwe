@@ -31,42 +31,13 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/monitordata"
 )
 
-// fetchData fetches data based on user account credentials and power station ID, and can retrieve daily summary if specified.
+// fetchData fetches data using the provided account credentials and power station ID.
 //
-// Parameters:
-// - Account: the email account associated with the user.
-// - Password: the password associated with the user's account.
-// - PowerStationID: the ID of the power station.
-// - DailySummary: a boolean indicating whether to retrieve a daily summary.
-//
-// Returns:
-// - error: an error if there was a problem logging in or fetching data.
-// func fetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
-
-// 	// User account struct
-// 	loginCreds := &apilogin.ApiLoginCredentials{
-// 		Account:        Account,
-// 		Password:       Password,
-// 		PowerStationID: PowerStationID,
-// 	}
-
-// 	// Do the login..check for errors
-// 	loginApiResponse, err := loginCreds.APILogin()
-// 	if err != nil {
-// 		utils.HandleError(err)
-// 		return err
-// 	}
-
-// 	//fetch data and output
-// 	dataErr := monitordata.GetData(loginCreds, loginApiResponse, DailySummary)
-// 	if dataErr != nil {
-// 		utils.HandleError(dataErr)
-// 		return dataErr
-// 	}
-
-// 	return nil
-// }
-
+// Account: the email account associated with the user.
+// Password: the password associated with the user's account.
+// PowerStationID: the ID of the power station.
+// DailySummary: a boolean indicating whether to retrieve a daily summary.
+// error: an error if there was a problem logging in or fetching data.
 func fetchData(Account, Password, PowerStationID string, DailySummary bool) error {
 	// User account struct
 	loginCreds := &apilogin.ApiLoginCredentials{

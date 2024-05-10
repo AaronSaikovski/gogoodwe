@@ -34,7 +34,9 @@ import (
 
 // parseOutput parses the JSON output from the provided byte slice.
 //
-// It takes a byte slice as input and returns a *fastjson.Value and an error.
+// Parameters:
+// - dataOutput: a byte slice containing the JSON output to be parsed.
+// Return type: (*fastjson.Value, error)
 func parseOutput(dataOutput []byte) (*fastjson.Value, error) {
 	//parse JSON output
 	var parser fastjson.Parser
@@ -48,6 +50,12 @@ func parseOutput(dataOutput []byte) (*fastjson.Value, error) {
 
 }
 
+// printOutput prints the provided fastjson.Value in bright yellow color using the aurora package.
+//
+// Parameters:
+// - output: a pointer to a fastjson.Value that represents the output to be printed.
+//
+// Return type: None.
 func printOutput(output *fastjson.Value) {
 	fmt.Println(aurora.BrightYellow(output))
 }
