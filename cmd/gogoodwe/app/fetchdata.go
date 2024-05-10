@@ -25,9 +25,10 @@ package app
 
 // Main package - This is the main program entry point
 import (
+	"fmt"
+
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/monitordata"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
 // fetchData fetches data based on user account credentials and power station ID, and can retrieve daily summary if specified.
@@ -40,8 +41,33 @@ import (
 //
 // Returns:
 // - error: an error if there was a problem logging in or fetching data.
-func fetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
+// func fetchData(Account string, Password string, PowerStationID string, DailySummary bool) error {
 
+// 	// User account struct
+// 	loginCreds := &apilogin.ApiLoginCredentials{
+// 		Account:        Account,
+// 		Password:       Password,
+// 		PowerStationID: PowerStationID,
+// 	}
+
+// 	// Do the login..check for errors
+// 	loginApiResponse, err := loginCreds.APILogin()
+// 	if err != nil {
+// 		utils.HandleError(err)
+// 		return err
+// 	}
+
+// 	//fetch data and output
+// 	dataErr := monitordata.GetData(loginCreds, loginApiResponse, DailySummary)
+// 	if dataErr != nil {
+// 		utils.HandleError(dataErr)
+// 		return dataErr
+// 	}
+
+// 	return nil
+// }
+
+func fetchData(Account, Password, PowerStationID string, DailySummary bool) error {
 	// User account struct
 	loginCreds := &apilogin.ApiLoginCredentials{
 		Account:        Account,
@@ -49,18 +75,15 @@ func fetchData(Account string, Password string, PowerStationID string, DailySumm
 		PowerStationID: PowerStationID,
 	}
 
-	// Do the login..check for errors
+	// Do the login
 	loginApiResponse, err := loginCreds.APILogin()
 	if err != nil {
-		utils.HandleError(err)
-		return err
+		return fmt.Errorf("login failed: %w", err)
 	}
 
-	//fetch data and output
-	dataErr := monitordata.GetData(loginCreds, loginApiResponse, DailySummary)
-	if dataErr != nil {
-		utils.HandleError(dataErr)
-		return dataErr
+	// Fetch data and handle errors
+	if err := monitordata.GetData(loginCreds, loginApiResponse, DailySummary); err != nil {
+		return fmt.Errorf("data fetching failed: %w", err)
 	}
 
 	return nil

@@ -33,13 +33,22 @@ import (
 )
 
 // UnmarshalDataToStruct - Unmarshall http response to target struct
+// func UnmarshalDataToStruct(respBody []byte, targetStruct interface{}) error {
+// 	resperr := json.Unmarshal(respBody, &targetStruct)
+// 	return resperr
+// }
+
+// // MarshalStructToJSON - Marshall the struct pointer to JSON
+// func MarshalStructToJSON(targetStruct interface{}) ([]byte, error) {
+// 	jsonData, err := json.Marshal(&targetStruct)
+// 	return jsonData, err
+// }
+
 func UnmarshalDataToStruct(respBody []byte, targetStruct interface{}) error {
-	resperr := json.Unmarshal(respBody, &targetStruct)
-	return resperr
+	return json.Unmarshal(respBody, &targetStruct)
 }
 
 // MarshalStructToJSON - Marshall the struct pointer to JSON
 func MarshalStructToJSON(targetStruct interface{}) ([]byte, error) {
-	jsonData, err := json.Marshal(&targetStruct)
-	return jsonData, err
+	return json.Marshal(&targetStruct)
 }

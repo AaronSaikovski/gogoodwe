@@ -29,10 +29,9 @@ package main
 
 import (
 	_ "embed"
-	"os"
+	"log"
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
 //ref: https://levelup.gitconnected.com/a-better-way-than-ldflags-to-add-a-build-version-to-your-go-binaries-2258ce419d2d
@@ -41,11 +40,17 @@ import (
 //go:embed version.txt
 var version string
 
+// func main() {
+
+// 	if err := app.Run(version); err != nil {
+// 		utils.HandleError(err)
+// 		os.Exit(1)
+// 	}
+
+// }
+
 func main() {
-
 	if err := app.Run(version); err != nil {
-		utils.HandleError(err)
-		os.Exit(1)
+		log.Fatalf("Error: %v", err)
 	}
-
 }

@@ -25,7 +25,7 @@ package monitordata
 
 import (
 	"bytes"
-	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -39,40 +39,88 @@ import (
 // LoginApiResponse: The login API response.
 // InverterOutput: The output struct to store the retrieved data.
 // error: An error if any occurred during the retrieval process.
-func getMonitorData[T ISemsDataConstraint](LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse, InverterOutput *T) error {
+// func getMonitorData[T ISemsDataConstraint](LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse, InverterOutput *T) error {
 
-	// get the Token header data
-	apiResponseJsonData, err := dataTokenJSON(LoginApiResponse)
+// 	// get the Token header data
+// 	apiResponseJsonData, err := dataTokenJSON(LoginApiResponse)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	// get the Powerstation ID header data
+// 	powerStationIdJsonData, err := powerStationIdJSON(LoginCredentials)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	//Get the url from the Auth API and append the data url part
+// 	url := (LoginApiResponse.API + PowerStationURL)
+
+// 	// Create a new http request
+// 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIdJsonData))
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	//Add headers pass in the pointer to set the headers on the request object
+// 	setHeaders(req, apiResponseJsonData)
+
+// 	//make the API Call
+// 	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
+// 	resp, err := client.Do(req)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	//cleanup
+// 	defer resp.Body.Close()
+
+// 	// Get the response body
+// 	respBody, err := utils.FetchResponseBody(resp.Body)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	//marshall response to struct pointer
+// 	inverterDataerr := utils.UnmarshalDataToStruct(respBody, &InverterOutput)
+// 	if inverterDataerr != nil {
+// 		return inverterDataerr
+// 	}
+
+// 	return nil
+
+// }
+func getMonitorData[T ISemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+	// Get the Token header data
+	apiResponseJSONData, err := dataTokenJSON(loginApiResponse)
 	if err != nil {
 		return err
 	}
 
-	// get the Powerstation ID header data
-	powerStationIdJsonData, err := powerStationIdJSON(LoginCredentials)
+	// Get the Powerstation ID header data
+	powerStationIDJSONData, err := powerStationIdJSON(loginCredentials)
 	if err != nil {
 		return err
 	}
 
-	//Get the url from the Auth API and append the data url part
-	url := (LoginApiResponse.API + PowerStationURL)
+	// Create URL from the Auth API and append the data URL part
+	url := loginApiResponse.API + PowerStationURL
 
-	// Create a new http request
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIdJsonData))
+	// Create a new HTTP request
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
 	if err != nil {
 		return err
 	}
 
-	//Add headers pass in the pointer to set the headers on the request object
-	setHeaders(req, apiResponseJsonData)
+	// Add headers
+	setHeaders(req, apiResponseJSONData)
 
-	//make the API Call
+	// Make the API call
 	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
-
-	//cleanup
 	defer resp.Body.Close()
 
 	// Get the response body
@@ -81,14 +129,12 @@ func getMonitorData[T ISemsDataConstraint](LoginCredentials *apilogin.ApiLoginCr
 		return err
 	}
 
-	//marshall response to struct pointer
-	inverterDataerr := utils.UnmarshalDataToStruct(respBody, &InverterOutput)
-	if inverterDataerr != nil {
-		return inverterDataerr
+	// Unmarshal response to struct pointer
+	if err := utils.UnmarshalDataToStruct(respBody, inverterOutput); err != nil {
+		return err
 	}
 
 	return nil
-
 }
 
 // getMonitorDataOutput retrieves monitor data for a given LoginCredentials and LoginApiResponse,
@@ -100,24 +146,48 @@ func getMonitorData[T ISemsDataConstraint](LoginCredentials *apilogin.ApiLoginCr
 // then calls the getDataJSON function to convert the data to JSON format, and finally calls the parseOutput
 // function to parse the JSON data and print the output. If any errors occur during the process, the
 // utils.HandleError function is called to handle the error.
-func getMonitorDataOutput[T ISemsDataConstraint](LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse, InverterOutput *T) error {
+// func getMonitorDataOutput[T ISemsDataConstraint](LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse, InverterOutput *T) error {
 
+// 	var powerstationData T
+// 	err := getMonitorData(LoginCredentials, LoginApiResponse, &powerstationData)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	dataOutput, err := getDataJSON(powerstationData)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	output, err := parseOutput(dataOutput)
+// 	if err != nil {
+// 		utils.HandleError(err)
+// 		return err
+// 	}
+// 	printOutput(output)
+
+//		return nil
+//	}
+func getMonitorDataOutput[T ISemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+	// Get monitor data
 	var powerstationData T
-	err := getMonitorData(LoginCredentials, LoginApiResponse, &powerstationData)
-	if err != nil {
+	if err := getMonitorData(loginCredentials, loginApiResponse, &powerstationData); err != nil {
 		return err
 	}
 
+	// Get data JSON
 	dataOutput, err := getDataJSON(powerstationData)
 	if err != nil {
 		return err
 	}
 
+	// Parse output
 	output, err := parseOutput(dataOutput)
 	if err != nil {
-		utils.HandleError(err)
 		return err
 	}
+
+	// Print output
 	printOutput(output)
 
 	return nil
@@ -129,15 +199,22 @@ func getMonitorDataOutput[T ISemsDataConstraint](LoginCredentials *apilogin.ApiL
 // LoginApiResponse: The login API response.
 //
 // No return value.
-func getMonitorDetailByPowerstationId(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse) error {
+// func getMonitorDetailByPowerstationId(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse) error {
+// 	var powerstationData InverterData
+// 	err := getMonitorDataOutput(LoginCredentials, LoginApiResponse, &powerstationData)
+
+// 	if err != nil {
+// 		utils.HandleError(errors.New("error: fetching powerstation data"))
+// 		return err
+// 	}
+
+//		return nil
+//	}
+func getMonitorDetailByPowerstationId(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse) error {
 	var powerstationData InverterData
-	err := getMonitorDataOutput(LoginCredentials, LoginApiResponse, &powerstationData)
-
-	if err != nil {
-		utils.HandleError(errors.New("error: fetching powerstation data"))
-		return err
+	if err := getMonitorDataOutput(loginCredentials, loginApiResponse, &powerstationData); err != nil {
+		return fmt.Errorf("error fetching powerstation data: %v", err)
 	}
-
 	return nil
 }
 
@@ -146,19 +223,26 @@ func getMonitorDetailByPowerstationId(LoginCredentials *apilogin.ApiLoginCredent
 // LoginCredentials: The login credentials for the API.
 // LoginApiResponse: The login API response.
 //
-// No return value.
-func getMonitorSummaryByPowerstationId(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse) error {
+// // No return value.
+// func getMonitorSummaryByPowerstationId(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse) error {
 
+// 	var powerstationData DailySummaryData
+// 	err := getMonitorDataOutput(LoginCredentials, LoginApiResponse, &powerstationData)
+
+// 	if err != nil {
+// 		utils.HandleError(errors.New("error: fetching powerstation summary data"))
+// 		return err
+// 	}
+
+// 	return nil
+
+// }
+func getMonitorSummaryByPowerstationId(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse) error {
 	var powerstationData DailySummaryData
-	err := getMonitorDataOutput(LoginCredentials, LoginApiResponse, &powerstationData)
-
-	if err != nil {
-		utils.HandleError(errors.New("error: fetching powerstation summary data"))
-		return err
+	if err := getMonitorDataOutput(loginCredentials, loginApiResponse, &powerstationData); err != nil {
+		return fmt.Errorf("error fetching powerstation summary data: %v", err)
 	}
-
 	return nil
-
 }
 
 // GetData retrieves data based on the provided login credentials and login API response.
@@ -166,12 +250,19 @@ func getMonitorSummaryByPowerstationId(LoginCredentials *apilogin.ApiLoginCreden
 // LoginCredentials: A pointer to an ApiLoginCredentials struct representing the login credentials.
 // LoginApiResponse: A pointer to an ApiLoginResponse struct representing the login API response.
 // isDailySummary: A boolean indicating whether to retrieve daily summary data.
-func GetData(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse, isDailySummary bool) error {
+// func GetData(LoginCredentials *apilogin.ApiLoginCredentials, LoginApiResponse *apilogin.ApiLoginResponse, isDailySummary bool) error {
 
+// 	if isDailySummary {
+// 		return getMonitorSummaryByPowerstationId(LoginCredentials, LoginApiResponse)
+
+// 	} else {
+// 		return getMonitorDetailByPowerstationId(LoginCredentials, LoginApiResponse)
+// 	}
+// }
+
+func GetData(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, isDailySummary bool) error {
 	if isDailySummary {
-		return getMonitorSummaryByPowerstationId(LoginCredentials, LoginApiResponse)
-
-	} else {
-		return getMonitorDetailByPowerstationId(LoginCredentials, LoginApiResponse)
+		return getMonitorSummaryByPowerstationId(loginCredentials, loginApiResponse)
 	}
+	return getMonitorDetailByPowerstationId(loginCredentials, loginApiResponse)
 }
