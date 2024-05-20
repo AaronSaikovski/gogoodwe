@@ -110,3 +110,8 @@ tasks:
       - go fmt ./...
       - go mod tidy -v
       - golangci-lint run ./...
+
+  ## generate - update build version
+  generate:
+    cmds:
+      - go generate $APPPATH
