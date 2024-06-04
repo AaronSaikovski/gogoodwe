@@ -1,6 +1,6 @@
 module github.com/AaronSaikovski/gogoodwe
 
-go 1.22.3
+go 1.22.4
 
 require (
 	github.com/alexflint/go-arg v1.5.0
