@@ -30,7 +30,6 @@ import (
 	"time"
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/helpers"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/interfaces"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/types"
@@ -48,25 +47,24 @@ const (
 // getMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
 //
 // Parameters:
-// - loginCredentials: pointer to the API login credentials
-// - loginApiResponse: pointer to the API login response
+// - monitorDataLoginInfo: pointer to the MonitorDataLoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func getMonitorData[T interfaces.SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+func getMonitorData[T interfaces.SemsDataConstraint](monitorDataLoginInfo *MonitorDataLoginInfo, inverterOutput *T) error {
 	// Get the Token header data
-	apiResponseJSONData, err := helpers.DataTokenJSON(loginApiResponse)
+	apiResponseJSONData, err := helpers.DataTokenJSON(monitorDataLoginInfo.LoginApiResponse)
 	if err != nil {
 		return err
 	}
 
 	// Get the Powerstation ID header data
-	powerStationIDJSONData, err := helpers.PowerStationIdJSON(loginCredentials)
+	powerStationIDJSONData, err := helpers.PowerStationIdJSON(monitorDataLoginInfo.LoginApiCredentials)
 	if err != nil {
 		return err
 	}
 
 	// Create URL from the Auth API and append the data URL part
-	url := loginApiResponse.API + PowerStationURL
+	url := monitorDataLoginInfo.LoginApiResponse.API + PowerStationURL
 
 	// Create a new HTTP request
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
@@ -99,17 +97,18 @@ func getMonitorData[T interfaces.SemsDataConstraint](loginCredentials *apilogin.
 	return nil
 }
 
-// getMonitorDataOutput retrieves monitor data using login credentials and response, storing it in inverterOutput.
+// getMonitorDataOutput retrieves the monitor data output for a given MonitorDataLoginInfo and stores it in the provided inverterOutput.
 //
 // Parameters:
-// - loginCredentials: pointer to the API login credentials
-// - loginApiResponse: pointer to the API login response
-// - inverterOutput: pointer to the data output
-// Return type: error
-func getMonitorDataOutput[T interfaces.SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct containing the login information for the monitor data.
+// - inverterOutput: a pointer to the variable where the monitor data output will be stored.
+//
+// Returns:
+// - error: an error if any occurred during the retrieval or processing of the monitor data.
+func getMonitorDataOutput[T interfaces.SemsDataConstraint](monitorDataLoginInfo *MonitorDataLoginInfo, inverterOutput *T) error {
 	// Get monitor data
 	var powerstationData T
-	if err := getMonitorData(loginCredentials, loginApiResponse, &powerstationData); err != nil {
+	if err := getMonitorData(monitorDataLoginInfo, &powerstationData); err != nil {
 		return err
 	}
 
@@ -131,15 +130,13 @@ func getMonitorDataOutput[T interfaces.SemsDataConstraint](loginCredentials *api
 	return nil
 }
 
-// getMonitorDetailByPowerstationId retrieves the monitor details for a specific power station ID.
+// getMonitorDetailByPowerstationId retrieves the monitor detail for a given powerstation ID.
 //
-// LoginCredentials: The login credentials for the API.
-// LoginApiResponse: The login API response.
-//
-// Returns an error if there was an issue fetching the powerstation data.
-func getMonitorDetailByPowerstationId(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse) error {
+// It takes a pointer to a MonitorDataLoginInfo struct as a parameter.
+// The function returns an error if there was an issue fetching the powerstation data.
+func getMonitorDetailByPowerstationId(monitorDataLoginInfo *MonitorDataLoginInfo) error {
 	var powerstationData types.InverterData
-	if err := getMonitorDataOutput(loginCredentials, loginApiResponse, &powerstationData); err != nil {
+	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
 		return fmt.Errorf("error fetching powerstation data: %v", err)
 	}
 	return nil
@@ -148,14 +145,13 @@ func getMonitorDetailByPowerstationId(loginCredentials *apilogin.ApiLoginCredent
 // getMonitorSummaryByPowerstationId retrieves the monitor summary data for a specific power station ID.
 //
 // Parameters:
-// - loginCredentials: a pointer to the API login credentials
-// - loginApiResponse: a pointer to the API login response
+// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct containing the login credentials and power station ID.
 //
 // Returns:
-// - error: an error if there was an issue fetching the powerstation summary data
-func getMonitorSummaryByPowerstationId(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse) error {
+// - error: an error if there was an issue fetching the powerstation summary data.
+func getMonitorSummaryByPowerstationId(monitorDataLoginInfo *MonitorDataLoginInfo) error {
 	var powerstationData types.DailySummaryData
-	if err := getMonitorDataOutput(loginCredentials, loginApiResponse, &powerstationData); err != nil {
+	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
 		return fmt.Errorf("error fetching powerstation summary data: %v", err)
 	}
 	return nil
@@ -163,13 +159,14 @@ func getMonitorSummaryByPowerstationId(loginCredentials *apilogin.ApiLoginCreden
 
 // GetData retrieves either monitor summary or monitor details based on the specified flag.
 //
-// - loginCredentials: a pointer to the API login credentials
-// - loginApiResponse: a pointer to the API login response
+// Parameters:
+// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct
 // - isDailySummary: a flag to determine if daily summary data should be retrieved
+//
 // Returns an error if there was an issue fetching the data.
-func GetData(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, isDailySummary bool) error {
+func (monitorDataLoginInfo *MonitorDataLoginInfo) GetData(isDailySummary bool) error {
 	if isDailySummary {
-		return getMonitorSummaryByPowerstationId(loginCredentials, loginApiResponse)
+		return getMonitorSummaryByPowerstationId(monitorDataLoginInfo)
 	}
-	return getMonitorDetailByPowerstationId(loginCredentials, loginApiResponse)
+	return getMonitorDetailByPowerstationId(monitorDataLoginInfo)
 }

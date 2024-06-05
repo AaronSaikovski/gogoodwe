@@ -26,6 +26,7 @@ package app
 // Main package - This is the main program entry point
 import (
 	"fmt"
+
 	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/internal/monitordata"
 )
@@ -37,24 +38,33 @@ import (
 // PowerStationID: the ID of the power station.
 // DailySummary: a boolean indicating whether to retrieve a daily summary.
 // error: an error if there was a problem logging in or fetching data.
-func fetchData(Account, Password, PowerStationID string, DailySummary bool) error {
+func fetchData(Account, Password, PowerStationID string, isDailySummary bool) error {
 	// User account struct
-	loginCreds := &apilogin.ApiLoginCredentials{
+	apiLoginCreds := &apilogin.ApiLoginCredentials{
 		Account:        Account,
 		Password:       Password,
 		PowerStationID: PowerStationID,
 	}
 
 	// Do the login
-	loginApiResponse, err := loginCreds.APILogin()
+	loginApiResponse, err := apiLoginCreds.APILogin()
 	if err != nil {
 		return fmt.Errorf("login failed: %w", err)
 	}
 
-	// Fetch data and handle errors
-	if err := monitordata.GetData(loginCreds, loginApiResponse, DailySummary); err != nil {
-		return fmt.Errorf("data fetching failed: %w", err)
+	monitordata := &monitordata.MonitorDataLoginInfo{
+		LoginApiCredentials: apiLoginCreds,
+		LoginApiResponse:    loginApiResponse,
 	}
+
+	if err := monitordata.GetData(isDailySummary); err != nil {
+		return fmt.Errorf("data retrieval failed: %w", err)
+	}
+
+	// Fetch data and handle errors
+	// if err := monitordata.GetData(apiLoginCreds, loginApiResponse, DailySummary); err != nil {
+	// 	return fmt.Errorf("data fetching failed: %w", err)
+	// }
 
 	return nil
 }
