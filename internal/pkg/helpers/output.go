@@ -21,12 +21,41 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package monitordata
+package helpers
 
-const (
-	// Powerstation API Url
-	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
+import (
+	"errors"
+	"fmt"
 
-	// Default timeout value
-	HTTPTimeout int = 20
+	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+	"github.com/logrusorgru/aurora"
+	"github.com/valyala/fastjson"
 )
+
+// parseOutput parses the JSON output from the provided byte slice.
+//
+// Parameters:
+// - dataOutput: a byte slice containing the JSON output to be parsed.
+// Return type: (*fastjson.Value, error)
+func ParseOutput(dataOutput []byte) (*fastjson.Value, error) {
+	//parse JSON output
+	var parser fastjson.Parser
+	output, err := parser.Parse(string(dataOutput))
+	if err != nil {
+		utils.HandleError(errors.New("error: parsing powerstation data"))
+		return nil, err
+	}
+
+	return output, nil
+
+}
+
+// printOutput prints the provided fastjson.Value in bright yellow color using the aurora package.
+//
+// Parameters:
+// - output: a pointer to a fastjson.Value that represents the output to be printed.
+//
+// Return type: None.
+func PrintOutput(output *fastjson.Value) {
+	fmt.Println(aurora.BrightYellow(output))
+}

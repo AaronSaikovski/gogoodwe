@@ -31,6 +31,11 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/constants"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/helpers"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/interfaces"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/types"
 )
 
 // getMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
@@ -40,21 +45,21 @@ import (
 // - loginApiResponse: pointer to the API login response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func getMonitorData[T SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+func getMonitorData[T interfaces.SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
 	// Get the Token header data
-	apiResponseJSONData, err := dataTokenJSON(loginApiResponse)
+	apiResponseJSONData, err := helpers.DataTokenJSON(loginApiResponse)
 	if err != nil {
 		return err
 	}
 
 	// Get the Powerstation ID header data
-	powerStationIDJSONData, err := powerStationIdJSON(loginCredentials)
+	powerStationIDJSONData, err := helpers.PowerStationIdJSON(loginCredentials)
 	if err != nil {
 		return err
 	}
 
 	// Create URL from the Auth API and append the data URL part
-	url := loginApiResponse.API + PowerStationURL
+	url := loginApiResponse.API + constants.PowerStationURL
 
 	// Create a new HTTP request
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
@@ -63,10 +68,10 @@ func getMonitorData[T SemsDataConstraint](loginCredentials *apilogin.ApiLoginCre
 	}
 
 	// Add headers
-	setHeaders(req, apiResponseJSONData)
+	helpers.SetHeaders(req, apiResponseJSONData)
 
 	// Make the API call
-	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
+	client := &http.Client{Timeout: time.Duration(constants.HTTPTimeout) * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
@@ -94,7 +99,7 @@ func getMonitorData[T SemsDataConstraint](loginCredentials *apilogin.ApiLoginCre
 // - loginApiResponse: pointer to the API login response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func getMonitorDataOutput[T SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+func getMonitorDataOutput[T interfaces.SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
 	// Get monitor data
 	var powerstationData T
 	if err := getMonitorData(loginCredentials, loginApiResponse, &powerstationData); err != nil {
@@ -102,19 +107,19 @@ func getMonitorDataOutput[T SemsDataConstraint](loginCredentials *apilogin.ApiLo
 	}
 
 	// Get data JSON
-	dataOutput, err := getDataJSON(powerstationData)
+	dataOutput, err := helpers.GetDataJSON(powerstationData)
 	if err != nil {
 		return err
 	}
 
 	// Parse output
-	output, err := parseOutput(dataOutput)
+	output, err := helpers.ParseOutput(dataOutput)
 	if err != nil {
 		return err
 	}
 
 	// Print output
-	printOutput(output)
+	helpers.PrintOutput(output)
 
 	return nil
 }
@@ -126,7 +131,7 @@ func getMonitorDataOutput[T SemsDataConstraint](loginCredentials *apilogin.ApiLo
 //
 // Returns an error if there was an issue fetching the powerstation data.
 func getMonitorDetailByPowerstationId(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse) error {
-	var powerstationData InverterData
+	var powerstationData types.InverterData
 	if err := getMonitorDataOutput(loginCredentials, loginApiResponse, &powerstationData); err != nil {
 		return fmt.Errorf("error fetching powerstation data: %v", err)
 	}
@@ -142,7 +147,7 @@ func getMonitorDetailByPowerstationId(loginCredentials *apilogin.ApiLoginCredent
 // Returns:
 // - error: an error if there was an issue fetching the powerstation summary data
 func getMonitorSummaryByPowerstationId(loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse) error {
-	var powerstationData DailySummaryData
+	var powerstationData types.DailySummaryData
 	if err := getMonitorDataOutput(loginCredentials, loginApiResponse, &powerstationData); err != nil {
 		return fmt.Errorf("error fetching powerstation summary data: %v", err)
 	}

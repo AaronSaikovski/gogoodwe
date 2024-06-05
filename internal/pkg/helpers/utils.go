@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package monitordata
+package helpers
 
 import (
 	"encoding/json"
@@ -29,12 +29,13 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/internal/pkg/interfaces"
 )
 
 // setHeaders sets the headers for the SEMS Data API.
 //
 // It takes an http.Request pointer 'r' and a byte slice 'tokenstring' as parameters.
-func setHeaders(r *http.Request, tokenstring []byte) {
+func SetHeaders(r *http.Request, tokenstring []byte) {
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Token", string(tokenstring))
 }
@@ -43,7 +44,7 @@ func setHeaders(r *http.Request, tokenstring []byte) {
 //
 // It takes an ApiLoginCredentials pointer 'userLogin' as a parameter.
 // Returns a byte slice and an error.
-func powerStationIdJSON(userLogin *apilogin.ApiLoginCredentials) ([]byte, error) {
+func PowerStationIdJSON(userLogin *apilogin.ApiLoginCredentials) ([]byte, error) {
 	powerStationMap := map[string]string{"powerStationId": userLogin.PowerStationID}
 	return json.Marshal(powerStationMap)
 }
@@ -52,7 +53,7 @@ func powerStationIdJSON(userLogin *apilogin.ApiLoginCredentials) ([]byte, error)
 //
 // It takes a pointer to an ApiLoginResponse struct 'semsResponseData' as a parameter.
 // Returns a byte slice and an error.
-func dataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) {
+func DataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) {
 	tokenMap := map[string]interface{}{
 		"version":   "v2.1.0",
 		"client":    "ios",
@@ -68,7 +69,7 @@ func dataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) 
 //
 // The function takes a parameter 'data' of type T, which must satisfy the ISemsDataConstraint interface.
 // It returns a byte slice containing the JSON representation of the data, and an error if any occurred.
-func getDataJSON[T SemsDataConstraint](data T) ([]byte, error) {
+func GetDataJSON[T interfaces.SemsDataConstraint](data T) ([]byte, error) {
 
 	// Get the response and return any errors
 	return utils.MarshalStructToJSON(&data)

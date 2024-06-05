@@ -28,7 +28,8 @@ import (
 	"fmt"
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/monitordata"
+
+	"github.com/AaronSaikovski/gogoodwe/internal/monitordata"
 )
 
 // fetchData fetches data using the provided account credentials and power station ID.

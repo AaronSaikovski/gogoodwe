@@ -21,9 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package monitordata
+package constants
 
-// Constraints for functions that return data from the API via marshalled structs
-type SemsDataConstraint interface {
-	InverterData | DailySummaryData
-}
+const (
+	// Powerstation API Url
+	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
+
+	// Default timeout value
+	HTTPTimeout int = 20
+)
