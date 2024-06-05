@@ -68,7 +68,7 @@ func dataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) 
 //
 // The function takes a parameter 'data' of type T, which must satisfy the ISemsDataConstraint interface.
 // It returns a byte slice containing the JSON representation of the data, and an error if any occurred.
-func getDataJSON[T ISemsDataConstraint](data T) ([]byte, error) {
+func getDataJSON[T SemsDataConstraint](data T) ([]byte, error) {
 
 	// Get the response and return any errors
 	return utils.MarshalStructToJSON(&data)

@@ -40,7 +40,7 @@ import (
 // - loginApiResponse: pointer to the API login response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func getMonitorData[T ISemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+func getMonitorData[T SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
 	// Get the Token header data
 	apiResponseJSONData, err := dataTokenJSON(loginApiResponse)
 	if err != nil {
@@ -94,7 +94,7 @@ func getMonitorData[T ISemsDataConstraint](loginCredentials *apilogin.ApiLoginCr
 // - loginApiResponse: pointer to the API login response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func getMonitorDataOutput[T ISemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
+func getMonitorDataOutput[T SemsDataConstraint](loginCredentials *apilogin.ApiLoginCredentials, loginApiResponse *apilogin.ApiLoginResponse, inverterOutput *T) error {
 	// Get monitor data
 	var powerstationData T
 	if err := getMonitorData(loginCredentials, loginApiResponse, &powerstationData); err != nil {

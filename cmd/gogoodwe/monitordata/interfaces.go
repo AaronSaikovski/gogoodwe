@@ -24,6 +24,6 @@ SOFTWARE.
 package monitordata
 
 // Constraints for functions that return data from the API via marshalled structs
-type ISemsDataConstraint interface {
+type SemsDataConstraint interface {
 	InverterData | DailySummaryData
 }
