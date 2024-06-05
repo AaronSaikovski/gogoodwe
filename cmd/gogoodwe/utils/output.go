@@ -24,7 +24,6 @@ SOFTWARE.
 package utils
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/logrusorgru/aurora"
@@ -39,14 +38,7 @@ import (
 func ParseOutput(dataOutput []byte) (*fastjson.Value, error) {
 	//parse JSON output
 	var parser fastjson.Parser
-	output, err := parser.Parse(string(dataOutput))
-	if err != nil {
-		HandleError(errors.New("error: parsing powerstation data"))
-		return nil, err
-	}
-
-	return output, nil
-
+	return parser.Parse(string(dataOutput))
 }
 
 // printOutput prints the provided fastjson.Value in bright yellow color using the aurora package.
