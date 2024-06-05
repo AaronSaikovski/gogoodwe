@@ -113,13 +113,13 @@ func getMonitorDataOutput[T interfaces.SemsDataConstraint](loginCredentials *api
 	}
 
 	// Parse output
-	output, err := helpers.ParseOutput(dataOutput)
+	output, err := utils.ParseOutput(dataOutput)
 	if err != nil {
 		return err
 	}
 
 	// Print output
-	helpers.PrintOutput(output)
+	utils.PrintOutput(output)
 
 	return nil
 }

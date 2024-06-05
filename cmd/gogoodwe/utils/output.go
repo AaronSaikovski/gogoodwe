@@ -21,13 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package helpers
+package utils
 
 import (
 	"errors"
 	"fmt"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/logrusorgru/aurora"
 	"github.com/valyala/fastjson"
 )
@@ -42,7 +41,7 @@ func ParseOutput(dataOutput []byte) (*fastjson.Value, error) {
 	var parser fastjson.Parser
 	output, err := parser.Parse(string(dataOutput))
 	if err != nil {
-		utils.HandleError(errors.New("error: parsing powerstation data"))
+		HandleError(errors.New("error: parsing powerstation data"))
 		return nil, err
 	}
 
