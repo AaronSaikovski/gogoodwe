@@ -27,8 +27,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/interfaces"
 )
 

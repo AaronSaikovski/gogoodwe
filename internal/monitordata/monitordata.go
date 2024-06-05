@@ -29,8 +29,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/helpers"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/interfaces"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/types"

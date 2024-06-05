@@ -26,9 +26,7 @@ package app
 // Main package - This is the main program entry point
 import (
 	"fmt"
-
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
-
+	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/internal/monitordata"
 )
 
