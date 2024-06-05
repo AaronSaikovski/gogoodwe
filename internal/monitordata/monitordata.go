@@ -31,11 +31,18 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/apilogin"
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/constants"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/helpers"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/interfaces"
 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/types"
+)
+
+const (
+
+	// Powerstation API Url
+	PowerStationURL string = "v2/PowerStation/GetMonitorDetailByPowerstationId"
+
+	// Default timeout value
+	HTTPTimeout int = 20
 )
 
 // getMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
@@ -59,7 +66,7 @@ func getMonitorData[T interfaces.SemsDataConstraint](loginCredentials *apilogin.
 	}
 
 	// Create URL from the Auth API and append the data URL part
-	url := loginApiResponse.API + constants.PowerStationURL
+	url := loginApiResponse.API + PowerStationURL
 
 	// Create a new HTTP request
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
@@ -71,7 +78,7 @@ func getMonitorData[T interfaces.SemsDataConstraint](loginCredentials *apilogin.
 	helpers.SetHeaders(req, apiResponseJSONData)
 
 	// Make the API call
-	client := &http.Client{Timeout: time.Duration(constants.HTTPTimeout) * time.Second}
+	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
