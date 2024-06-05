@@ -3,6 +3,8 @@
 ## v2.0.6 (2024-06-7)
 
 - renamed SemsDataConstraint
+- refactored API and monitor data into Internal
+- Minor performance and optimisation fixes
 
 ## v2.0.5 (2024-05-10)
 

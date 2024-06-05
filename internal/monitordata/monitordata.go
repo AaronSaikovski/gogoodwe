@@ -157,14 +157,14 @@ func getMonitorSummaryByPowerstationId(monitorDataLoginInfo *MonitorDataLoginInf
 	return nil
 }
 
-// GetData retrieves either monitor summary or monitor details based on the specified flag.
+// GetPowerData retrieves either monitor summary or monitor details based on the specified flag.
 //
 // Parameters:
 // - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct
 // - isDailySummary: a flag to determine if daily summary data should be retrieved
 //
 // Returns an error if there was an issue fetching the data.
-func (monitorDataLoginInfo *MonitorDataLoginInfo) GetData(isDailySummary bool) error {
+func (monitorDataLoginInfo *MonitorDataLoginInfo) GetPowerData(isDailySummary bool) error {
 	if isDailySummary {
 		return getMonitorSummaryByPowerstationId(monitorDataLoginInfo)
 	}

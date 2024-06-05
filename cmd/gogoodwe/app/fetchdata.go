@@ -57,14 +57,9 @@ func fetchData(Account, Password, PowerStationID string, isDailySummary bool) er
 		LoginApiResponse:    loginApiResponse,
 	}
 
-	if err := monitordata.GetData(isDailySummary); err != nil {
+	if err := monitordata.GetPowerData(isDailySummary); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)
 	}
-
-	// Fetch data and handle errors
-	// if err := monitordata.GetData(apiLoginCreds, loginApiResponse, DailySummary); err != nil {
-	// 	return fmt.Errorf("data fetching failed: %w", err)
-	// }
 
 	return nil
 }
