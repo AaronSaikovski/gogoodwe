@@ -25,20 +25,9 @@ package app
 
 import (
 	"context"
-	"log"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
-)
-
-const (
-
-	//Context default timeout
-	contextTimeout = (time.Second * 60)
 )
 
 // Main package - This is the main program entry point
@@ -51,17 +40,7 @@ const (
 // It checks if the email address and powerstation ID are in the correct format.
 // If not, it fails with an error message.
 // Finally, it calls the fetchData function to get data from the API and returns any errors.
-func Run(versionString string) error {
-
-	// Create a context with cancellation capability and 60 seconds timeout
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(contextTimeout))
-	defer cancel()
-
-	//Set shutdown signal
-	shutdown := make(chan os.Signal, 1)
-	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
-	sig := <-shutdown
-	defer log.Print(ctx, "shutdown", "status", "shutdown complete", "signal", sig)
+func Run(ctx context.Context, versionString string) error {
 
 	// Set version build info
 	var args utils.Args
@@ -73,14 +52,23 @@ func Run(versionString string) error {
 	// Check for valid email address input
 	if !utils.CheckValidEmail(args.Account) {
 		p.Fail("invalid email address format: should be 'user@somedomain.com'")
+		return ctx.Err()
+
 	}
 
 	// Check for valid powerstation ID
 	if !utils.CheckValidPowerstationID(args.PowerStationID) {
 		p.Fail("invalid Powerstation ID format: should be 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'")
+		return ctx.Err()
 	}
 
 	// Get the data from the API, return any errors
-	return fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	//return fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	if err := fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary); err != nil {
+		return ctx.Err()
+	} else {
+		ctx.Done()
+		return nil
+	}
 
 }
