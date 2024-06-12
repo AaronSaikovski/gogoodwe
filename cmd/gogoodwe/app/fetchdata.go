@@ -25,6 +25,7 @@ package app
 
 // Main package - This is the main program entry point
 import (
+	"context"
 	"fmt"
 
 	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
@@ -38,7 +39,8 @@ import (
 // PowerStationID: the ID of the power station.
 // DailySummary: a boolean indicating whether to retrieve a daily summary.
 // error: an error if there was a problem logging in or fetching data.
-func fetchData(Account, Password, PowerStationID string, isDailySummary bool) error {
+func fetchData(context context.Context, Account, Password, PowerStationID string, isDailySummary bool) error {
+
 	// User account struct
 	apiLoginCreds := &apilogin.ApiLoginCredentials{
 		Account:        Account,
@@ -59,6 +61,10 @@ func fetchData(Account, Password, PowerStationID string, isDailySummary bool) er
 
 	if err := monitordata.GetPowerData(isDailySummary); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)
+	}
+
+	if err := context.Err(); err != nil {
+		return fmt.Errorf("context error: %w", err)
 	}
 
 	return nil

@@ -24,8 +24,21 @@ SOFTWARE.
 package app
 
 import (
+	"context"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
+)
+
+const (
+
+	//Context default timeout
+	contextTimeout = (time.Second * 60)
 )
 
 // Main package - This is the main program entry point
@@ -39,8 +52,18 @@ import (
 // If not, it fails with an error message.
 // Finally, it calls the fetchData function to get data from the API and returns any errors.
 func Run(versionString string) error {
-	// Set version build info
 
+	// Create a context with cancellation capability and 60 seconds timeout
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(contextTimeout))
+	defer cancel()
+
+	//Set shutdown signal
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
+	sig := <-shutdown
+	defer log.Print(ctx, "shutdown", "status", "shutdown complete", "signal", sig)
+
+	// Set version build info
 	var args utils.Args
 	args.SetVersion(versionString)
 
@@ -58,5 +81,6 @@ func Run(versionString string) error {
 	}
 
 	// Get the data from the API, return any errors
-	return fetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	return fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary)
+
 }
