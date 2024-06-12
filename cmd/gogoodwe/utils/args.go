@@ -26,7 +26,7 @@ package utils
 
 var (
 	// Version string
-	VersionString string = "gogoodwe v2.0.3"
+	VersionString string = "v0.0.1"
 )
 
 // Args - struct using go-arg- https://github.com/alexflint/go-arg
