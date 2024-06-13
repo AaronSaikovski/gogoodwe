@@ -32,6 +32,11 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 )
 
+const (
+	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"
+	HTTPTimeout  = 20 // seconds
+)
+
 // APILogin logs in to the SEMS API using the provided credentials.
 //
 // It takes the login credentials as a parameter and returns the API login response and an error.

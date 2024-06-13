@@ -21,10 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package monitordata
 
-package apilogin
-
-const (
-	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"
-	HTTPTimeout  = 20 // seconds
+import (
+	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
 )
+
+// MonitorDataLoginInfo - Struct to hold login info
+type MonitorDataLoginInfo struct {
+	LoginApiCredentials *apilogin.ApiLoginCredentials
+	LoginApiResponse    *apilogin.ApiLoginResponse
+}

@@ -27,7 +27,7 @@ SOFTWARE.
 # Minimised version - removed any sensitive data
 # Author: Aaron Saikovski - asaikovski@outlook.com
 */
-package monitordata
+package types
 
 // InverterData - Struct to hold data returned from the Inverter Powerstation API
 type InverterData struct {

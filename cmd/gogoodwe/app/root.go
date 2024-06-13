@@ -24,11 +24,11 @@ SOFTWARE.
 package app
 
 import (
+	"context"
+
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
 	"github.com/alexflint/go-arg"
 )
-
-// Main package - This is the main program entry point
 
 // Run is the main program runner.
 //
@@ -38,9 +38,16 @@ import (
 // It checks if the email address and powerstation ID are in the correct format.
 // If not, it fails with an error message.
 // Finally, it calls the fetchData function to get data from the API and returns any errors.
-func Run(versionString string) error {
-	// Set version build info
+//
+// Parameters:
+// - ctx: the context.Context object for cancellation and timeouts.
+// - versionString: the version string used to set the build information.
+//
+// Returns:
+// - error: an error if there was a problem with the input or fetching the data from the API.
+func Run(ctx context.Context, versionString string) error {
 
+	// Set version build info
 	var args utils.Args
 	args.SetVersion(versionString)
 
@@ -50,13 +57,22 @@ func Run(versionString string) error {
 	// Check for valid email address input
 	if !utils.CheckValidEmail(args.Account) {
 		p.Fail("invalid email address format: should be 'user@somedomain.com'")
+		return ctx.Err()
+
 	}
 
 	// Check for valid powerstation ID
 	if !utils.CheckValidPowerstationID(args.PowerStationID) {
 		p.Fail("invalid Powerstation ID format: should be 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'")
+		return ctx.Err()
 	}
 
 	// Get the data from the API, return any errors
-	return fetchData(args.Account, args.Password, args.PowerStationID, args.DailySummary)
+	if err := fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary); err != nil {
+		return ctx.Err()
+	} else {
+		ctx.Done()
+		return nil
+	}
+
 }
