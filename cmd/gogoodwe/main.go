@@ -60,4 +60,5 @@ func main() {
 	if err := app.Run(ctx, version); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
+
 }

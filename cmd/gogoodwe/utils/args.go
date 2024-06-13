@@ -27,6 +27,7 @@ package utils
 var (
 	// Version string
 	VersionString string = "v0.0.1"
+	infoString    string = "*GoGoodwe - A command line tool to query your SEMS Solar inverter.*"
 )
 
 // Args - struct using go-arg- https://github.com/alexflint/go-arg
@@ -42,7 +43,7 @@ type Args struct {
 // No parameters.
 // Returns a string.
 func (Args) Description() string {
-	return "A command line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API."
+	return infoString
 }
 
 // Version returns the version string of the Args struct.
@@ -50,7 +51,7 @@ func (Args) Description() string {
 // No parameters.
 // Returns a string.
 func (Args) Version() string {
-	return VersionString
+	return "version: " + VersionString
 }
 
 // SetVersion sets the version string of the Args struct.

@@ -1,10 +1,11 @@
 # GoGoodwe - CHANGELOG
 
-## v2.0.6 (2024-06-7)
+## v2.0.6 (2024-06-13)
 
 - renamed SemsDataConstraint
 - refactored API and monitor data into Internal
 - Minor performance and optimisation fixes
+- added contexts for better error signals between function calls
 
 ## v2.0.5 (2024-05-10)
 

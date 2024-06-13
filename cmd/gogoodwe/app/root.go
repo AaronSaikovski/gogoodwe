@@ -30,8 +30,6 @@ import (
 	"github.com/alexflint/go-arg"
 )
 
-// Main package - This is the main program entry point
-
 // Run is the main program runner.
 //
 // It takes a version string as a parameter and returns an error.
@@ -40,6 +38,13 @@ import (
 // It checks if the email address and powerstation ID are in the correct format.
 // If not, it fails with an error message.
 // Finally, it calls the fetchData function to get data from the API and returns any errors.
+//
+// Parameters:
+// - ctx: the context.Context object for cancellation and timeouts.
+// - versionString: the version string used to set the build information.
+//
+// Returns:
+// - error: an error if there was a problem with the input or fetching the data from the API.
 func Run(ctx context.Context, versionString string) error {
 
 	// Set version build info
@@ -63,7 +68,6 @@ func Run(ctx context.Context, versionString string) error {
 	}
 
 	// Get the data from the API, return any errors
-	//return fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary)
 	if err := fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary); err != nil {
 		return ctx.Err()
 	} else {
