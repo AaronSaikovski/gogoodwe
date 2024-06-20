@@ -23,9 +23,9 @@ SOFTWARE.
 */
 package apilogin
 
-// ApiLoginCredentials - Struct to hold User login credentials
-type ApiLoginCredentials struct {
-	Account        string `json:"account"`
-	Password       string `json:"pwd"`
-	PowerStationID string `json:"powerstationid"`
-}
+// // ApiLoginCredentials - Struct to hold User login credentials
+// type ApiLoginCredentials struct {
+// 	Account        string `json:"account"`
+// 	Password       string `json:"pwd"`
+// 	PowerStationID string `json:"powerstationid"`
+// }

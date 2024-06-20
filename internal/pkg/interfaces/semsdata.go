@@ -23,11 +23,11 @@ SOFTWARE.
 */
 package interfaces
 
-import (
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/types"
-)
+// import (
+// 	"github.com/AaronSaikovski/gogoodwe/internal/pkg/types"
+// )
 
-// Constraints for functions that return data from the API via marshalled structs
-type SemsDataConstraint interface {
-	types.InverterData | types.DailySummaryData
-}
+// // Constraints for functions that return data from the API via marshalled structs
+// type SemsDataConstraint interface {
+// 	types.InverterData | types.DailySummaryData
+// }

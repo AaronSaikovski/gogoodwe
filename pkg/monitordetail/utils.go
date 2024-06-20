@@ -21,14 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package monitordata
+package monitordetail
 
-// import (
-// 	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
-// )
+import "github.com/AaronSaikovski/gogoodwe/pkg/utils"
 
-// // MonitorDataLoginInfo - Struct to hold login info
-// type MonitorDataLoginInfo struct {
-// 	LoginApiCredentials *apilogin.ApiLoginCredentials
-// 	LoginApiResponse    *apilogin.ApiLoginResponse
-// }
+func getDataJSON[T SemsDataConstraint](data T) ([]byte, error) {
+
+	// Get the response and return any errors
+	return utils.MarshalStructToJSON(&data)
+}

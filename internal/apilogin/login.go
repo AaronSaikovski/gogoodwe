@@ -24,67 +24,67 @@ SOFTWARE.
 
 package apilogin
 
-import (
-	"bytes"
-	"net/http"
-	"time"
+// import (
+// 	"bytes"
+// 	"net/http"
+// 	"time"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-)
+// 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+// )
 
-const (
-	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"
-	HTTPTimeout  = 20 // seconds
-)
+// const (
+// 	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"
+// 	HTTPTimeout  = 20 // seconds
+// )
 
-// APILogin logs in to the SEMS API using the provided credentials.
-//
-// It takes the login credentials as a parameter and returns the API login response and an error.
-func (loginCredentials *ApiLoginCredentials) APILogin() (*ApiLoginResponse, error) {
-	// Check if the UserLogin struct is empty
-	if err := checkUserLoginInfo(loginCredentials); err != nil {
-		return nil, err
-	}
+// // APILogin logs in to the SEMS API using the provided credentials.
+// //
+// // It takes the login credentials as a parameter and returns the API login response and an error.
+// func (loginCredentials *ApiLoginCredentials) APILogin() (*ApiLoginResponse, error) {
+// 	// Check if the UserLogin struct is empty
+// 	if err := checkUserLoginInfo(loginCredentials); err != nil {
+// 		return nil, err
+// 	}
 
-	// Convert User login struct to JSON
-	loginData, err := utils.MarshalStructToJSON(loginCredentials)
-	if err != nil {
-		return nil, err
-	}
+// 	// Convert User login struct to JSON
+// 	loginData, err := utils.MarshalStructToJSON(loginCredentials)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	// Create a new http request
-	req, err := http.NewRequest(http.MethodPost, AuthLoginURL, bytes.NewBuffer(loginData))
-	if err != nil {
-		return nil, err
-	}
+// 	// Create a new http request
+// 	req, err := http.NewRequest(http.MethodPost, AuthLoginURL, bytes.NewBuffer(loginData))
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	// Add headers
-	setHeaders(req)
+// 	// Add headers
+// 	setHeaders(req)
 
-	// Make the API call
-	client := &http.Client{Timeout: HTTPTimeout * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+// 	// Make the API call
+// 	client := &http.Client{Timeout: HTTPTimeout * time.Second}
+// 	resp, err := client.Do(req)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer resp.Body.Close()
 
-	// Get the response body
-	respBody, err := utils.FetchResponseBody(resp.Body)
-	if err != nil {
-		return nil, err
-	}
+// 	// Get the response body
+// 	respBody, err := utils.FetchResponseBody(resp.Body)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	// Unmarshal response to loginresponse struct
-	var loginApiResponse ApiLoginResponse
-	if err := utils.UnmarshalDataToStruct(respBody, &loginApiResponse); err != nil {
-		return nil, err
-	}
+// 	// Unmarshal response to loginresponse struct
+// 	var loginApiResponse ApiLoginResponse
+// 	if err := utils.UnmarshalDataToStruct(respBody, &loginApiResponse); err != nil {
+// 		return nil, err
+// 	}
 
-	// Check for successful login
-	if err := checkUserLoginResponse(loginApiResponse.Msg); err != nil {
-		return nil, err
-	}
+// 	// Check for successful login
+// 	if err := checkUserLoginResponse(loginApiResponse.Msg); err != nil {
+// 		return nil, err
+// 	}
 
-	return &loginApiResponse, nil
-}
+// 	return &loginApiResponse, nil
+// }

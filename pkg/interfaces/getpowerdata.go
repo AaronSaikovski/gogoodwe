@@ -21,14 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package monitordata
+package interfaces
 
-// import (
-// 	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
-// )
+import (
+	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
+)
 
-// // MonitorDataLoginInfo - Struct to hold login info
-// type MonitorDataLoginInfo struct {
-// 	LoginApiCredentials *apilogin.ApiLoginCredentials
-// 	LoginApiResponse    *apilogin.ApiLoginResponse
-// }
+type PowerData interface {
+	GetPowerData(monitorDataLoginInfo *auth.LoginInfo, isDailySummary bool)
+	ATest() ([]byte, error)
+}
