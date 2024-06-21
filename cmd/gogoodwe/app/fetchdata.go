@@ -43,7 +43,7 @@ import (
 // PowerStationID: the ID of the power station.
 // DailySummary: a boolean indicating whether to retrieve a daily summary.
 // error: an error if there was a problem logging in or fetching data.
-func fetchData(context context.Context, Account, Password, PowerStationID string, isDailySummary bool) error {
+func fetchData(context context.Context, Account, Password, PowerStationID string) error {
 
 	// User account struct
 	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID)

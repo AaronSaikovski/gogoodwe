@@ -68,7 +68,7 @@ func Run(ctx context.Context, versionString string) error {
 	}
 
 	// Get the data from the API, return any errors
-	if err := fetchData(ctx, args.Account, args.Password, args.PowerStationID, args.DailySummary); err != nil {
+	if err := fetchData(ctx, args.Account, args.Password, args.PowerStationID); err != nil {
 		return ctx.Err()
 	} else {
 		ctx.Done()
