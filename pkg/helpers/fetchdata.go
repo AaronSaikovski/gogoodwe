@@ -32,6 +32,8 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
 
+//func getMonitorData[T SemsDataConstraint](authLoginInfo *auth.LoginInfo, inverterOutput *T) error {
+
 // FetchMonitorData fetches data from the Monitor API.
 //
 // It takes in the authentication information, the URL of the power station,
