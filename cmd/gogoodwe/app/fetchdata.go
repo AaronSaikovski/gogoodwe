@@ -60,9 +60,19 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 		SemsLoginResponse:    loginApiResponse,
 	}
 
-	if err := monitordetail.GetPowerData(loginInfo, isDailySummary); err != nil {
+	//summaryData := monitorsummary.NewDailySummaryData()
+
+	// Assign the login interface
+	//var dataService interfaces.PowerData = monitorsummary.NewDailySummaryData()
+	var dataService interfaces.PowerData = monitordetail.NewInverterData()
+
+	if err := dataService.GetPowerData(loginInfo); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)
 	}
+
+	// if err := monitordetail.GetPowerData(loginInfo, isDailySummary); err != nil {
+	// 	return fmt.Errorf("data retrieval failed: %w", err)
+	// }
 
 	if err := context.Err(); err != nil {
 		return fmt.Errorf("context error: %w", err)

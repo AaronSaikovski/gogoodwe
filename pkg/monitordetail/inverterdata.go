@@ -407,3 +407,7 @@ type InverterData struct {
 		} `json:"equipment"`
 	} `json:"data"`
 }
+
+func NewInverterData() *InverterData {
+	return &InverterData{}
+}

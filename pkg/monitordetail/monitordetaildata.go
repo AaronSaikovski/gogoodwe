@@ -25,7 +25,6 @@ package monitordetail
 
 import (
 	"bytes"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -54,7 +53,7 @@ const (
 // - monitorDataLoginInfo: pointer to the MonitorDataLoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func getMonitorData[T SemsDataConstraint](authLoginInfo *auth.LoginInfo, inverterOutput *T) error {
+func (summaryData *InverterData) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
 	// Get the Token header data
 	apiResponseJSONData, err := helpers.DataTokenJSON(authLoginInfo.SemsLoginResponse)
 	if err != nil {
@@ -109,15 +108,85 @@ func getMonitorData[T SemsDataConstraint](authLoginInfo *auth.LoginInfo, inverte
 //
 // Returns:
 // - error: an error if any occurred during the retrieval or processing of the monitor data.
-func getMonitorDataOutput[T SemsDataConstraint](monitorDataLoginInfo *auth.LoginInfo, inverterOutput *T) error {
+// func (detailData *InverterData) getMonitorDataOutput(authLoginInfo *auth.LoginInfo, inverterOutput *InverterData) error {
+// 	// Get monitor data
+// 	//var powerstationData T
+// 	if err := getMonitorData(authLoginInfo, &powerstationData); err != nil {
+// 		return err
+// 	}
+
+// 	// Get data JSON
+// 	dataOutput, err := utils.MarshalStructToJSON(powerstationData)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	// Parse output
+// 	output, err := utils.ParseOutput(dataOutput)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	// Print output
+// 	utils.PrintOutput(output)
+
+// 	return nil
+// }
+
+// getMonitorDetailByPowerstationId retrieves the monitor detail for a given powerstation ID.
+//
+// It takes a pointer to a MonitorDataLoginInfo struct as a parameter.
+// The function returns an error if there was an issue fetching the powerstation data.
+// func getMonitorDetailByPowerstationId(monitorDataLoginInfo *auth.LoginInfo) error {
+// 	var powerstationData InverterData
+// 	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
+// 		return fmt.Errorf("error fetching powerstation data: %v", err)
+// 	}
+// 	return nil
+// }
+
+// getMonitorSummaryByPowerstationId retrieves the monitor summary data for a specific power station ID.
+//
+// Parameters:
+// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct containing the login credentials and power station ID.
+//
+// Returns:
+// - error: an error if there was an issue fetching the powerstation summary data.
+// func getMonitorSummaryByPowerstationId(monitorDataLoginInfo *auth.LoginInfo) error {
+// 	var powerstationData DailySummaryData
+// 	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
+// 		return fmt.Errorf("error fetching powerstation summary data: %v", err)
+// 	}
+// 	return nil
+// }
+
+// GetPowerData retrieves either monitor summary or monitor details based on the specified flag.
+//
+// Parameters:
+// - LoginInfo: a pointer to the MonitorDataLoginInfo struct
+// - isDailySummary: a flag to determine if daily summary data should be retrieved
+//
+// Returns an error if there was an issue fetching the data.
+func (detailData *InverterData) GetPowerData(authLoginInfo *auth.LoginInfo) error {
+	// if isDailySummary {
+	// 	return getMonitorSummaryByPowerstationId(LoginInfo)
+	// }
+	// return getMonitorDetailByPowerstationId(LoginInfo)
+
+	//var powerstationData InverterData
+	// if err := detailData.getMonitorDataOutput(LoginInfo, detailData); err != nil {
+	// 	return fmt.Errorf("error fetching powerstation data: %v", err)
+	// }
+	// return nil
+
 	// Get monitor data
-	var powerstationData T
-	if err := getMonitorData(monitorDataLoginInfo, &powerstationData); err != nil {
+	//var powerstationData T
+	if err := detailData.GetMonitorData(authLoginInfo, detailData); err != nil {
 		return err
 	}
 
 	// Get data JSON
-	dataOutput, err := utils.MarshalStructToJSON(powerstationData)
+	dataOutput, err := utils.MarshalStructToJSON(detailData)
 	if err != nil {
 		return err
 	}
@@ -132,45 +201,4 @@ func getMonitorDataOutput[T SemsDataConstraint](monitorDataLoginInfo *auth.Login
 	utils.PrintOutput(output)
 
 	return nil
-}
-
-// getMonitorDetailByPowerstationId retrieves the monitor detail for a given powerstation ID.
-//
-// It takes a pointer to a MonitorDataLoginInfo struct as a parameter.
-// The function returns an error if there was an issue fetching the powerstation data.
-func getMonitorDetailByPowerstationId(monitorDataLoginInfo *auth.LoginInfo) error {
-	var powerstationData InverterData
-	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
-		return fmt.Errorf("error fetching powerstation data: %v", err)
-	}
-	return nil
-}
-
-// getMonitorSummaryByPowerstationId retrieves the monitor summary data for a specific power station ID.
-//
-// Parameters:
-// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct containing the login credentials and power station ID.
-//
-// Returns:
-// - error: an error if there was an issue fetching the powerstation summary data.
-func getMonitorSummaryByPowerstationId(monitorDataLoginInfo *auth.LoginInfo) error {
-	var powerstationData DailySummaryData
-	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
-		return fmt.Errorf("error fetching powerstation summary data: %v", err)
-	}
-	return nil
-}
-
-// GetPowerData retrieves either monitor summary or monitor details based on the specified flag.
-//
-// Parameters:
-// - LoginInfo: a pointer to the MonitorDataLoginInfo struct
-// - isDailySummary: a flag to determine if daily summary data should be retrieved
-//
-// Returns an error if there was an issue fetching the data.
-func GetPowerData(LoginInfo *auth.LoginInfo, isDailySummary bool) error {
-	if isDailySummary {
-		return getMonitorSummaryByPowerstationId(LoginInfo)
-	}
-	return getMonitorDetailByPowerstationId(LoginInfo)
 }
