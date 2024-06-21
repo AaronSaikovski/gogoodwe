@@ -24,8 +24,8 @@ SOFTWARE.
 package monitordetail
 
 import (
+	"github.com/AaronSaikovski/gogoodwe/pkg/apihelpers"
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
-	"github.com/AaronSaikovski/gogoodwe/pkg/helpers"
 )
 
 const (
@@ -45,7 +45,7 @@ const (
 // Return type: error
 func (summaryData *InverterData) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error { // // Get the Token header data
 
-	return helpers.FetchMonitorData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
+	return apihelpers.FetchMonitorAPIData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
 
 // GetPowerData retrieves the power data for a detailed inverter using the provided authentication information.
@@ -62,5 +62,5 @@ func (detailData *InverterData) GetPowerData(authLoginInfo *auth.LoginInfo) erro
 		return err
 	}
 
-	return helpers.ProcesData(detailData)
+	return apihelpers.ProcesData(detailData)
 }

@@ -24,8 +24,8 @@ SOFTWARE.
 package monitorsummary
 
 import (
+	"github.com/AaronSaikovski/gogoodwe/pkg/apihelpers"
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
-	"github.com/AaronSaikovski/gogoodwe/pkg/helpers"
 )
 
 const (
@@ -45,7 +45,7 @@ const (
 // Return type: error
 func (summaryData *DailySummaryData) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
 
-	return helpers.FetchMonitorData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
+	return apihelpers.FetchMonitorAPIData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
 
 // GetPowerData retrieves the power data for a daily summary using the provided authentication information.
@@ -62,6 +62,6 @@ func (summaryData *DailySummaryData) GetPowerData(authLoginInfo *auth.LoginInfo)
 		return err
 	}
 
-	return helpers.ProcesData(summaryData)
+	return apihelpers.ProcesData(summaryData)
 
 }
