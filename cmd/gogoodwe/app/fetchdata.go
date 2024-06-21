@@ -23,53 +23,6 @@ SOFTWARE.
 */
 package app
 
-// // Main package - This is the main program entry point
-// import (
-// 	"context"
-// 	"fmt"
-
-// 	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
-// 	"github.com/AaronSaikovski/gogoodwe/internal/monitordata"
-// )
-
-// // fetchData fetches data using the provided account credentials and power station ID.
-// //
-// // Account: the email account associated with the user.
-// // Password: the password associated with the user's account.
-// // PowerStationID: the ID of the power station.
-// // DailySummary: a boolean indicating whether to retrieve a daily summary.
-// // error: an error if there was a problem logging in or fetching data.
-// func fetchData(context context.Context, Account, Password, PowerStationID string, isDailySummary bool) error {
-
-// 	// User account struct
-// 	apiLoginCreds := &apilogin.ApiLoginCredentials{
-// 		Account:        Account,
-// 		Password:       Password,
-// 		PowerStationID: PowerStationID,
-// 	}
-
-// 	// Do the login
-// 	loginApiResponse, err := apiLoginCreds.APILogin()
-// 	if err != nil {
-// 		return fmt.Errorf("login failed: %w", err)
-// 	}
-
-// 	monitordata := &monitordata.MonitorDataLoginInfo{
-// 		LoginApiCredentials: apiLoginCreds,
-// 		LoginApiResponse:    loginApiResponse,
-// 	}
-
-// 	if err := monitordata.GetPowerData(isDailySummary); err != nil {
-// 		return fmt.Errorf("data retrieval failed: %w", err)
-// 	}
-
-// 	if err := context.Err(); err != nil {
-// 		return fmt.Errorf("context error: %w", err)
-// 	}
-
-// 	return nil
-// }
-
 // Main package - This is the main program entry point
 import (
 	"context"
@@ -93,10 +46,10 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID, "au")
 
 	// Assign the login interface
-	var loginInterface interfaces.SemsLogin = apiLoginCreds
+	var loginService interfaces.SemsLogin = apiLoginCreds
 
 	// Do the login
-	loginApiResponse, err := loginInterface.SemsLogin()
+	loginApiResponse, err := loginService.SemsLogin()
 	if err != nil {
 		return fmt.Errorf("login failed: %w", err)
 	}

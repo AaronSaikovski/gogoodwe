@@ -117,7 +117,7 @@ func getMonitorDataOutput[T SemsDataConstraint](monitorDataLoginInfo *auth.Login
 	}
 
 	// Get data JSON
-	dataOutput, err := getDataJSON(powerstationData)
+	dataOutput, err := utils.MarshalStructToJSON(powerstationData)
 	if err != nil {
 		return err
 	}
@@ -164,17 +164,10 @@ func getMonitorSummaryByPowerstationId(monitorDataLoginInfo *auth.LoginInfo) err
 // GetPowerData retrieves either monitor summary or monitor details based on the specified flag.
 //
 // Parameters:
-// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct
+// - LoginInfo: a pointer to the MonitorDataLoginInfo struct
 // - isDailySummary: a flag to determine if daily summary data should be retrieved
 //
 // Returns an error if there was an issue fetching the data.
-// func GetPowerData(monitorDataLoginInfo *auth.LoginInfo, isDailySummary bool) error {
-// 	if isDailySummary {
-// 		return getMonitorSummaryByPowerstationId(monitorDataLoginInfo)
-// 	}
-// 	return getMonitorDetailByPowerstationId(monitorDataLoginInfo)
-// }
-
 func GetPowerData(LoginInfo *auth.LoginInfo, isDailySummary bool) error {
 	if isDailySummary {
 		return getMonitorSummaryByPowerstationId(LoginInfo)
