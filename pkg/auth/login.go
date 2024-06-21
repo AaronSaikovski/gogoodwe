@@ -37,9 +37,9 @@ const (
 	HTTPTimeout  = 20 // seconds
 )
 
-// APILogin logs in to the SEMS API using the provided credentials.
+// SemsLogin is a method on the SemsLoginCredentials struct that performs a Sems login.
 //
-// It takes the login credentials as a parameter and returns the API login response and an error.
+// It takes no parameters and returns a pointer to a SemsLoginResponse struct and an error.
 func (loginCredentials *SemsLoginCredentials) SemsLogin() (*SemsLoginResponse, error) {
 	// Check if the UserLogin struct is empty
 	if err := checkUserLoginInfo(loginCredentials); err != nil {

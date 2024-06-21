@@ -23,11 +23,11 @@ SOFTWARE.
 */
 package interfaces
 
-import (
-	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
-)
+// import (
+// 	"github.com/AaronSaikovski/gogoodwe/pkg/types"
+// )
 
-type PowerData interface {
-	GetPowerData(monitorDataLoginInfo *auth.LoginInfo, isDailySummary bool)
-	ATest() ([]byte, error)
-}
+// type PowerData interface {
+// 	GetPowerData(*types.LoginInfo, bool)
+// 	ATest() ([]byte, error)
+// }

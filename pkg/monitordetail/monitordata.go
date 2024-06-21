@@ -44,9 +44,9 @@ const (
 )
 
 // Define a local type that embeds the external type
-type LocalLoginInfo struct {
-	LoginInfo *auth.LoginInfo
-}
+// type LocalLoginInfo struct {
+// 	LoginInfo *auth.LoginInfo
+// }
 
 // getMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
 //

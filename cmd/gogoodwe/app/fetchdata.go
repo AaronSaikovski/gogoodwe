@@ -89,14 +89,20 @@ import (
 func fetchData(context context.Context, Account, Password, PowerStationID string, isDailySummary bool) error {
 
 	// User account struct
-	apiLoginCreds := &auth.SemsLoginCredentials{
-		Account:        Account,
-		Password:       Password,
-		PowerStationID: PowerStationID,
-	}
+	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID, "au")
+
+	// User account struct
+	// apiLoginCreds := &types.SemsLoginCredentials{
+	// 	Account:        Account,
+	// 	Password:       Password,
+	// 	PowerStationID: PowerStationID,
+	// }
+
+	// Assign the login interface
+	var loginInterface auth.SemsLogin = apiLoginCreds
 
 	// Do the login
-	loginApiResponse, err := apiLoginCreds.SemsLogin()
+	loginApiResponse, err := loginInterface.SemsLogin()
 	if err != nil {
 		return fmt.Errorf("login failed: %w", err)
 	}
