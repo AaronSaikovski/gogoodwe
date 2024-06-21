@@ -37,6 +37,8 @@ const (
 	HTTPTimeout int = 20
 )
 
+// --data '{"id":"d035a6b1-a99a-46cf-84a0-ddd5730d7f5c","date":"2024-06-21"}'
+
 // GetMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
 //
 // Parameters:
