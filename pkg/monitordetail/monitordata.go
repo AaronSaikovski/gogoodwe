@@ -22,15 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*
-# Name: InverterData - Struct to hold data returned from the Powerstation API
-# Minimised version - removed any sensitive data
-# Author: Aaron Saikovski - asaikovski@outlook.com
-*/
 package monitordetail
 
 // InverterData - Struct to hold data returned from the Inverter Powerstation API
-type InverterData struct {
+type MonitorData struct {
 	Language string   `json:"language"`
 	Function []string `json:"function"`
 	HasError bool     `json:"hasError"`
@@ -408,6 +403,6 @@ type InverterData struct {
 	} `json:"data"`
 }
 
-func NewInverterData() *InverterData {
-	return &InverterData{}
+func NewMonitorData() *MonitorData {
+	return &MonitorData{}
 }

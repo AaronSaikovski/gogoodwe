@@ -64,7 +64,7 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 
 	// Assign the login interface
 	//var dataService interfaces.PowerData = monitorsummary.NewDailySummaryData()
-	var dataService interfaces.PowerData = monitordetail.NewInverterData()
+	var dataService interfaces.PowerData = monitordetail.NewMonitorData()
 
 	if err := dataService.GetPowerData(loginInfo); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)
