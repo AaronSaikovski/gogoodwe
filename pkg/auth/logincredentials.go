@@ -28,15 +28,13 @@ type SemsLoginCredentials struct {
 	Account        string `json:"account"`
 	Password       string `json:"pwd"`
 	PowerStationID string `json:"powerstationid"`
-	Region         string `json:"region"`
 }
 
-func NewSemsLoginCredentials(account, password, powerStationID, region string) *SemsLoginCredentials {
+func NewSemsLoginCredentials(account, password, powerStationID string) *SemsLoginCredentials {
 	return &SemsLoginCredentials{
 		Account:        account,
 		Password:       password,
 		PowerStationID: powerStationID,
-		Region:         region,
 	}
 
 }

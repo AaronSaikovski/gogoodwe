@@ -45,7 +45,7 @@ import (
 func fetchData(context context.Context, Account, Password, PowerStationID string, isDailySummary bool) error {
 
 	// User account struct
-	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID, "au")
+	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID)
 
 	// Assign the login interface
 	var loginService interfaces.SemsLogin = apiLoginCreds
