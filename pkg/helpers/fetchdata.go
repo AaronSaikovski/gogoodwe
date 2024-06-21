@@ -32,6 +32,11 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
 
+// FetchMonitorData fetches data from the Monitor API.
+//
+// It takes in the authentication information, the URL of the power station,
+// the HTTP timeout, and a pointer to a struct to store the output.
+// It returns an error if there was a problem with the API call.
 func FetchMonitorData(authLoginInfo *auth.LoginInfo, powerStationURL string, HTTPTimeout int, inverterOutput interface{}) error {
 
 	// Get the Token header data

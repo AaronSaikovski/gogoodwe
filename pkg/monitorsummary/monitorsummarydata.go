@@ -45,51 +45,6 @@ const (
 // Return type: error
 func (summaryData *DailySummaryData) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
 
-	// // Get the Token header data
-	// apiResponseJSONData, err := helpers.DataTokenJSON(authLoginInfo.SemsLoginResponse)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// // Get the Powerstation ID header data
-	// powerStationIDJSONData, err := helpers.PowerStationIdJSON(authLoginInfo.SemsLoginCredentials)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// // Create URL from the Auth API and append the data URL part
-	// url := authLoginInfo.SemsLoginResponse.API + powerStationURL
-
-	// // Create a new HTTP request
-	// req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
-	// if err != nil {
-	// 	return err
-	// }
-
-	// // Add headers
-	// helpers.SetHeaders(req, apiResponseJSONData)
-
-	// // Make the API call
-	// client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
-	// resp, err := client.Do(req)
-	// if err != nil {
-	// 	return err
-	// }
-	// defer resp.Body.Close()
-
-	// // Get the response body
-	// respBody, err := utils.FetchResponseBody(resp.Body)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// // Unmarshal response to struct pointer
-	// if err := utils.UnmarshalDataToStruct(respBody, inverterOutput); err != nil {
-	// 	return err
-	// }
-
-	// return nil
-
 	return helpers.FetchMonitorData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
 
@@ -109,20 +64,4 @@ func (summaryData *DailySummaryData) GetPowerData(authLoginInfo *auth.LoginInfo)
 
 	return helpers.ProcesData(summaryData)
 
-	// // Get data JSON
-	// dataOutput, err := utils.MarshalStructToJSON(summaryData)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// // Parse output
-	// output, err := utils.ParseOutput(dataOutput)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// // Print output
-	// utils.PrintOutput(output)
-
-	// return nil
 }

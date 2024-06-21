@@ -27,6 +27,16 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
 
+// ProcesData processes the given inverter data by marshaling it to JSON,
+// parsing the output, and printing the output using the PrintOutput function
+// from the utils package. It returns an error if any of the processing steps
+// fail.
+//
+// Parameters:
+// - inverterData: The data to be processed. It should be of type interface{}.
+//
+// Returns:
+// - error: An error if any of the processing steps fail, otherwise nil.
 func ProcesData(inverterData interface{}) error {
 
 	// Get data JSON
