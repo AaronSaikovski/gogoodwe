@@ -76,6 +76,7 @@ import (
 	"fmt"
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
+	"github.com/AaronSaikovski/gogoodwe/pkg/interfaces"
 	"github.com/AaronSaikovski/gogoodwe/pkg/monitordetail"
 )
 
@@ -91,15 +92,8 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 	// User account struct
 	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID, "au")
 
-	// User account struct
-	// apiLoginCreds := &types.SemsLoginCredentials{
-	// 	Account:        Account,
-	// 	Password:       Password,
-	// 	PowerStationID: PowerStationID,
-	// }
-
 	// Assign the login interface
-	var loginInterface auth.SemsLogin = apiLoginCreds
+	var loginInterface interfaces.SemsLogin = apiLoginCreds
 
 	// Do the login
 	loginApiResponse, err := loginInterface.SemsLogin()
@@ -107,6 +101,7 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 		return fmt.Errorf("login failed: %w", err)
 	}
 
+	//Populate the loginInfo struct
 	loginInfo := &auth.LoginInfo{
 		SemsLoginCredentials: apiLoginCreds,
 		SemsLoginResponse:    loginApiResponse,
