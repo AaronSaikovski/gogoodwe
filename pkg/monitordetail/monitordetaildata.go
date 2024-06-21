@@ -24,13 +24,8 @@ SOFTWARE.
 package monitordetail
 
 import (
-	"bytes"
-	"net/http"
-	"time"
-
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 	"github.com/AaronSaikovski/gogoodwe/pkg/helpers"
-	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
 
 const (
@@ -42,163 +37,91 @@ const (
 	HTTPTimeout int = 20
 )
 
-// Define a local type that embeds the external type
-// type LocalLoginInfo struct {
-// 	LoginInfo *auth.LoginInfo
-// }
-
-// getMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
+// GetMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
 //
 // Parameters:
-// - monitorDataLoginInfo: pointer to the MonitorDataLoginInfo struct containing the login credentials and API response
+// - authLoginInfo: pointer to the LoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
 func (summaryData *InverterData) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
-	// Get the Token header data
-	apiResponseJSONData, err := helpers.DataTokenJSON(authLoginInfo.SemsLoginResponse)
-	if err != nil {
-		return err
-	}
-
-	// Get the Powerstation ID header data
-	powerStationIDJSONData, err := helpers.PowerStationIdJSON(authLoginInfo.SemsLoginCredentials)
-	if err != nil {
-		return err
-	}
-
-	// Create URL from the Auth API and append the data URL part
-	url := authLoginInfo.SemsLoginResponse.API + powerStationURL
-
-	// Create a new HTTP request
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
-	if err != nil {
-		return err
-	}
-
-	// Add headers
-	helpers.SetHeaders(req, apiResponseJSONData)
-
-	// Make the API call
-	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	// Get the response body
-	respBody, err := utils.FetchResponseBody(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	// Unmarshal response to struct pointer
-	if err := utils.UnmarshalDataToStruct(respBody, inverterOutput); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// getMonitorDataOutput retrieves the monitor data output for a given MonitorDataLoginInfo and stores it in the provided inverterOutput.
-//
-// Parameters:
-// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct containing the login information for the monitor data.
-// - inverterOutput: a pointer to the variable where the monitor data output will be stored.
-//
-// Returns:
-// - error: an error if any occurred during the retrieval or processing of the monitor data.
-// func (detailData *InverterData) getMonitorDataOutput(authLoginInfo *auth.LoginInfo, inverterOutput *InverterData) error {
-// 	// Get monitor data
-// 	//var powerstationData T
-// 	if err := getMonitorData(authLoginInfo, &powerstationData); err != nil {
-// 		return err
-// 	}
-
-// 	// Get data JSON
-// 	dataOutput, err := utils.MarshalStructToJSON(powerstationData)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	// Parse output
-// 	output, err := utils.ParseOutput(dataOutput)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	// Print output
-// 	utils.PrintOutput(output)
-
-// 	return nil
-// }
-
-// getMonitorDetailByPowerstationId retrieves the monitor detail for a given powerstation ID.
-//
-// It takes a pointer to a MonitorDataLoginInfo struct as a parameter.
-// The function returns an error if there was an issue fetching the powerstation data.
-// func getMonitorDetailByPowerstationId(monitorDataLoginInfo *auth.LoginInfo) error {
-// 	var powerstationData InverterData
-// 	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
-// 		return fmt.Errorf("error fetching powerstation data: %v", err)
-// 	}
-// 	return nil
-// }
-
-// getMonitorSummaryByPowerstationId retrieves the monitor summary data for a specific power station ID.
-//
-// Parameters:
-// - monitorDataLoginInfo: a pointer to the MonitorDataLoginInfo struct containing the login credentials and power station ID.
-//
-// Returns:
-// - error: an error if there was an issue fetching the powerstation summary data.
-// func getMonitorSummaryByPowerstationId(monitorDataLoginInfo *auth.LoginInfo) error {
-// 	var powerstationData DailySummaryData
-// 	if err := getMonitorDataOutput(monitorDataLoginInfo, &powerstationData); err != nil {
-// 		return fmt.Errorf("error fetching powerstation summary data: %v", err)
-// 	}
-// 	return nil
-// }
-
-// GetPowerData retrieves either monitor summary or monitor details based on the specified flag.
-//
-// Parameters:
-// - LoginInfo: a pointer to the MonitorDataLoginInfo struct
-// - isDailySummary: a flag to determine if daily summary data should be retrieved
-//
-// Returns an error if there was an issue fetching the data.
-func (detailData *InverterData) GetPowerData(authLoginInfo *auth.LoginInfo) error {
-	// if isDailySummary {
-	// 	return getMonitorSummaryByPowerstationId(LoginInfo)
+	// // Get the Token header data
+	// apiResponseJSONData, err := helpers.DataTokenJSON(authLoginInfo.SemsLoginResponse)
+	// if err != nil {
+	// 	return err
 	// }
-	// return getMonitorDetailByPowerstationId(LoginInfo)
 
-	//var powerstationData InverterData
-	// if err := detailData.getMonitorDataOutput(LoginInfo, detailData); err != nil {
-	// 	return fmt.Errorf("error fetching powerstation data: %v", err)
+	// // Get the Powerstation ID header data
+	// powerStationIDJSONData, err := helpers.PowerStationIdJSON(authLoginInfo.SemsLoginCredentials)
+	// if err != nil {
+	// 	return err
 	// }
+
+	// // Create URL from the Auth API and append the data URL part
+	// url := authLoginInfo.SemsLoginResponse.API + powerStationURL
+
+	// // Create a new HTTP request
+	// req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
+	// if err != nil {
+	// 	return err
+	// }
+
+	// // Add headers
+	// helpers.SetHeaders(req, apiResponseJSONData)
+
+	// // Make the API call
+	// client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
+	// resp, err := client.Do(req)
+	// if err != nil {
+	// 	return err
+	// }
+	// defer resp.Body.Close()
+
+	// // Get the response body
+	// respBody, err := utils.FetchResponseBody(resp.Body)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// // Unmarshal response to struct pointer
+	// if err := utils.UnmarshalDataToStruct(respBody, inverterOutput); err != nil {
+	// 	return err
+	// }
+
 	// return nil
 
+	return helpers.FetchMonitorData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
+}
+
+// GetPowerData retrieves the power data for a detailed inverter using the provided authentication information.
+//
+// Parameters:
+// - authLoginInfo: a pointer to the auth.LoginInfo struct containing the login credentials and API response
+//
+// Returns:
+// - error: an error if there was a problem retrieving the power data
+func (detailData *InverterData) GetPowerData(authLoginInfo *auth.LoginInfo) error {
+
 	// Get monitor data
-	//var powerstationData T
 	if err := detailData.GetMonitorData(authLoginInfo, detailData); err != nil {
 		return err
 	}
 
-	// Get data JSON
-	dataOutput, err := utils.MarshalStructToJSON(detailData)
-	if err != nil {
-		return err
-	}
+	return helpers.ProcesData(detailData)
 
-	// Parse output
-	output, err := utils.ParseOutput(dataOutput)
-	if err != nil {
-		return err
-	}
+	// // Get data JSON
+	// dataOutput, err := utils.MarshalStructToJSON(detailData)
+	// if err != nil {
+	// 	return err
+	// }
 
-	// Print output
-	utils.PrintOutput(output)
+	// // Parse output
+	// output, err := utils.ParseOutput(dataOutput)
+	// if err != nil {
+	// 	return err
+	// }
 
-	return nil
+	// // Print output
+	// utils.PrintOutput(output)
+
+	// return nil
 }

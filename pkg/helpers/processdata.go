@@ -21,13 +21,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package interfaces
+package helpers
 
 import (
-	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
+	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
 
-type PowerData interface {
-	GetPowerData(*auth.LoginInfo) error
-	GetMonitorData(*auth.LoginInfo, interface{}) error
+func ProcesData(inverterData interface{}) error {
+
+	// Get data JSON
+	dataOutput, err := utils.MarshalStructToJSON(inverterData)
+	if err != nil {
+		return err
+	}
+
+	// Parse output
+	output, err := utils.ParseOutput(dataOutput)
+	if err != nil {
+		return err
+	}
+
+	// Print output
+	utils.PrintOutput(output)
+
+	return nil
 }
