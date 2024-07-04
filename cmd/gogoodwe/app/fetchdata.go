@@ -60,7 +60,7 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 	}
 
 	// fetch the data
-	var dataService interfaces.PowerData = lookupMonitorData("")
+	var dataService interfaces.PowerData = lookupMonitorData(Detail)
 
 	if err := dataService.GetPowerData(loginInfo); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)

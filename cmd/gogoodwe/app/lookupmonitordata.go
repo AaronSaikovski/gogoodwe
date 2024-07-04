@@ -41,21 +41,21 @@ import (
 //
 // Returns:
 // - interfaces.PowerData: the PowerData object corresponding to the reportData.
-func lookupMonitorData(reportData string) interfaces.PowerData {
+func lookupMonitorData(reportData int) interfaces.PowerData {
 
 	switch reportData {
 
-	case "point":
+	case Point:
 		return inverteallpoint.NewInverterAllPoint()
-	case "detail":
+	case Detail:
 		return monitordetail.NewMonitorData()
-	case "summary":
+	case Summary:
 		return monitorsummary.NewDailySummaryData()
-	case "plant":
+	case Plant:
 		return plantdetail.NewGetPlantDetailByPowerstationId()
-	case "plantchart":
+	case PlantChart:
 		return plantchartdata.NewPlantPowerChart()
-	case "powerflow":
+	case PowerFlow:
 		return powerflow.NewPowerflow()
 	default:
 		return monitordetail.NewMonitorData()
