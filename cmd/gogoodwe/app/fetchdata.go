@@ -31,9 +31,6 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 	"github.com/AaronSaikovski/gogoodwe/pkg/interfaces"
 	"github.com/AaronSaikovski/gogoodwe/pkg/monitordetail"
-	// 	"github.com/AaronSaikovski/gogoodwe/pkg/monitordetail"
-	// "github.com/AaronSaikovski/gogoodwe/pkg/monitorsummary"
-	// "github.com/AaronSaikovski/gogoodwe/pkg/monitorsummary"
 )
 
 // fetchData fetches data using the provided account credentials and power station ID.
