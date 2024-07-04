@@ -30,7 +30,6 @@ import (
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 	"github.com/AaronSaikovski/gogoodwe/pkg/interfaces"
-	"github.com/AaronSaikovski/gogoodwe/pkg/monitordetail"
 )
 
 // fetchData fetches data using the provided account credentials and power station ID.
@@ -41,9 +40,6 @@ import (
 // DailySummary: a boolean indicating whether to retrieve a daily summary.
 // error: an error if there was a problem logging in or fetching data.
 func fetchData(context context.Context, Account, Password, PowerStationID string) error {
-
-	//get the current date
-	//currentDate := getFormattedData()
 
 	// User account struct
 	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID)
@@ -63,9 +59,8 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 		SemsLoginResponse:    loginApiResponse,
 	}
 
-	// Assign the login interface
-	//var dataService interfaces.PowerData = monitorsummary.NewDailySummaryData()
-	var dataService interfaces.PowerData = monitordetail.NewMonitorData()
+	// fetch the data
+	var dataService interfaces.PowerData = lookupMonitorData("")
 
 	if err := dataService.GetPowerData(loginInfo); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)
@@ -75,5 +70,7 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 		return fmt.Errorf("context error: %w", err)
 	}
 
+	defer context.Done()
 	return nil
+
 }

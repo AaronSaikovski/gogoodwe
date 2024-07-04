@@ -24,11 +24,15 @@ SOFTWARE.
 package interfaces
 
 import (
-	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
+	inverteallpoint "github.com/AaronSaikovski/gogoodwe/pkg/inverterallpoint"
+	"github.com/AaronSaikovski/gogoodwe/pkg/monitordetail"
+	"github.com/AaronSaikovski/gogoodwe/pkg/monitorsummary"
+	"github.com/AaronSaikovski/gogoodwe/pkg/plantdetail"
+	plantchartdata "github.com/AaronSaikovski/gogoodwe/pkg/plantpowerchart"
+	"github.com/AaronSaikovski/gogoodwe/pkg/powerflow"
 )
 
-type PowerData interface {
-	GetPowerData(*auth.LoginInfo) error
-	GetMonitorData(*auth.LoginInfo, interface{}) error
-	//LookupMonitorData(string) interface{}
+// SEMS Data Constraints
+type SemsDataConstraint interface {
+	inverteallpoint.InverterAllPoint | monitordetail.MonitorData | monitorsummary.DailySummaryData | plantdetail.PlantDetailByPowerstationId | plantchartdata.PlantPowerChart | powerflow.Powerflow
 }

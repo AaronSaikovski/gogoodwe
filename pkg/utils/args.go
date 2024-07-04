@@ -35,7 +35,7 @@ type Args struct {
 	Account        string `arg:"required,-a,--account" help:"SEMS Email Account."`
 	Password       string `arg:"required,-p,--password" help:"SEMS Account password."`
 	PowerStationID string `arg:"required,-i,--powerstationid" help:"SEMS Powerstation ID."`
-	DailySummary   bool   `arg:"-s,--summary" help:"Output as a daily summary."`
+	//DailySummary   bool   `arg:"-s,--summary" help:"Output as a daily summary."`
 }
 
 // Description returns a command line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API.
