@@ -28,8 +28,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
-	"github.com/AaronSaikovski/gogoodwe/internal/monitordata"
+	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
+	"github.com/AaronSaikovski/gogoodwe/pkg/interfaces"
 )
 
 // fetchData fetches data using the provided account credentials and power station ID.
@@ -39,27 +39,30 @@ import (
 // PowerStationID: the ID of the power station.
 // DailySummary: a boolean indicating whether to retrieve a daily summary.
 // error: an error if there was a problem logging in or fetching data.
-func fetchData(context context.Context, Account, Password, PowerStationID string, isDailySummary bool) error {
+func fetchData(context context.Context, Account, Password, PowerStationID string, ReportType int) error {
 
 	// User account struct
-	apiLoginCreds := &apilogin.ApiLoginCredentials{
-		Account:        Account,
-		Password:       Password,
-		PowerStationID: PowerStationID,
-	}
+	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID)
+
+	// Assign the login interface
+	var loginService interfaces.SemsLogin = apiLoginCreds
 
 	// Do the login
-	loginApiResponse, err := apiLoginCreds.APILogin()
+	loginApiResponse, err := loginService.SemsLogin()
 	if err != nil {
 		return fmt.Errorf("login failed: %w", err)
 	}
 
-	monitordata := &monitordata.MonitorDataLoginInfo{
-		LoginApiCredentials: apiLoginCreds,
-		LoginApiResponse:    loginApiResponse,
+	//Populate the loginInfo struct
+	loginInfo := &auth.LoginInfo{
+		SemsLoginCredentials: apiLoginCreds,
+		SemsLoginResponse:    loginApiResponse,
 	}
 
-	if err := monitordata.GetPowerData(isDailySummary); err != nil {
+	// fetch the data
+	var dataService interfaces.PowerData = lookupMonitorData(ReportType)
+
+	if err := dataService.GetPowerData(loginInfo); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)
 	}
 
@@ -67,5 +70,7 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 		return fmt.Errorf("context error: %w", err)
 	}
 
+	defer context.Done()
 	return nil
+
 }

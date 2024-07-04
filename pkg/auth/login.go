@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package apilogin
+package auth
 
 import (
 	"bytes"
@@ -37,10 +37,10 @@ const (
 	HTTPTimeout  = 20 // seconds
 )
 
-// APILogin logs in to the SEMS API using the provided credentials.
+// SemsLogin is a method on the SemsLoginCredentials struct that performs a Sems login.
 //
-// It takes the login credentials as a parameter and returns the API login response and an error.
-func (loginCredentials *ApiLoginCredentials) APILogin() (*ApiLoginResponse, error) {
+// It takes no parameters and returns a pointer to a SemsLoginResponse struct and an error.
+func (loginCredentials *SemsLoginCredentials) SemsLogin() (*SemsLoginResponse, error) {
 	// Check if the UserLogin struct is empty
 	if err := checkUserLoginInfo(loginCredentials); err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (loginCredentials *ApiLoginCredentials) APILogin() (*ApiLoginResponse, erro
 	}
 
 	// Unmarshal response to loginresponse struct
-	var loginApiResponse ApiLoginResponse
+	var loginApiResponse SemsLoginResponse
 	if err := utils.UnmarshalDataToStruct(respBody, &loginApiResponse); err != nil {
 		return nil, err
 	}

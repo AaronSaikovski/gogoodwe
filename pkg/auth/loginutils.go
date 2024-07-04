@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package apilogin
+package auth
 
 import (
 	"errors"
@@ -55,8 +55,8 @@ func checkUserLoginResponse(loginResponse string) error {
 //
 // It takes a pointer to an ApiLoginCredentials struct as a parameter and returns an error if the credentials are empty or invalid.
 // The function returns nil if the credentials are valid.
-func checkUserLoginInfo(userLogin *ApiLoginCredentials) error {
-	if *userLogin == (ApiLoginCredentials{}) {
+func checkUserLoginInfo(userLogin *SemsLoginCredentials) error {
+	if *userLogin == (SemsLoginCredentials{}) {
 		return errors.New("**Error: User Login details are empty or invalid**")
 	}
 	return nil

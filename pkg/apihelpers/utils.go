@@ -21,15 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package helpers
+package apihelpers
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-	"github.com/AaronSaikovski/gogoodwe/internal/apilogin"
-	"github.com/AaronSaikovski/gogoodwe/internal/pkg/interfaces"
+	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 )
 
 // setHeaders sets the headers for the SEMS Data API.
@@ -44,7 +42,7 @@ func SetHeaders(r *http.Request, tokenstring []byte) {
 //
 // It takes an ApiLoginCredentials pointer 'userLogin' as a parameter.
 // Returns a byte slice and an error.
-func PowerStationIdJSON(userLogin *apilogin.ApiLoginCredentials) ([]byte, error) {
+func PowerStationIdJSON(userLogin *auth.SemsLoginCredentials) ([]byte, error) {
 	powerStationMap := map[string]string{"powerStationId": userLogin.PowerStationID}
 	return json.Marshal(powerStationMap)
 }
@@ -53,7 +51,7 @@ func PowerStationIdJSON(userLogin *apilogin.ApiLoginCredentials) ([]byte, error)
 //
 // It takes a pointer to an ApiLoginResponse struct 'semsResponseData' as a parameter.
 // Returns a byte slice and an error.
-func DataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) {
+func DataTokenJSON(semsResponseData *auth.SemsLoginResponse) ([]byte, error) {
 	tokenMap := map[string]interface{}{
 		"version":   "v2.1.0",
 		"client":    "ios",
@@ -63,14 +61,4 @@ func DataTokenJSON(semsResponseData *apilogin.ApiLoginResponse) ([]byte, error) 
 		"token":     semsResponseData.Data.Token,
 	}
 	return json.Marshal(tokenMap)
-}
-
-// getDataJSON generates a JSON representation of the given data.
-//
-// The function takes a parameter 'data' of type T, which must satisfy the ISemsDataConstraint interface.
-// It returns a byte slice containing the JSON representation of the data, and an error if any occurred.
-func GetDataJSON[T interfaces.SemsDataConstraint](data T) ([]byte, error) {
-
-	// Get the response and return any errors
-	return utils.MarshalStructToJSON(&data)
 }

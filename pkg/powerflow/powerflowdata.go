@@ -21,27 +21,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package apilogin
 
-// LoginResponse - SEMS API Response struct
-type ApiLoginResponse struct {
+package powerflow
+
+type Powerflow struct {
+	Language string `json:"language"`
+	Function any    `json:"function"`
 	HasError bool   `json:"hasError"`
-	Code     int32  `json:"code"`
 	Msg      string `json:"msg"`
+	Code     string `json:"code"`
 	Data     struct {
-		UID       string `json:"uid"`
-		Timestamp int64  `json:"timestamp"`
-		Token     string `json:"token"`
-		Client    string `json:"client"`
-		Version   string `json:"version"`
-		Language  string `json:"language"`
+		HasGenset                bool `json:"hasGenset"`
+		HasMoreInverter          bool `json:"hasMoreInverter"`
+		HasPowerflow             bool `json:"hasPowerflow"`
+		Powerflow                any  `json:"powerflow"`
+		HasGridLoad              bool `json:"hasGridLoad"`
+		IsStored                 bool `json:"isStored"`
+		IsParallelInventers      bool `json:"isParallelInventers"`
+		IsMixedParallelInventers bool `json:"isMixedParallelInventers"`
+		IsEvCharge               bool `json:"isEvCharge"`
+		EvCharge                 any  `json:"evCharge"`
 	} `json:"data"`
 	Components struct {
-		Para         any    `json:"para"`
+		Para         string `json:"para"`
 		LangVer      int    `json:"langVer"`
 		TimeSpan     int    `json:"timeSpan"`
 		API          string `json:"api"`
-		MsgSocketAdr string `json:"msgSocketAdr"`
+		MsgSocketAdr any    `json:"msgSocketAdr"`
 	} `json:"components"`
-	API string `json:"api"`
+}
+
+func NewPowerflow() *Powerflow {
+	return &Powerflow{}
 }

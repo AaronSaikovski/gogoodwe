@@ -21,27 +21,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+package apihelpers
 
-package types
+import (
+	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
+)
 
-// DailySummaryData - Struct to hold daily summary data
-type DailySummaryData struct {
-	Language string `json:"language"`
-	HasError bool   `json:"hasError"`
-	Msg      string `json:"msg"`
-	Code     string `json:"code"`
-	Data     struct {
-		Kpi struct {
-			MonthGeneration float64 `json:"month_generation"`
-			Power           float64 `json:"power"`
-			TotalPower      float64 `json:"total_power"`
-			DayIncome       float64 `json:"day_income"`
-			TotalIncome     float64 `json:"total_income"`
-			Currency        string  `json:"currency"`
-		} `json:"kpi"`
-		Inverter []struct {
-			TotalGeneration string `json:"total_generation"`
-			DailyGeneration string `json:"daily_generation"`
-		} `json:"inverter"`
-	} `json:"data"`
+// ProcesData processes the given inverter data by marshaling it to JSON,
+// parsing the output, and printing the output using the PrintOutput function
+// from the utils package. It returns an error if any of the processing steps
+// fail.
+//
+// Parameters:
+// - inverterData: The data to be processed. It should be of type interface{}.
+//
+// Returns:
+// - error: An error if any of the processing steps fail, otherwise nil.
+func ProcesData(inverterData interface{}) error {
+
+	// Get data JSON
+	dataOutput, err := utils.MarshalStructToJSON(inverterData)
+	if err != nil {
+		return err
+	}
+
+	// Parse output
+	output, err := utils.ParseOutput(dataOutput)
+	if err != nil {
+		return err
+	}
+
+	// Print output
+	utils.PrintOutput(output)
+
+	return nil
 }

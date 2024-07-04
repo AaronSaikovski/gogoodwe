@@ -1,5 +1,11 @@
 # GoGoodwe - CHANGELOG
 
+## v3.0.0 (2024-07-04)
+
+- added new report types
+- added new command line report types
+- Minor performance and optimisation fixes
+
 ## v2.0.6 (2024-06-13)
 
 - renamed SemsDataConstraint
