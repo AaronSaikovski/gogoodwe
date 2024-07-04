@@ -84,7 +84,6 @@ The Report Type corresponds to the type of API call and Report that is generated
             -i '<powerstation id>' \
              -r '<report type> (Optional)>'
 
-##w
 ```
 
 To get the help on using the command line tool, type:
