@@ -110,4 +110,4 @@ GOODWE access is based on the undocumented API used by mobile apps. This could b
 
 ## Known Issues
 
-**None at time of release.**
+- The Powerchart report is returning no/blank values - investigating.
