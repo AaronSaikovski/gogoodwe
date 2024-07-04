@@ -73,10 +73,16 @@ The Report Type corresponds to the type of API call and Report that is generated
 
 ```bash
 ##Note the use of single quotes ''
-./gogoodwe --account '<user@email.com>' --pwd '<password>' --powerstationid '<powerstation id>' --reporttype '<report type>'
+./gogoodwe  --account '<user@email.com>' \
+            --pwd '<password>' \
+            --powerstationid '<powerstation id>' \
+            --reporttype '<report type>'
 
 # Or
-./gogoodwe -a '<user@email.com>' -p '<password>' -i '<powerstation id>' -r '<report type>'
+./gogoodwe  -a '<user@email.com>' \
+            -p '<password>' \
+            -i '<powerstation id>' \
+             -r '<report type>'
 
 ##w
 ```
