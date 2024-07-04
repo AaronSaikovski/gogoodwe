@@ -30,5 +30,4 @@ import (
 type PowerData interface {
 	GetPowerData(*auth.LoginInfo) error
 	GetMonitorData(*auth.LoginInfo, interface{}) error
-	//LookupMonitorData(string) interface{}
 }
