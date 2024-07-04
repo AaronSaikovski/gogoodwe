@@ -23,11 +23,15 @@ SOFTWARE.
 */
 package auth
 
+import "time"
+
 // ApiLoginCredentials - Struct to hold User login credentials
 type SemsLoginCredentials struct {
 	Account        string `json:"account"`
 	Password       string `json:"pwd"`
 	PowerStationID string `json:"powerstationid"`
+	ID             string `json:"id"`
+	Date           string `json:"date"` // YYYY-MM-DD
 }
 
 func NewSemsLoginCredentials(account, password, powerStationID string) *SemsLoginCredentials {
@@ -35,6 +39,17 @@ func NewSemsLoginCredentials(account, password, powerStationID string) *SemsLogi
 		Account:        account,
 		Password:       password,
 		PowerStationID: powerStationID,
+		ID:             powerStationID,
+		Date:           getFormattedData(),
 	}
+
+}
+
+func getFormattedData() string {
+	// Get the current date and time
+	currentTime := time.Now()
+
+	// Format the date as yyyy-mm-dd
+	return currentTime.Format("2006-01-02")
 
 }

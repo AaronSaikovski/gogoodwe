@@ -45,6 +45,9 @@ import (
 // error: an error if there was a problem logging in or fetching data.
 func fetchData(context context.Context, Account, Password, PowerStationID string) error {
 
+	//get the current date
+	//currentDate := getFormattedData()
+
 	// User account struct
 	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID)
 
