@@ -39,7 +39,7 @@ import (
 // PowerStationID: the ID of the power station.
 // DailySummary: a boolean indicating whether to retrieve a daily summary.
 // error: an error if there was a problem logging in or fetching data.
-func fetchData(context context.Context, Account, Password, PowerStationID string) error {
+func fetchData(context context.Context, Account, Password, PowerStationID string, ReportType int) error {
 
 	// User account struct
 	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID)
@@ -60,7 +60,7 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 	}
 
 	// fetch the data
-	var dataService interfaces.PowerData = lookupMonitorData(Detail)
+	var dataService interfaces.PowerData = lookupMonitorData(ReportType)
 
 	if err := dataService.GetPowerData(loginInfo); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)

@@ -25,9 +25,9 @@ package app
 
 // Constants for Report lookups
 const (
-	Point      = iota // 0
-	Detail            // 1
-	Summary           // 2
+	Detail     = iota // 0
+	Summary           // 1
+	Point             // 2
 	Plant             // 3
 	PlantChart        // 4
 	PowerFlow         // 5

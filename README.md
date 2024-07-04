@@ -1,6 +1,6 @@
 <div align="center">
 
-## GoGoodwe V3.0.0
+## GoGoodwe v3.0.0
 
 A command line tool to query the GOODWE SEMS Solar Inverter APIs - written in 100% Go.
 
@@ -9,31 +9,48 @@ A command line tool to query the GOODWE SEMS Solar Inverter APIs - written in 10
 
 </div>
 
-## Installation
+### Software Requirements:
 
-The toolchain is mainly driven by the Makefile.
+- [Go v1.22.X](https://www.go.dev/dl/) or later needs to be installed to build the code.
+- [Azure CLI tools](https://learn.microsoft.com/en-us/cli/azure/) 2.50 or later
+- [Taskfile](https://taskfile.dev/) to run the build chain commands listed below.
+
+## Installation:
+
+The toolchain is driven by using [Taskfile](https://taskfile.dev/) and all commands are managed via the file `Taskfile.yml`
+
+The list of commands is as follows:
 
 ```bash
-help         - Display help about make targets for this Makefile
-release      - Builds the project in preparation for (local)release
-goreleaser   - Builds the project in preparation for release
-docs         - updates the swagger docs
-build        - Builds the project in preparation for debug
-run          - builds and runs the program on the target platform
-clean        - Remove the old builds and any debug information
-test         - executes unit tests
-deps         - fetches any external dependencies and updates
-vet          - Vet examines Go source code and reports suspicious constructs
-staticcheck  - Runs static code analyzer staticcheck - currently broken
-seccheck     - Code vulnerability check
-lint         - format code and tidy modules
+* build:             Builds the project in preparation for debug.
+* clean:             Removes the old builds and any debug information from the source tree.
+* deps:              Fetches any external dependencies and updates.
+* destroy:           Destroy Azure resources for testing.
+* docs:              Updates the swagger docs - For APIs.
+* generate:          update binary build version using gogenerate.
+* goreleaser:        Builds a cross platform release using goreleaser.
+* lint:              Lint, format and tidy code.
+* release:           Builds the project in preparation for (local)release.
+* run:               Builds and runs the program on the target platform.
+* seccheck:          Code vulnerability scanner check.
+* staticcheck:       Runs static code analyzer staticcheck.
+* test:              Executes unit tests.
+* version:           Get the Go version.
+* vet:               Vet examines Go source code and reports suspicious constructs.
+* watch:             Use air server for hot reloading.
+```
+
+Execute using the taskfile utility:
+
+```bash
+task <command_from_above_list>
 ```
 
 To get started type,
 
-- make dep - to fetch all dependencies
-- make build - to build debug version for your target environment architecture
-- make release - Builds a release version for your target environment architecture
+- `task deps` - to fetch all dependencies and update all dependencies.
+- `task build` - to build debug version for your target environment architecture.
+- `task release` - Builds a release version for your target environment architecture - outputs to /bin folder.
 
 ## Usage
 
@@ -45,14 +62,23 @@ Then the Station ID is `11112222-aaaa-bbbb-cccc-ddddeeeeeffff`.
 
 From the command line the usage is pretty simple:
 
+The Report Type corresponds to the type of API call and Report that is generated:
+
+- (0)-Detail - Fully detailed report.
+- (1)-Summary - Summary Data report (reduced information).
+- (2)-Point - Inverter All points data.
+- (3)-Plant - Plant Detail By Powerstation Id.
+- (4)-PlantChart - Plant Chart data for use in Charts and Graphs.
+- (5)-PowerFlow - Powerflow Summary data
+
 ```bash
 ##Note the use of single quotes ''
-./gogoodwe --account '<user@email.com>' --pwd '<password>' --powerstationid '<powerstation id>' --summary
+./gogoodwe --account '<user@email.com>' --pwd '<password>' --powerstationid '<powerstation id>' --reporttype '<report type>'
 
 # Or
-./gogoodwe -a '<user@email.com>' -p '<password>' -i '<powerstation id>' -s
+./gogoodwe -a '<user@email.com>' -p '<password>' -i '<powerstation id>' -r '<report type>'
 
-##where daily summary provides a shorter daily view of the inverter data
+##w
 ```
 
 To get the help on using the command line tool, type:
