@@ -76,13 +76,13 @@ The Report Type corresponds to the type of API call and Report that is generated
 ./gogoodwe  --account '<user@email.com>' \
             --pwd '<password>' \
             --powerstationid '<powerstation id>' \
-            --reporttype '<report type>'
+            --reporttype '<report type (Optional)>'
 
 # Or
 ./gogoodwe  -a '<user@email.com>' \
             -p '<password>' \
             -i '<powerstation id>' \
-             -r '<report type>'
+             -r '<report type> (Optional)>'
 
 ##w
 ```
