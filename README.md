@@ -1,6 +1,6 @@
 <div align="center">
 
-## GoGoodwe v3.0.0
+## GoGoodwe v3.0.1
 
 A command line tool to query the GOODWE SEMS Solar Inverter APIs - written in 100% Go.
 
@@ -11,7 +11,7 @@ A command line tool to query the GOODWE SEMS Solar Inverter APIs - written in 10
 
 ### Software Requirements:
 
-- [Go v1.22.X](https://www.go.dev/dl/) or later needs to be installed to build the code.
+- [Go v1.23.0](https://www.go.dev/dl/) or later needs to be installed to build the code.
 - [Azure CLI tools](https://learn.microsoft.com/en-us/cli/azure/) 2.50 or later
 - [Taskfile](https://taskfile.dev/) to run the build chain commands listed below.
 
