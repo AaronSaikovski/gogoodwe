@@ -26,7 +26,7 @@ version: "3"
 
 #ENV VARS
 env:
-  TARGET: gogoodwe #Change this to suit
+  TARGET: gogoodwe.exe #Change this to suit
   APPPATH: ./cmd/gogoodwe/main.go #Change this to suit
 
 tasks:
@@ -41,7 +41,7 @@ tasks:
     cmds:
       - go generate $APPPATH
       - go build -ldflags="-s -w" -o bin/$TARGET $APPPATH
-      - file bin/$TARGET
+      #- file bin/$TARGET
 
   ## goreleaser - Builds the project in preparation for release
   goreleaser:
@@ -52,7 +52,7 @@ tasks:
   build:
     cmds:
       - go build -o bin/$TARGET $APPPATH
-      - file bin/$TARGET
+      #- file bin/$TARGET
 
   ## run - builds and runs the program on the target platform
   run:
