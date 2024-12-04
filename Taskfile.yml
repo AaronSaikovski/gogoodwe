@@ -27,7 +27,7 @@ version: "3"
 #ENV VARS
 env:
   TARGET: gogoodwe.exe #Change this to suit
-  APPPATH: ./cmd/gogoodwe/main.go #Change this to suit
+  APPPATH: .\cmd\gogoodwe\main.go #Change this to suit
 
 tasks:
   ## version - get the Go version
@@ -74,8 +74,8 @@ tasks:
     cmds:
       - go clean -cache
       - go clean
-      - rm -rf dist
-      - rm bin/$TARGET
+      # - rm -rf dist
+      # - rm bin/$TARGET
 
   ## test - executes unit tests
   test:
