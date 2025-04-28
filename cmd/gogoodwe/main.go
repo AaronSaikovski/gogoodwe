@@ -8,6 +8,8 @@ import (
 	_ "embed"
 	"log"
 	"time"
+	// "os"
+	// "runtime/pprof"
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
 )
@@ -27,6 +29,13 @@ var version string
 // It calls the app.Run function with the version string as a parameter.
 // If an error is returned, it logs the error message and exits the program.
 func main() {
+
+	// f, err := os.Create("cpu.prof")
+	// if err != nil {
+	//     panic(err)
+	// }
+	// pprof.StartCPUProfile(f)
+	// defer pprof.StopCPUProfile()
 
 	// Create a context with cancellation capability and 60 seconds timeout
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(contextTimeout))

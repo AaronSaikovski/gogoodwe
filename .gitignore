@@ -28,5 +28,5 @@ bin/
 # ignore output files
 output.txt
 out.txt
-
+cpu.prof
 .idea/
