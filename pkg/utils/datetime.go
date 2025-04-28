@@ -21,14 +21,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package app
 
-// Constants for Report lookups
-const (
-	Detail     = iota // 0
-	Summary           // 1
-	Point             // 2
-	Plant             // 3
-	PlantChart        // 4
-	PowerFlow         // 5
-)
+/*
+# Name: jsonutils - helper functions to get the Powerstation Data from the API
+# Author: Aaron Saikovski - asaikovski@outlook.com
+*/
+package utils
+
+import "time"
+
+func GetDate() string {
+	// Get the current date and time
+	currentTime := time.Now()
+
+	// Format the date as yyyy-mm-dd
+	return currentTime.Format("2006-01-02")
+
+}

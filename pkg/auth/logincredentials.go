@@ -23,7 +23,9 @@ SOFTWARE.
 */
 package auth
 
-import "time"
+import (
+	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
+)
 
 // ApiLoginCredentials - Struct to hold User login credentials
 type SemsLoginCredentials struct {
@@ -34,22 +36,13 @@ type SemsLoginCredentials struct {
 	Date           string `json:"date"` // YYYY-MM-DD
 }
 
-func NewSemsLoginCredentials(account, password, powerStationID string) *SemsLoginCredentials {
-	return &SemsLoginCredentials{
+func NewSemsLoginCredentials(account, password, powerStationID string) SemsLoginCredentials {
+	return SemsLoginCredentials{
 		Account:        account,
 		Password:       password,
 		PowerStationID: powerStationID,
 		ID:             powerStationID,
-		Date:           getFormattedData(),
+		Date:           utils.GetDate(),
 	}
-
-}
-
-func getFormattedData() string {
-	// Get the current date and time
-	currentTime := time.Now()
-
-	// Format the date as yyyy-mm-dd
-	return currentTime.Format("2006-01-02")
 
 }

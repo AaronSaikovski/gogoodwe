@@ -1,26 +1,3 @@
-/*
-MIT License
-
-# Copyright (c) 2024 Aaron Saikovski
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
 package app
 
 // Main package - This is the main program entry point
@@ -32,20 +9,11 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/interfaces"
 )
 
-// fetchData fetches data using the provided account credentials and power station ID.
-//
-// Account: the email account associated with the user.
-// Password: the password associated with the user's account.
-// PowerStationID: the ID of the power station.
-// DailySummary: a boolean indicating whether to retrieve a daily summary.
-// error: an error if there was a problem logging in or fetching data.
-func fetchData(context context.Context, Account, Password, PowerStationID string, ReportType int) error {
-
-	// User account struct
-	apiLoginCreds := auth.NewSemsLoginCredentials(Account, Password, PowerStationID)
+// LoginAndfetchData handles the login and data retrieval process
+func loginAndfetchData(context context.Context, apiLoginCreds auth.SemsLoginCredentials, ReportType int) error {
 
 	// Assign the login interface
-	var loginService interfaces.SemsLogin = apiLoginCreds
+	var loginService interfaces.SemsLogin = &apiLoginCreds
 
 	// Do the login
 	loginApiResponse, err := loginService.SemsLogin()
@@ -55,7 +23,7 @@ func fetchData(context context.Context, Account, Password, PowerStationID string
 
 	//Populate the loginInfo struct
 	loginInfo := &auth.LoginInfo{
-		SemsLoginCredentials: apiLoginCreds,
+		SemsLoginCredentials: &apiLoginCreds,
 		SemsLoginResponse:    loginApiResponse,
 	}
 

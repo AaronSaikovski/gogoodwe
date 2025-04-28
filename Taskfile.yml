@@ -1,6 +1,6 @@
 # MIT License
 
-# # Copyright (c) 2024 Aaron Saikovski
+# # Copyright (c) 2025 Aaron Saikovski
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,60 +27,57 @@ version: "3"
 #ENV VARS
 env:
   TARGET: gogoodwe.exe #Change this to suit
-  APPPATH: .\cmd\gogoodwe\main.go #Change this to suit
+  APPPATH: ./cmd/gogoodwe/main.go #Change this to suit
+  PROJECT_NAME: go-cli-starter #Change this to suit
+
+###########################################################################
 
 tasks:
-  ## version - get the Go version
-  version:
-    cmds:
-      - go version
-
   ## release - Builds the project in preparation for (local)release
   release:
     deps: [vet, lint, seccheck]
     cmds:
-      - go generate $APPPATH
       - go build -ldflags="-s -w" -o bin/$TARGET $APPPATH
-      #- file bin/$TARGET
+
+  ###############################################################################
 
   ## goreleaser - Builds the project in preparation for release
   goreleaser:
     cmds:
       - goreleaser release --snapshot --clean
 
+  ###############################################################################
+
   ## build - Builds the project in preparation for debug
   build:
     cmds:
       - go build -o bin/$TARGET $APPPATH
-      #- file bin/$TARGET
+
+  ###############################################################################
 
   ## run - builds and runs the program on the target platform
   run:
     cmds:
       - go run $APPPATH
 
-  ## watch - use air server for hot reloading
-  watch:
-    cmds:
-      - air
-
-  ## docs - updates the swagger docs
-  docs:
-    cmds:
-      - swag init
+  ###############################################################################
 
   ## clean - Remove the old builds and any debug information
   clean:
     cmds:
       - go clean -cache
       - go clean
-      # - rm -rf dist
-      # - rm bin/$TARGET
+      - cmd /c "rmdir /s /q dist || exit 0"
+      - cmd /c "rmdir /s /q bin || exit 0"
+
+  ###############################################################################
 
   ## test - executes unit tests
   test:
     cmds:
       - go test -v ./test/...
+
+  ###############################################################################
 
   ## deps - fetches any external dependencies and updates
   deps:
@@ -89,29 +86,58 @@ tasks:
       - go mod download
       - go get -u ./...
 
+  ###############################################################################
+
   ## vet - Vet examines Go source code and reports suspicious constructs
   vet:
     cmds:
       - go vet ./...
+
+  ###############################################################################
 
   ## staticcheck - Runs static code analyzer staticcheck - currently broken
   staticcheck:
     cmds:
       - staticcheck ./...
 
-    ## seccheck - Code vulnerability check
+  ###############################################################################
+
+  ## seccheck - Code vulnerability check
   seccheck:
     cmds:
       - govulncheck ./...
+
+  ###############################################################################
 
   ## lint - format code and tidy modules
   lint:
     cmds:
       - go fmt ./...
       - go mod tidy -v
-      - golangci-lint run ./...
+      #- golangci-lint run ./...
+
+  ###############################################################################
 
   ## generate - update build version
   generate:
     cmds:
       - go generate $APPPATH
+
+  ###############################################################################
+
+  ## docker-build - builds a docker image based on the docker file.
+  docker-build:
+    desc: "Builds a docker image based on the docker file."
+    cmds:
+      - docker build --platform linux/arm64 -t $PROJECT_NAME:latest .
+
+  ###############################################################################
+
+  ## docker-run - runs the docker container.
+  docker-run:
+    desc: "Runs the docker container."
+    deps: [docker-build]
+    cmds:
+      - docker run $PROJECT_NAME:latest
+
+  ###############################################################################
