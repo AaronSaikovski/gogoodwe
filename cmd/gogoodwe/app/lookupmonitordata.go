@@ -11,7 +11,7 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/models/powerflow"
 )
 
-// lookupMonitorData returns a PowerData object based on the given reportData string.
+// lookupMonitorData returns a PowerData object based on the given reportData int.
 //
 // Parameters:
 // - reportData: a string representing the type of data to retrieve.
