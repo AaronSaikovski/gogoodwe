@@ -21,7 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package plantchartdata
+
+package plantdetail
 
 import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/apihelpers"
@@ -31,13 +32,11 @@ import (
 const (
 
 	// Powerstation API Url
-	powerStationURL string = "/v2/Charts/GetPlantPowerChart"
+	powerStationURL string = "/v3/PowerStation/GetPlantDetailByPowerstationId"
 
 	// Default timeout value
 	HTTPTimeout int = 20
 )
-
-// --data '{"id":"d035a6b1-a99a-46cf-84a0-ddd5730d7f5c","date":"2024-06-21"}'
 
 // GetMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
 //
@@ -45,24 +44,25 @@ const (
 // - authLoginInfo: pointer to the LoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func (plantChartData *PlantPowerChart) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error { // // Get the Token header data
+func (plantDetailData *PlantDetailByPowerstationId) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
 
 	return apihelpers.FetchMonitorAPIData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
 
-// GetPowerData retrieves the power data for a detailed inverter using the provided authentication information.
+// GetPowerData retrieves the power data for a daily summary using the provided authentication information.
 //
 // Parameters:
-// - authLoginInfo: a pointer to the auth.LoginInfo struct containing the login credentials and API response
+// - authLoginInfo: a pointer to the authentication information for the user.
 //
 // Returns:
-// - error: an error if there was a problem retrieving the power data
-func (plantChartData *PlantPowerChart) GetPowerData(authLoginInfo *auth.LoginInfo) error {
+// - error: an error if there was a problem retrieving the power data.
+func (plantDetailData *PlantDetailByPowerstationId) GetPowerData(authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data
-	if err := plantChartData.GetMonitorData(authLoginInfo, plantChartData); err != nil {
+	if err := plantDetailData.GetMonitorData(authLoginInfo, plantDetailData); err != nil {
 		return err
 	}
 
-	return apihelpers.ProcesData(plantChartData)
+	return apihelpers.ProcessData(plantDetailData)
+
 }

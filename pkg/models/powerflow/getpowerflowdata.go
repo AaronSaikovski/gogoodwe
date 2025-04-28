@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package plantdetail
+package powerflow
 
 import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/apihelpers"
@@ -32,7 +32,7 @@ import (
 const (
 
 	// Powerstation API Url
-	powerStationURL string = "/v3/PowerStation/GetPlantDetailByPowerstationId"
+	powerStationURL string = "v2/PowerStation/GetPowerflow"
 
 	// Default timeout value
 	HTTPTimeout int = 20
@@ -44,7 +44,7 @@ const (
 // - authLoginInfo: pointer to the LoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func (plantDetailData *PlantDetailByPowerstationId) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
+func (powerFlowData *Powerflow) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
 
 	return apihelpers.FetchMonitorAPIData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
@@ -56,13 +56,13 @@ func (plantDetailData *PlantDetailByPowerstationId) GetMonitorData(authLoginInfo
 //
 // Returns:
 // - error: an error if there was a problem retrieving the power data.
-func (plantDetailData *PlantDetailByPowerstationId) GetPowerData(authLoginInfo *auth.LoginInfo) error {
+func (powerFlowData *Powerflow) GetPowerData(authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data
-	if err := plantDetailData.GetMonitorData(authLoginInfo, plantDetailData); err != nil {
+	if err := powerFlowData.GetMonitorData(authLoginInfo, powerFlowData); err != nil {
 		return err
 	}
 
-	return apihelpers.ProcesData(plantDetailData)
+	return apihelpers.ProcessData(powerFlowData)
 
 }

@@ -21,8 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
-package powerflow
+package monitordetail
 
 import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/apihelpers"
@@ -32,7 +31,7 @@ import (
 const (
 
 	// Powerstation API Url
-	powerStationURL string = "v2/PowerStation/GetPowerflow"
+	powerStationURL string = "v3/PowerStation/GetMonitorDetailByPowerstationId"
 
 	// Default timeout value
 	HTTPTimeout int = 20
@@ -44,25 +43,24 @@ const (
 // - authLoginInfo: pointer to the LoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func (powerFlowData *Powerflow) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
+func (summaryData *MonitorData) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error { // // Get the Token header data
 
 	return apihelpers.FetchMonitorAPIData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
 
-// GetPowerData retrieves the power data for a daily summary using the provided authentication information.
+// GetPowerData retrieves the power data for a detailed inverter using the provided authentication information.
 //
 // Parameters:
-// - authLoginInfo: a pointer to the authentication information for the user.
+// - authLoginInfo: a pointer to the auth.LoginInfo struct containing the login credentials and API response
 //
 // Returns:
-// - error: an error if there was a problem retrieving the power data.
-func (powerFlowData *Powerflow) GetPowerData(authLoginInfo *auth.LoginInfo) error {
+// - error: an error if there was a problem retrieving the power data
+func (detailData *MonitorData) GetPowerData(authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data
-	if err := powerFlowData.GetMonitorData(authLoginInfo, powerFlowData); err != nil {
+	if err := detailData.GetMonitorData(authLoginInfo, detailData); err != nil {
 		return err
 	}
 
-	return apihelpers.ProcesData(powerFlowData)
-
+	return apihelpers.ProcessData(detailData)
 }

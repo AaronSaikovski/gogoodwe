@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package monitordetail
+package plantchartdata
 
 import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/apihelpers"
@@ -31,11 +31,13 @@ import (
 const (
 
 	// Powerstation API Url
-	powerStationURL string = "v3/PowerStation/GetMonitorDetailByPowerstationId"
+	powerStationURL string = "/v2/Charts/GetPlantPowerChart"
 
 	// Default timeout value
 	HTTPTimeout int = 20
 )
+
+// --data '{"id":"d035a6b1-a99a-46cf-84a0-ddd5730d7f5c","date":"2024-06-21"}'
 
 // GetMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
 //
@@ -43,7 +45,7 @@ const (
 // - authLoginInfo: pointer to the LoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func (summaryData *MonitorData) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error { // // Get the Token header data
+func (plantChartData *PlantPowerChart) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error { // // Get the Token header data
 
 	return apihelpers.FetchMonitorAPIData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
@@ -55,12 +57,12 @@ func (summaryData *MonitorData) GetMonitorData(authLoginInfo *auth.LoginInfo, in
 //
 // Returns:
 // - error: an error if there was a problem retrieving the power data
-func (detailData *MonitorData) GetPowerData(authLoginInfo *auth.LoginInfo) error {
+func (plantChartData *PlantPowerChart) GetPowerData(authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data
-	if err := detailData.GetMonitorData(authLoginInfo, detailData); err != nil {
+	if err := plantChartData.GetMonitorData(authLoginInfo, plantChartData); err != nil {
 		return err
 	}
 
-	return apihelpers.ProcesData(detailData)
+	return apihelpers.ProcessData(plantChartData)
 }

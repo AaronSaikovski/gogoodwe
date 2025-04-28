@@ -63,6 +63,6 @@ func (inverterData *InverterAllPoint) GetPowerData(authLoginInfo *auth.LoginInfo
 		return err
 	}
 
-	return apihelpers.ProcesData(inverterData)
+	return apihelpers.ProcessData(inverterData)
 
 }

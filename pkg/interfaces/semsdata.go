@@ -24,12 +24,12 @@ SOFTWARE.
 package interfaces
 
 import (
-	inverteallpoint "github.com/AaronSaikovski/gogoodwe/pkg/inverterallpoint"
-	"github.com/AaronSaikovski/gogoodwe/pkg/monitordetail"
-	"github.com/AaronSaikovski/gogoodwe/pkg/monitorsummary"
-	"github.com/AaronSaikovski/gogoodwe/pkg/plantdetail"
-	plantchartdata "github.com/AaronSaikovski/gogoodwe/pkg/plantpowerchart"
-	"github.com/AaronSaikovski/gogoodwe/pkg/powerflow"
+	inverteallpoint "github.com/AaronSaikovski/gogoodwe/pkg/models/inverterallpoint"
+	"github.com/AaronSaikovski/gogoodwe/pkg/models/monitordetail"
+	"github.com/AaronSaikovski/gogoodwe/pkg/models/monitorsummary"
+	"github.com/AaronSaikovski/gogoodwe/pkg/models/plantdetail"
+	plantchartdata "github.com/AaronSaikovski/gogoodwe/pkg/models/plantpowerchart"
+	"github.com/AaronSaikovski/gogoodwe/pkg/models/powerflow"
 )
 
 // SEMS Data Constraints

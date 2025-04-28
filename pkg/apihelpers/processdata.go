@@ -27,7 +27,7 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
 
-// ProcesData processes the given inverter data by marshaling it to JSON,
+// ProcessData processes the given inverter data by marshaling it to JSON,
 // parsing the output, and printing the output using the PrintOutput function
 // from the utils package. It returns an error if any of the processing steps
 // fail.
@@ -37,7 +37,7 @@ import (
 //
 // Returns:
 // - error: An error if any of the processing steps fail, otherwise nil.
-func ProcesData(inverterData interface{}) error {
+func ProcessData(inverterData interface{}) error {
 
 	// Get data JSON
 	dataOutput, err := utils.MarshalStructToJSON(inverterData)

@@ -62,6 +62,6 @@ func (summaryData *DailySummaryData) GetPowerData(authLoginInfo *auth.LoginInfo)
 		return err
 	}
 
-	return apihelpers.ProcesData(summaryData)
+	return apihelpers.ProcessData(summaryData)
 
 }
