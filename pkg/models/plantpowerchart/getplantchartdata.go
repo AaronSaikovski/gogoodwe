@@ -20,8 +20,7 @@ const (
 // - authLoginInfo: pointer to the LoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: error
-func (plantChartData *PlantPowerChart) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error { // // Get the Token header data
-
+func (plantChartData *PlantPowerChart) GetMonitorData(authLoginInfo *auth.LoginInfo, inverterOutput interface{}) error {
 	return apihelpers.FetchMonitorAPIData(authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
 }
 

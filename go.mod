@@ -8,4 +8,7 @@ require (
 	github.com/valyala/fastjson v1.6.4
 )
 
-require github.com/alexflint/go-scalar v1.2.0 // indirect
+require (
+	github.com/alexflint/go-scalar v1.2.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)

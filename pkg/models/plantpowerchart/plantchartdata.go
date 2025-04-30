@@ -26,7 +26,7 @@ type PlantPowerChart struct {
 				X string  `json:"x,omitempty"`
 				Y float64 `json:"y,omitempty"`
 				Z any     `json:"z,omitempty"`
-			} `json:"xy"`
+			} `json:"xy,omitempty"`
 		} `json:"lines,omitempty"`
 	} `json:"data,omitempty"`
 	Components struct {
