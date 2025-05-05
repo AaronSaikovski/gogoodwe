@@ -38,3 +38,10 @@ func checkUserLoginInfo(userLogin *SemsLoginCredentials) error {
 	}
 	return nil
 }
+
+// setPowerPlantHeaders sets the headers for the Power Plant API.
+// func setPowerPlantHeaders(r *http.Request) {
+// 	r.Header.Add("Content-Type", "application/json")
+// 	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
+// 	r.Header.Add("data", "{\"id\":\"GUID\",\"date\":\"2024-06-21\"}")
+// }

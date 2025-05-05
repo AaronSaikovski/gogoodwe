@@ -49,7 +49,7 @@ func Run(ctx context.Context, versionString string) error {
 	apiLoginCreds := auth.NewSemsLoginCredentials(args.Account, args.Password, args.PowerStationID)
 
 	// Get the data from the API, return any errors
-	if err := loginAndfetchData(ctx, apiLoginCreds, args.ReportType); err != nil {
+	if err := loginAndFetchData(ctx, apiLoginCreds, args.ReportType); err != nil {
 		return ctx.Err()
 	} else {
 		ctx.Done()

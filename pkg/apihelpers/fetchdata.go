@@ -22,6 +22,13 @@ func FetchMonitorAPIData(authLoginInfo *auth.LoginInfo, powerStationURL string, 
 		return err
 	}
 
+	// //for 'https://au.semsportal.com/api/v2/Charts/GetPlantPowerChart' specific data
+	// apiplantPowerResponseJSONData, err := PowerPlantdataTokenJSON(authLoginInfo.SemsLoginResponse)
+	// if err != nil {
+	// 	return err
+	// }
+	// fmt.Println("apiplantPowerResponseJSONData", string(apiplantPowerResponseJSONData))
+
 	// Get the Powerstation ID header data
 	powerStationIDJSONData, err := PowerStationIdJSON(authLoginInfo.SemsLoginCredentials)
 	if err != nil {
@@ -39,6 +46,7 @@ func FetchMonitorAPIData(authLoginInfo *auth.LoginInfo, powerStationURL string, 
 
 	// Add headers
 	SetHeaders(req, apiResponseJSONData)
+	//SetPowerPlantHeaders(req, apiResponseJSONData, apiplantPowerResponseJSONData)
 
 	// Make the API call
 	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}

@@ -10,7 +10,7 @@ import (
 )
 
 // LoginAndfetchData handles the login and data retrieval process
-func loginAndfetchData(context context.Context, apiLoginCreds auth.SemsLoginCredentials, ReportType int) error {
+func loginAndFetchData(context context.Context, apiLoginCreds auth.SemsLoginCredentials, ReportType int) error {
 
 	// Assign the login interface
 	var loginService interfaces.SemsLogin = &apiLoginCreds
@@ -27,9 +27,8 @@ func loginAndfetchData(context context.Context, apiLoginCreds auth.SemsLoginCred
 		SemsLoginResponse:    loginApiResponse,
 	}
 
-	// fetch the data
+	// fetch the data via the interface lookup
 	var dataService interfaces.PowerData = lookupMonitorData(ReportType)
-
 	if err := dataService.GetPowerData(loginInfo); err != nil {
 		return fmt.Errorf("data retrieval failed: %w", err)
 	}
@@ -38,7 +37,7 @@ func loginAndfetchData(context context.Context, apiLoginCreds auth.SemsLoginCred
 		return fmt.Errorf("context error: %w", err)
 	}
 
-	defer context.Done()
+	//defer context.Done()
 	return nil
 
 }
