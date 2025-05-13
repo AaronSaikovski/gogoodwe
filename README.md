@@ -68,7 +68,7 @@ The Report Type corresponds to the type of API call and Report that is generated
 - (1)-Summary - Summary Data report (reduced information).
 - (2)-Point - Inverter All points data.
 - (3)-Plant - Plant Detail By Powerstation Id.
-- (4)-PlantChart - Plant Chart data for use in Charts and Graphs.
+- (4)-PlantChart - Plant Chart data for use in Charts and Graphs - **Not Implemented due to an undocumented GoodWe API Change**
 - (5)-PowerFlow - Powerflow Summary data
 
 ```bash

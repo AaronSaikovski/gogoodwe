@@ -1,26 +1,3 @@
-/*
-MIT License
-
-# Copyright (c) 2024 Aaron Saikovski
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
 package apihelpers
 
 import (
@@ -28,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
+	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
 
 // setHeaders sets the headers for the SEMS Data API.
@@ -36,6 +14,13 @@ import (
 func SetHeaders(r *http.Request, tokenstring []byte) {
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Token", string(tokenstring))
+}
+
+// setPowerPlantHeaders sets the headers for the Power Plant API.
+func SetPowerPlantHeaders(r *http.Request, tokenstring []byte, powerPlantTokenstring []byte) {
+	r.Header.Add("Content-Type", "application/json")
+	r.Header.Add("Token", string(tokenstring))
+	r.Header.Add("data", string(powerPlantTokenstring))
 }
 
 // powerStationIdJSON generates a JSON representation of the power station ID.
@@ -59,6 +44,18 @@ func DataTokenJSON(semsResponseData *auth.SemsLoginResponse) ([]byte, error) {
 		"timestamp": semsResponseData.Data.Timestamp,
 		"uid":       semsResponseData.Data.UID,
 		"token":     semsResponseData.Data.Token,
+	}
+	return json.Marshal(tokenMap)
+}
+
+// PowerPlantdataTokenJSON generates a JSON representation of the data token.
+//
+// It takes a pointer to an ApiLoginResponse struct 'semsResponseData' as a parameter.
+// Returns a byte slice and an error.
+func PowerPlantdataTokenJSON(semsResponseData *auth.SemsLoginResponse) ([]byte, error) {
+	tokenMap := map[string]interface{}{
+		"id":   semsResponseData.Data.UID,
+		"date": utils.GetDate(),
 	}
 	return json.Marshal(tokenMap)
 }
