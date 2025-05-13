@@ -22,10 +22,9 @@ builds:
       - linux
       - windows
       - darwin
-    main: ./cmd/gogoodwe
 
 archives:
-  - format: tar.gz
+  - formats: [tar.gz]
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
@@ -37,7 +36,7 @@ archives:
     # use zip for windows archives
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [zip]
 
 changelog:
   sort: asc
@@ -45,3 +44,10 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
+release:
+  footer: >-
+
+    ---
+
+    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
