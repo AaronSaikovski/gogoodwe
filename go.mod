@@ -1,9 +1,9 @@
 module github.com/AaronSaikovski/gogoodwe
 
-go 1.24.2
+go 1.25.0
 
 require (
-	github.com/alexflint/go-arg v1.5.1
+	github.com/alexflint/go-arg v1.6.0
 	github.com/logrusorgru/aurora v2.0.3+incompatible
 	github.com/valyala/fastjson v1.6.4
 )
