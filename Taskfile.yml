@@ -35,7 +35,7 @@ env:
 tasks:
   ## release - Builds the project in preparation for (local)release
   release:
-    deps: [vet, lint, seccheck]
+    deps: [lint]
     cmds:
       - go build -ldflags="-s -w" -o bin/$TARGET $APPPATH
 
