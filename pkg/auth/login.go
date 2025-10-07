@@ -40,8 +40,8 @@ func (loginCredentials *SemsLoginCredentials) SemsLogin() (*SemsLoginResponse, e
 		return nil, err
 	}
 
-	// Create a new http request
-	req, err := http.NewRequest(http.MethodPost, AuthLoginURL, bytes.NewBuffer(loginData))
+	// Create a new http request with pre-sized buffer
+	req, err := http.NewRequest(http.MethodPost, AuthLoginURL, bytes.NewReader(loginData))
 	if err != nil {
 		return nil, err
 	}

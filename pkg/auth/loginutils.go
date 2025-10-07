@@ -6,14 +6,16 @@ import (
 	"net/http"
 )
 
+const tokenHeaderValue = `{"version":"v2.1.0","client":"ios","language":"en"}`
+
 // setHeaders sets the headers for the SEMS API login.
 //
 // It takes a pointer to an http.Request as a parameter and adds the following headers:
 // - "Content-Type": "application/json"
 // - "Token": "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}"
 func setHeaders(r *http.Request) {
-	r.Header.Add("Content-Type", "application/json")
-	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Token", tokenHeaderValue)
 }
 
 // checkUserLoginResponse checks for successful login return value and returns a login error if unsuccessful.

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
@@ -18,6 +20,13 @@ var (
 			MaxIdleConns:        100,
 			MaxIdleConnsPerHost: 10,
 			IdleConnTimeout:     90 * time.Second,
+		},
+	}
+
+	// Buffer pool for reusing byte buffers
+	bufferPool = sync.Pool{
+		New: func() interface{} {
+			return new(strings.Builder)
 		},
 	}
 )
@@ -55,11 +64,19 @@ func FetchMonitorAPIData(authLoginInfo *auth.LoginInfo, powerStationURL string, 
 		return err
 	}
 
-	// Create URL from the Auth API and append the data URL part
-	url := authLoginInfo.SemsLoginResponse.API + powerStationURL
+	// Create URL from the Auth API and append the data URL part (use pool for better performance)
+	builder := bufferPool.Get().(*strings.Builder)
+	defer func() {
+		builder.Reset()
+		bufferPool.Put(builder)
+	}()
+	builder.Grow(len(authLoginInfo.SemsLoginResponse.API) + len(powerStationURL))
+	builder.WriteString(authLoginInfo.SemsLoginResponse.API)
+	builder.WriteString(powerStationURL)
+	url := builder.String()
 
-	// Create a new HTTP request
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
+	// Create a new HTTP request with pre-sized buffer
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(powerStationIDJSONData))
 	if err != nil {
 		return err
 	}
