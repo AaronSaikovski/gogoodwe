@@ -20,14 +20,14 @@ func UnmarshalDataToStruct(respBody []byte, targetStruct interface{}) error {
 	return json.Unmarshal(respBody, &targetStruct)
 }
 
-// MarshalStructToJSON marshals the struct pointer to JSON.
+// MarshalStructToJSON marshals the struct to JSON.
 //
 // Parameters:
-// - targetStruct: the struct pointer to be marshaled.
+// - targetStruct: the struct to be marshaled.
 //
 // Returns:
-// - []byte: the JSON representation of the struct pointer.
+// - []byte: the JSON representation of the struct.
 // - error: an error if the marshaling process fails.
 func MarshalStructToJSON(targetStruct interface{}) ([]byte, error) {
-	return json.Marshal(&targetStruct)
+	return json.Marshal(targetStruct)
 }

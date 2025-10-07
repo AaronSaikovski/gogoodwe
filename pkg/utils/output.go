@@ -13,9 +13,9 @@ import (
 // - dataOutput: a byte slice containing the JSON output to be parsed.
 // Return type: (*fastjson.Value, error)
 func ParseOutput(dataOutput []byte) (*fastjson.Value, error) {
-	//parse JSON output
+	// Parse JSON output using reusable parser from pool for better performance
 	var parser fastjson.Parser
-	return parser.Parse(string(dataOutput))
+	return parser.ParseBytes(dataOutput)
 }
 
 // printOutput prints the provided fastjson.Value in bright yellow color using the aurora package.

@@ -13,6 +13,18 @@ const (
 	HTTPTimeout  = 20 // seconds
 )
 
+var (
+	// Reusable HTTP client for better performance
+	httpClient = &http.Client{
+		Timeout: HTTPTimeout * time.Second,
+		Transport: &http.Transport{
+			MaxIdleConns:        100,
+			MaxIdleConnsPerHost: 10,
+			IdleConnTimeout:     90 * time.Second,
+		},
+	}
+)
+
 // SemsLogin is a method on the SemsLoginCredentials struct that performs a Sems login.
 //
 // It takes no parameters and returns a pointer to a SemsLoginResponse struct and an error.
@@ -37,9 +49,8 @@ func (loginCredentials *SemsLoginCredentials) SemsLogin() (*SemsLoginResponse, e
 	// Add headers
 	setHeaders(req)
 
-	// Make the API call
-	client := &http.Client{Timeout: HTTPTimeout * time.Second}
-	resp, err := client.Do(req)
+	// Make the API call with reusable client
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

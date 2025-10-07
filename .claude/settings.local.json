@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cloc:*)",
+      "Bash(find:*)",
+      "Bash(go list:*)",
+      "Bash(go vet:*)",
+      "Bash(go build:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

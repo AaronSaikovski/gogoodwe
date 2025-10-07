@@ -2,11 +2,24 @@ package apihelpers
 
 import (
 	"bytes"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
+)
+
+var (
+	// Reusable HTTP client for better performance
+	httpClient = &http.Client{
+		Timeout: 0, // Will be set per request
+		Transport: &http.Transport{
+			MaxIdleConns:        100,
+			MaxIdleConnsPerHost: 10,
+			IdleConnTimeout:     90 * time.Second,
+		},
+	}
 )
 
 // FetchMonitorData fetches data from the Monitor API.
@@ -15,6 +28,13 @@ import (
 // the HTTP timeout, and a pointer to a struct to store the output.
 // It returns an error if there was a problem with the API call.
 func FetchMonitorAPIData(authLoginInfo *auth.LoginInfo, powerStationURL string, HTTPTimeout int, inverterOutput interface{}) error {
+	// Validate input parameters
+	if authLoginInfo == nil || authLoginInfo.SemsLoginResponse == nil || authLoginInfo.SemsLoginCredentials == nil {
+		return fmt.Errorf("invalid authentication information")
+	}
+	if powerStationURL == "" {
+		return fmt.Errorf("powerStationURL cannot be empty")
+	}
 
 	// Get the Token header data
 	apiResponseJSONData, err := DataTokenJSON(authLoginInfo.SemsLoginResponse)
@@ -48,9 +68,9 @@ func FetchMonitorAPIData(authLoginInfo *auth.LoginInfo, powerStationURL string, 
 	SetHeaders(req, apiResponseJSONData)
 	//SetPowerPlantHeaders(req, apiResponseJSONData, apiplantPowerResponseJSONData)
 
-	// Make the API call
-	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
-	resp, err := client.Do(req)
+	// Make the API call with reusable client
+	httpClient.Timeout = time.Duration(HTTPTimeout) * time.Second
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return err
 	}

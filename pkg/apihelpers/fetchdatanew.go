@@ -42,14 +42,19 @@ func FetchMonitorAPIDataNew(wg *sync.WaitGroup, authLoginInfo *auth.LoginInfo, p
 	// Add headers
 	SetHeaders(req, apiResponseJSONData)
 
-	// Make the API call
-	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
-	resp, err := client.Do(req)
+	// Make the API call with reusable client
+	httpClient.Timeout = time.Duration(HTTPTimeout) * time.Second
+	resp, err := httpClient.Do(req)
 	if err != nil {
-		ch <- fmt.Sprintf("Response from %s: %s", url, resp.Status)
+		ch <- fmt.Sprintf("HTTP request failed for %s: %s", url, err.Error())
 		return err
 	}
 	defer resp.Body.Close()
+
+	// Check response status
+	if resp.StatusCode != http.StatusOK {
+		ch <- fmt.Sprintf("Non-OK response from %s: %s", url, resp.Status)
+	}
 
 	// Get the response body
 	respBody, err := utils.FetchResponseBody(resp.Body)
