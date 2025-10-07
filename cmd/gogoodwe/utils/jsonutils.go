@@ -17,7 +17,7 @@ import (
 // Returns:
 // - error: an error if the unmarshaling process fails.
 func UnmarshalDataToStruct(respBody []byte, targetStruct interface{}) error {
-	return json.Unmarshal(respBody, &targetStruct)
+	return json.Unmarshal(respBody, targetStruct)
 }
 
 // MarshalStructToJSON marshals the struct to JSON.

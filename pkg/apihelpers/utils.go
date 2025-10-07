@@ -3,24 +3,30 @@ package apihelpers
 import (
 	"encoding/json"
 	"net/http"
+	"unsafe"
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
+
+// bytesToString converts byte slice to string without allocation
+func bytesToString(b []byte) string {
+	return unsafe.String(unsafe.SliceData(b), len(b))
+}
 
 // setHeaders sets the headers for the SEMS Data API.
 //
 // It takes an http.Request pointer 'r' and a byte slice 'tokenstring' as parameters.
 func SetHeaders(r *http.Request, tokenstring []byte) {
 	r.Header.Set("Content-Type", "application/json")
-	r.Header.Set("Token", string(tokenstring))
+	r.Header.Set("Token", bytesToString(tokenstring))
 }
 
 // setPowerPlantHeaders sets the headers for the Power Plant API.
 func SetPowerPlantHeaders(r *http.Request, tokenstring []byte, powerPlantTokenstring []byte) {
 	r.Header.Set("Content-Type", "application/json")
-	r.Header.Set("Token", string(tokenstring))
-	r.Header.Set("data", string(powerPlantTokenstring))
+	r.Header.Set("Token", bytesToString(tokenstring))
+	r.Header.Set("data", bytesToString(powerPlantTokenstring))
 }
 
 // powerStationIdJSON generates a JSON representation of the power station ID.
@@ -28,8 +34,13 @@ func SetPowerPlantHeaders(r *http.Request, tokenstring []byte, powerPlantTokenst
 // It takes an ApiLoginCredentials pointer 'userLogin' as a parameter.
 // Returns a byte slice and an error.
 func PowerStationIdJSON(userLogin *auth.SemsLoginCredentials) ([]byte, error) {
-	powerStationMap := map[string]string{"powerStationId": userLogin.PowerStationID}
-	return json.Marshal(powerStationMap)
+	// Use struct for better performance and type safety
+	powerStationData := struct {
+		PowerStationID string `json:"powerStationId"`
+	}{
+		PowerStationID: userLogin.PowerStationID,
+	}
+	return json.Marshal(powerStationData)
 }
 
 // dataTokenJSON generates a JSON representation of the data token.
