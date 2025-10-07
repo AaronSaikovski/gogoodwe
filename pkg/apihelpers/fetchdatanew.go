@@ -2,9 +2,9 @@ package apihelpers
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"net/http"
-	"strings"
 	"sync"
 	"time"
 
@@ -30,16 +30,8 @@ func FetchMonitorAPIDataNew(wg *sync.WaitGroup, authLoginInfo *auth.LoginInfo, p
 		return err
 	}
 
-	// Create URL from the Auth API and append the data URL part (use pool for better performance)
-	builder := bufferPool.Get().(*strings.Builder)
-	defer func() {
-		builder.Reset()
-		bufferPool.Put(builder)
-	}()
-	builder.Grow(len(authLoginInfo.SemsLoginResponse.API) + len(powerStationURL))
-	builder.WriteString(authLoginInfo.SemsLoginResponse.API)
-	builder.WriteString(powerStationURL)
-	url := builder.String()
+	// Create URL from the Auth API and append the data URL part (simple concatenation is faster for 2 strings)
+	url := authLoginInfo.SemsLoginResponse.API + powerStationURL
 
 	// Create a new HTTP request with pre-sized buffer
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(powerStationIDJSONData))
@@ -48,11 +40,15 @@ func FetchMonitorAPIDataNew(wg *sync.WaitGroup, authLoginInfo *auth.LoginInfo, p
 		return err
 	}
 
+	// Add context with timeout for thread-safe timeout handling
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(HTTPTimeout)*time.Second)
+	defer cancel()
+	req = req.WithContext(ctx)
+
 	// Add headers
 	SetHeaders(req, apiResponseJSONData)
 
 	// Make the API call with reusable client
-	httpClient.Timeout = time.Duration(HTTPTimeout) * time.Second
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		ch <- fmt.Sprintf("HTTP request failed for %s: %s", url, err.Error())

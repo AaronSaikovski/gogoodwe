@@ -3,30 +3,24 @@ package apihelpers
 import (
 	"encoding/json"
 	"net/http"
-	"unsafe"
 
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 	"github.com/AaronSaikovski/gogoodwe/pkg/utils"
 )
-
-// bytesToString converts byte slice to string without allocation
-func bytesToString(b []byte) string {
-	return unsafe.String(unsafe.SliceData(b), len(b))
-}
 
 // setHeaders sets the headers for the SEMS Data API.
 //
 // It takes an http.Request pointer 'r' and a byte slice 'tokenstring' as parameters.
 func SetHeaders(r *http.Request, tokenstring []byte) {
 	r.Header.Set("Content-Type", "application/json")
-	r.Header.Set("Token", bytesToString(tokenstring))
+	r.Header.Set("Token", string(tokenstring))
 }
 
 // setPowerPlantHeaders sets the headers for the Power Plant API.
 func SetPowerPlantHeaders(r *http.Request, tokenstring []byte, powerPlantTokenstring []byte) {
 	r.Header.Set("Content-Type", "application/json")
-	r.Header.Set("Token", bytesToString(tokenstring))
-	r.Header.Set("data", bytesToString(powerPlantTokenstring))
+	r.Header.Set("Token", string(tokenstring))
+	r.Header.Set("data", string(powerPlantTokenstring))
 }
 
 // powerStationIdJSON generates a JSON representation of the power station ID.

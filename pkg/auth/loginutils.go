@@ -35,7 +35,8 @@ func checkUserLoginResponse(loginResponse string) error {
 // It takes a pointer to an ApiLoginCredentials struct as a parameter and returns an error if the credentials are empty or invalid.
 // The function returns nil if the credentials are valid.
 func checkUserLoginInfo(userLogin *SemsLoginCredentials) error {
-	if *userLogin == (SemsLoginCredentials{}) {
+	// Check individual required fields instead of comparing entire struct
+	if userLogin == nil || userLogin.Account == "" || userLogin.Password == "" || userLogin.PowerStationID == "" {
 		return errors.New("**Error: User Login details are empty or invalid**")
 	}
 	return nil
