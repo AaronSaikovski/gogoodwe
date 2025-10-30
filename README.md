@@ -1,8 +1,10 @@
 <div align="center">
 
-## GoGoodwe v3.0.1
+## GoGoodwe v3.1.1
 
-A command line tool to query the GOODWE SEMS Solar Inverter APIs - written in 100% Go.
+A high-performance command-line tool to query GOODWE SEMS (Solar Energy Management System) APIs - written in 100% Go.
+
+
 
 [![Build Status](https://github.com/AaronSaikovski/gogoodwe/workflows/build/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)
@@ -11,9 +13,15 @@ A command line tool to query the GOODWE SEMS Solar Inverter APIs - written in 10
 
 ### Software Requirements:
 
-- [Go v1.23.0](https://www.go.dev/dl/) or later needs to be installed to build the code.
-- [Azure CLI tools](https://learn.microsoft.com/en-us/cli/azure/) 2.50 or later
+- [Go v1.25.3](https://www.go.dev/dl/) or later needs to be installed to build the code.
 - [Taskfile](https://taskfile.dev/) to run the build chain commands listed below.
+
+### Dependencies:
+
+GoGoodwe uses minimal external dependencies for a lightweight binary:
+- `github.com/alexflint/go-arg` - CLI argument parsing
+- `github.com/logrusorgru/aurora` - Terminal color output
+- `github.com/valyala/fastjson` - High-performance JSON parsing
 
 ## Installation:
 
@@ -52,17 +60,44 @@ To get started type,
 - `task build` - to build debug version for your target environment architecture.
 - `task release` - Builds a release version for your target environment architecture - outputs to /bin folder.
 
+## Project Architecture
+
+```
+cmd/gogoodwe/           - Command-line application entry point
+  └── app/              - Application logic for login and data fetching
+pkg/                    - Core library packages
+  ├── auth/             - Authentication handling for SEMS API
+  ├── apihelpers/       - HTTP request/response handling and API communication
+  ├── models/           - Data structures for each report type
+  ├── interfaces/       - Interface definitions for type safety
+  └── utils/            - Utilities for JSON, HTTP clients, and formatting
+```
+
+### Performance Optimizations
+
+GoGoodwe includes several performance enhancements:
+- **HTTP Connection Pooling**: Reusable HTTP client with optimized transport settings (MaxIdleConns: 100, MaxConnsPerHost: 100)
+- **Efficient JSON Parsing**: Uses `fastjson` for high-performance JSON processing without double marshaling
+- **Optimized Timeouts**: HTTP response header timeout of 10 seconds with TLS handshake timeout
+- **Context Management**: Proper context handling with 60-second application timeout
+
 ## Usage
 
-Determine the Station ID from the GOODWE site as follows. Open the [Sems Portal](https://www.semsportal.com). The Plant Status will reveal the Station ID in the URL. Example:
+GoGoodwe retrieves real-time and historical data from your GoodWe solar inverters via the SEMS (Solar Energy Management System) Portal API.
 
-    https://www.semsportal.com/powerstation/powerstatussnmin/11112222-aaaa-bbbb-cccc-ddddeeeeeffff
+### Getting Your Station ID
 
-Then the Station ID is `11112222-aaaa-bbbb-cccc-ddddeeeeeffff`.
+1. Open the [Sems Portal](https://www.semsportal.com)
+2. Navigate to your power plant status page
+3. The Station ID (UUID format) will appear in the URL:
 
-From the command line the usage is pretty simple:
+    `https://www.semsportal.com/powerstation/powerstatussnmin/11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
 
-The Report Type corresponds to the type of API call and Report that is generated:
+Your Station ID is: `11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
+
+### Command Line Usage
+
+The Report Type parameter specifies which type of data report to generate:
 
 - (0)-Detail - Fully detailed report.
 - (1)-Summary - Summary Data report (reduced information).
@@ -72,18 +107,20 @@ The Report Type corresponds to the type of API call and Report that is generated
 - (5)-PowerFlow - Powerflow Summary data
 
 ```bash
-##Note the use of single quotes ''
-./gogoodwe  --account '<user@email.com>' \
-            --pwd '<password>' \
-            --powerstationid '<powerstation id>' \
-            --reporttype '<report type (Optional)>'
+# Using long arguments (note the use of single quotes)
+./gogoodwe --account 'user@email.com' \
+           --pwd 'password' \
+           --powerstationid '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
+           --reporttype '0'
 
-# Or
-./gogoodwe  -a '<user@email.com>' \
-            -p '<password>' \
-            -i '<powerstation id>' \
-             -r '<report type> (Optional)>'
+# Or using short arguments
+./gogoodwe -a 'user@email.com' \
+           -p 'password' \
+           -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
+           -r '0'
 
+# Report type is optional (defaults to 0 - Detail report)
+./gogoodwe -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff'
 ```
 
 To get the help on using the command line tool, type:
@@ -94,6 +131,14 @@ To get the help on using the command line tool, type:
 # Or
 ./gogoodwe -h
 ```
+
+## Recent Changes
+
+### Version 3.1.1
+- **Updated Go version** to 1.25.3 for latest language improvements and security patches
+- **Performance refactoring** with optimized HTTP client setup and connection pooling
+- **Improved context management** for better timeout handling and resource cleanup
+- **Code organization** - Renamed `root.go` to `main.go` for better clarity
 
 ## Contributions
 
