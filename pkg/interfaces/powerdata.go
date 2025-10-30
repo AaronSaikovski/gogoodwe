@@ -1,10 +1,11 @@
 package interfaces
 
 import (
+	"context"
+
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 )
 
 type PowerData interface {
-	GetPowerData(*auth.LoginInfo) error
-	GetMonitorData(*auth.LoginInfo, interface{}) error
+	GetPowerData(context.Context, *auth.LoginInfo) error
 }

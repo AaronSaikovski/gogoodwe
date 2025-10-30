@@ -15,9 +15,8 @@ import (
 )
 
 const (
-
-	//Context default timeout
-	contextTimeout = (time.Second * 60)
+	// Context default timeout
+	contextTimeout = 60 * time.Second
 )
 
 //go:generate bash get_version.sh
@@ -38,7 +37,7 @@ func main() {
 	// defer pprof.StopCPUProfile()
 
 	// Create a context with cancellation capability and 60 seconds timeout
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(contextTimeout))
+	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
 	defer cancel()
 
 	// Main run

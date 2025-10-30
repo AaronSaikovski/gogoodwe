@@ -1,9 +1,11 @@
 package interfaces
 
 import (
+	"context"
+
 	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 )
 
 type SemsLogin interface {
-	SemsLogin() (*auth.SemsLoginResponse, error)
+	SemsLogin(ctx context.Context) (*auth.SemsLoginResponse, error)
 }

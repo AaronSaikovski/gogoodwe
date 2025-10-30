@@ -2,6 +2,7 @@ package apihelpers
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"net/http"
 	"sync"
@@ -29,27 +30,36 @@ func FetchMonitorAPIDataNew(wg *sync.WaitGroup, authLoginInfo *auth.LoginInfo, p
 		return err
 	}
 
-	// Create URL from the Auth API and append the data URL part
+	// Create URL from the Auth API and append the data URL part (simple concatenation is faster for 2 strings)
 	url := authLoginInfo.SemsLoginResponse.API + powerStationURL
 
-	// Create a new HTTP request
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(powerStationIDJSONData))
+	// Create a new HTTP request with pre-sized buffer
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(powerStationIDJSONData))
 	if err != nil {
 		ch <- fmt.Sprintf("HTTP request  error : %s", err)
 		return err
 	}
 
+	// Add context with timeout for thread-safe timeout handling
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(HTTPTimeout)*time.Second)
+	defer cancel()
+	req = req.WithContext(ctx)
+
 	// Add headers
 	SetHeaders(req, apiResponseJSONData)
 
-	// Make the API call
-	client := &http.Client{Timeout: time.Duration(HTTPTimeout) * time.Second}
-	resp, err := client.Do(req)
+	// Make the API call with reusable client
+	resp, err := httpClient.Do(req)
 	if err != nil {
-		ch <- fmt.Sprintf("Response from %s: %s", url, resp.Status)
+		ch <- fmt.Sprintf("HTTP request failed for %s: %s", url, err.Error())
 		return err
 	}
 	defer resp.Body.Close()
+
+	// Check response status
+	if resp.StatusCode != http.StatusOK {
+		ch <- fmt.Sprintf("Non-OK response from %s: %s", url, resp.Status)
+	}
 
 	// Get the response body
 	respBody, err := utils.FetchResponseBody(resp.Body)

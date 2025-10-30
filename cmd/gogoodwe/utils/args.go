@@ -2,9 +2,9 @@ package utils
 
 var (
 	// Version string
-	VersionString string = "v0.0.1"
-	infoString    string = "GoGoodwe - A CLI tool to query your SEMS Solar Inverter API."
-	reportString  string = "Report Types: (0)-Detail, (1)-Summary, (2)-Point, (3)-Plant, (4)-PlantChart, (5)-PowerFlow"
+	VersionString = "v0.0.1"
+	infoString    = "GoGoodwe - A CLI tool to query your SEMS Solar Inverter API."
+	reportString  = "Report Types: (0)-Detail, (1)-Summary, (2)-Point, (3)-Plant, (4)-PlantChart, (5)-PowerFlow"
 )
 
 // Args - struct using go-arg- https://github.com/alexflint/go-arg

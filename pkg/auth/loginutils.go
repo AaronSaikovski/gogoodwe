@@ -6,14 +6,16 @@ import (
 	"net/http"
 )
 
+const tokenHeaderValue = `{"version":"v2.1.0","client":"ios","language":"en"}`
+
 // setHeaders sets the headers for the SEMS API login.
 //
 // It takes a pointer to an http.Request as a parameter and adds the following headers:
 // - "Content-Type": "application/json"
 // - "Token": "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}"
 func setHeaders(r *http.Request) {
-	r.Header.Add("Content-Type", "application/json")
-	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Token", tokenHeaderValue)
 }
 
 // checkUserLoginResponse checks for successful login return value and returns a login error if unsuccessful.
@@ -33,7 +35,8 @@ func checkUserLoginResponse(loginResponse string) error {
 // It takes a pointer to an ApiLoginCredentials struct as a parameter and returns an error if the credentials are empty or invalid.
 // The function returns nil if the credentials are valid.
 func checkUserLoginInfo(userLogin *SemsLoginCredentials) error {
-	if *userLogin == (SemsLoginCredentials{}) {
+	// Check individual required fields instead of comparing entire struct
+	if userLogin == nil || userLogin.Account == "" || userLogin.Password == "" || userLogin.PowerStationID == "" {
 		return errors.New("**Error: User Login details are empty or invalid**")
 	}
 	return nil
