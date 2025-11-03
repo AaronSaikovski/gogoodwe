@@ -75,7 +75,7 @@ tasks:
   ## test - executes unit tests
   test:
     cmds:
-      - go test -v ./test/...
+      - go test -v ./tests/...
 
   ###############################################################################
 
