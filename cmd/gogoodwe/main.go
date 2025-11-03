@@ -4,19 +4,10 @@ Package main implements a program that authenticates to and queries the SEMS Sol
 package main
 
 import (
-	"context"
 	_ "embed"
 	"log"
-	"time"
-	// "os"
-	// "runtime/pprof"
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
-)
-
-const (
-	// Context default timeout
-	contextTimeout = 60 * time.Second
 )
 
 //go:generate bash get_version.sh
@@ -25,24 +16,12 @@ var version string
 
 // main is the entry point of the Go program.
 //
-// It calls the app.Run function with the version string as a parameter.
+// It creates the root Cobra command with the version string and executes it.
 // If an error is returned, it logs the error message and exits the program.
 func main() {
+	rootCmd := app.NewRootCmd(version)
 
-	// f, err := os.Create("cpu.prof")
-	// if err != nil {
-	//     panic(err)
-	// }
-	// pprof.StartCPUProfile(f)
-	// defer pprof.StopCPUProfile()
-
-	// Create a context with cancellation capability and 60 seconds timeout
-	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
-	defer cancel()
-
-	// Main run
-	if err := app.Run(ctx, version); err != nil {
+	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
-
 }

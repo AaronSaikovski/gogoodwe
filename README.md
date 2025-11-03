@@ -19,7 +19,7 @@ A high-performance command-line tool to query GOODWE SEMS (Solar Energy Manageme
 ### Dependencies:
 
 GoGoodwe uses minimal external dependencies for a lightweight binary:
-- `github.com/alexflint/go-arg` - CLI argument parsing
+- `github.com/spf13/cobra` - CLI command framework
 - `github.com/logrusorgru/aurora` - Terminal color output
 - `github.com/valyala/fastjson` - High-performance JSON parsing
 
@@ -64,7 +64,20 @@ To get started type,
 
 ```
 cmd/gogoodwe/           - Command-line application entry point
-  └── app/              - Application logic for login and data fetching
+  ├── main.go           - Entry point, initializes Cobra root command
+  └── app/
+      ├── cmd.go        - Cobra command definitions and flag configuration
+      ├── fetchdata.go  - Login and API data fetching logic
+      ├── enums.go      - Report type constants
+      └── lookupmonitordata.go - Report type routing
+
+tests/                  - Comprehensive test suite
+  ├── cmd/
+  │   └── gogoodwe/
+  │       └── app/
+  │           └── cmd_test.go - CLI command tests
+  └── README.md         - Test documentation
+
 pkg/                    - Core library packages
   ├── auth/             - Authentication handling for SEMS API
   ├── apihelpers/       - HTTP request/response handling and API communication
@@ -97,42 +110,89 @@ Your Station ID is: `11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
 
 ### Command Line Usage
 
-The Report Type parameter specifies which type of data report to generate:
+GoGoodwe uses [Cobra](https://github.com/spf13/cobra) for CLI argument parsing. The Report Type parameter specifies which type of data report to generate:
 
-- (0)-Detail - Fully detailed report.
-- (1)-Summary - Summary Data report (reduced information).
-- (2)-Point - Inverter All points data.
-- (3)-Plant - Plant Detail By Powerstation Id.
-- (4)-PlantChart - Plant Chart data for use in Charts and Graphs - **Not Implemented due to an undocumented GoodWe API Change**
-- (5)-PowerFlow - Powerflow Summary data
+**Available Report Types:**
+- `detail` or `0` - Fully detailed inverter monitoring report
+- `summary` or `1` - Summary Data report (reduced information)
+- `point` or `2` - Inverter All points data
+- `plant` or `3` - Plant Detail By Powerstation Id
+- `plantchart` or `4` - Plant Chart data for use in Charts and Graphs (API support varies)
+- `powerflow` or `5` - Powerflow Summary data
+
+**Examples:**
 
 ```bash
-# Using long arguments (note the use of single quotes)
+# Using string-based report types (recommended)
 ./gogoodwe --account 'user@email.com' \
-           --pwd 'password' \
+           --password 'password' \
            --powerstationid '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
-           --reporttype '0'
+           --reporttype 'detail'
 
-# Or using short arguments
 ./gogoodwe -a 'user@email.com' \
            -p 'password' \
            -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
-           -r '0'
+           -r 'summary'
 
-# Report type is optional (defaults to 0 - Detail report)
+# Using numeric report types (backward compatible)
+./gogoodwe -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' -r 0
+
+# Report type is optional (defaults to 'detail')
 ./gogoodwe -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff'
 ```
 
-To get the help on using the command line tool, type:
+### Getting Help
 
 ```bash
+# Display help message
 ./gogoodwe --help
-
-# Or
 ./gogoodwe -h
+
+# Display version
+./gogoodwe --version
+./gogoodwe -v
 ```
 
+## Testing
+
+GoGoodwe includes comprehensive test coverage for CLI functionality:
+
+### Running Tests
+
+```bash
+# Run all tests
+go test ./tests/... -v
+
+# Run CLI command tests
+go test ./tests/cmd/gogoodwe/app -v
+
+# Run tests with coverage report
+go test ./tests/cmd/gogoodwe/app -cover
+
+# Generate HTML coverage report
+go test ./tests/cmd/gogoodwe/app -coverprofile=coverage.out
+go tool cover -html=coverage.out
+```
+
+### Test Suite
+
+- **Location**: `tests/cmd/gogoodwe/app/cmd_test.go`
+- **Coverage**: 28 comprehensive test cases
+- **Focus Areas**:
+  - Report type parsing (string and numeric formats)
+  - CLI flag validation
+  - Command initialization
+  - Edge cases and error handling
+
+See `tests/README.md` for detailed test documentation.
+
 ## Recent Changes
+
+### Latest Updates
+- **Cobra CLI Framework** - Replaced `go-arg` with [Cobra](https://github.com/spf13/cobra) for robust CLI argument parsing
+- **String-based Report Types** - Support for human-readable report type names (`detail`, `summary`, `point`, etc.) alongside numeric values for backward compatibility
+- **Comprehensive Test Suite** - Added 28 test cases covering CLI functionality with dedicated `tests/` directory
+- **Improved Documentation** - Updated help text and command descriptions with Cobra
 
 ### Version 3.1.1
 - **Updated Go version** to 1.25.3 for latest language improvements and security patches
