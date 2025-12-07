@@ -1,10 +1,10 @@
 module github.com/AaronSaikovski/gogoodwe
 
-go 1.25.4
+go 1.25.5
 
 require (
 	github.com/logrusorgru/aurora v2.0.3+incompatible
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	github.com/valyala/fastjson v1.6.4
 )
 
