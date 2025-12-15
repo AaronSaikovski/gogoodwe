@@ -10,7 +10,7 @@ type KPIMonitorData struct {
 	Data     struct {
 		Kpi struct {
 			MonthGeneration float64 `json:"month_generation,omitempty"`
-			Pac             float64   `json:"pac,omitempty"`
+			Pac             float64 `json:"pac,omitempty"`
 			Power           float64 `json:"power,omitempty"`
 			TotalPower      float64 `json:"total_power,omitempty"`
 			DayIncome       float64 `json:"day_income,omitempty"`

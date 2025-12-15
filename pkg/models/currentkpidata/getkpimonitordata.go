@@ -38,12 +38,12 @@ func (kpiData *KPIMonitorData) GetMonitorData(ctx context.Context, authLoginInfo
 // - error: an error if there was a problem retrieving the power data
 func (kpiData *KPIMonitorData) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
-	// Get monitor data (returns raw JSON to avoid double marshaling)
-	rawJSON, err := kpiData.GetMonitorData(ctx, authLoginInfo, kpiData)
+	// Get monitor data and unmarshal into struct
+	_, err := kpiData.GetMonitorData(ctx, authLoginInfo, kpiData)
 	if err != nil {
 		return err
 	}
 
-	// Process raw JSON directly without remarshaling
-	return apihelpers.ProcessRawJSON(rawJSON)
+	// Process only the KPI data fields (Data.Kpi)
+	return apihelpers.ProcessData(kpiData.Data.Kpi)
 }
