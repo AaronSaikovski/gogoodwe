@@ -8,4 +8,5 @@ const (
 	Plant             // 3
 	PlantChart        // 4
 	PowerFlow         // 5
+	KPIData           // 6
 )

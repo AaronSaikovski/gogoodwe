@@ -12,7 +12,8 @@
       "Bash(del \"cmd\\gogoodwe\\utils\\args.go\")",
       "Bash(dir \"C:\\Development\\Personal\\Go\\gogoodwe\")",
       "Bash(del \"C:\\Development\\Personal\\Go\\gogoodwe\\cmd\\gogoodwe\\app\\cmd_test.go\")",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(dir \"C:\\Development\\Personal\\Go\\gogoodwe\\pkg\\models\" /B)"
     ],
     "deny": [],
     "ask": []

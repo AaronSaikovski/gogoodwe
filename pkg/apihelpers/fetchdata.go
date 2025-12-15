@@ -38,13 +38,6 @@ func FetchMonitorAPIData(ctx context.Context, authLoginInfo *auth.LoginInfo, pow
 		return nil, fmt.Errorf("failed to create token JSON: %w", err)
 	}
 
-	// //for 'https://au.semsportal.com/api/v2/Charts/GetPlantPowerChart' specific data
-	// apiplantPowerResponseJSONData, err := PowerPlantdataTokenJSON(authLoginInfo.SemsLoginResponse)
-	// if err != nil {
-	// 	return err
-	// }
-	// fmt.Println("apiplantPowerResponseJSONData", string(apiplantPowerResponseJSONData))
-
 	// Get the Powerstation ID header data
 	powerStationIDJSONData, err := PowerStationIdJSON(authLoginInfo.SemsLoginCredentials)
 	if err != nil {
@@ -67,7 +60,6 @@ func FetchMonitorAPIData(ctx context.Context, authLoginInfo *auth.LoginInfo, pow
 
 	// Add headers
 	SetHeaders(req, apiResponseJSONData)
-	//SetPowerPlantHeaders(req, apiResponseJSONData, apiplantPowerResponseJSONData)
 
 	// Make the API call with reusable client
 	resp, err := httpClient.Do(req)

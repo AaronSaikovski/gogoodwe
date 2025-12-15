@@ -3,6 +3,7 @@ package app
 // Main package - This is the main program entry point
 import (
 	"github.com/AaronSaikovski/gogoodwe/pkg/interfaces"
+	"github.com/AaronSaikovski/gogoodwe/pkg/models/currentkpidata"
 	inverteallpoint "github.com/AaronSaikovski/gogoodwe/pkg/models/inverterallpoint"
 	"github.com/AaronSaikovski/gogoodwe/pkg/models/monitordetail"
 	"github.com/AaronSaikovski/gogoodwe/pkg/models/monitorsummary"
@@ -34,6 +35,8 @@ func lookupMonitorData(reportData int) interfaces.PowerData {
 		return plantchartdata.NewPlantPowerChart()
 	case PowerFlow:
 		return powerflow.NewPowerflow()
+	case KPIData:
+		return currentkpidata.NewKPIMonitorData()
 	default:
 		return monitordetail.NewMonitorData()
 	}

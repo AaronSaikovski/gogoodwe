@@ -33,7 +33,8 @@ Report Types:
   point       - All inverter point data
   plant       - Plant details
   plantchart  - Plant power chart data
-  powerflow   - Power flow data`,
+  powerflow   - Power flow data,
+  kpidata   - KPI data `,
 		Version: version,
 		RunE:    runRoot,
 	}
@@ -42,7 +43,7 @@ Report Types:
 	rootCmd.Flags().StringVarP(&account, "account", "a", "", "SEMS Email Account (required)")
 	rootCmd.Flags().StringVarP(&password, "password", "p", "", "SEMS Account password (required)")
 	rootCmd.Flags().StringVarP(&powerstationID, "powerstationid", "i", "", "SEMS Powerstation ID (required)")
-	rootCmd.Flags().StringVarP(&reportType, "reporttype", "r", "detail", "Report Type: detail, summary, point, plant, plantchart, powerflow")
+	rootCmd.Flags().StringVarP(&reportType, "reporttype", "r", "detail", "Report Type: detail, summary, point, plant, plantchart, powerflow, kpidata")
 
 	// Mark required flags
 	rootCmd.MarkFlagRequired("account")
@@ -96,6 +97,8 @@ func ParseReportType(reportTypeStr string) (int, error) {
 		return PlantChart, nil
 	case "powerflow", "5":
 		return PowerFlow, nil
+	case "kpidata", "6":
+		return KPIData, nil
 	default:
 		return -1, fmt.Errorf("invalid report type '%s'. Valid options are: detail, summary, point, plant, plantchart, powerflow", reportTypeStr)
 	}
