@@ -39,11 +39,14 @@ func (plantDetailData *PlantDetailByPowerstationId) GetMonitorData(ctx context.C
 func (plantDetailData *PlantDetailByPowerstationId) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data
-	rawJSON, err := plantDetailData.GetMonitorData(ctx, authLoginInfo, plantDetailData)
+	//rawJSON, err := plantDetailData.GetMonitorData(ctx, authLoginInfo, plantDetailData)
+	_, err := plantDetailData.GetMonitorData(ctx, authLoginInfo, plantDetailData)
 	if err != nil {
 		return err
 	}
 
-	return apihelpers.ProcessRawJSON(rawJSON)
+	//return apihelpers.ProcessRawJSON(rawJSON)
+
+	return apihelpers.ProcessData(plantDetailData)
 
 }

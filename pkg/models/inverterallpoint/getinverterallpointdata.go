@@ -39,12 +39,15 @@ func (inverterData *InverterAllPoint) GetMonitorData(ctx context.Context, authLo
 func (inverterData *InverterAllPoint) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data (returns raw JSON to avoid double marshaling)
-	rawJSON, err := inverterData.GetMonitorData(ctx, authLoginInfo, inverterData)
+	//rawJSON, err := inverterData.GetMonitorData(ctx, authLoginInfo, inverterData)
+	_, err := inverterData.GetMonitorData(ctx, authLoginInfo, inverterData)
 	if err != nil {
 		return err
 	}
 
 	// Process raw JSON directly without remarshaling
-	return apihelpers.ProcessRawJSON(rawJSON)
+	//return apihelpers.ProcessRawJSON(rawJSON)
+
+	return apihelpers.ProcessData(inverterData)
 
 }

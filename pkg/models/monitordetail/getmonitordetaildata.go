@@ -39,11 +39,14 @@ func (summaryData *MonitorData) GetMonitorData(ctx context.Context, authLoginInf
 func (detailData *MonitorData) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data (returns raw JSON to avoid double marshaling)
-	rawJSON, err := detailData.GetMonitorData(ctx, authLoginInfo, detailData)
+	//rawJSON, err := detailData.GetMonitorData(ctx, authLoginInfo, detailData)
+	_, err := detailData.GetMonitorData(ctx, authLoginInfo, detailData)
 	if err != nil {
 		return err
 	}
 
 	// Process raw JSON directly without remarshaling
-	return apihelpers.ProcessRawJSON(rawJSON)
+	//return apihelpers.ProcessRawJSON(rawJSON)
+
+	return apihelpers.ProcessData(detailData)
 }

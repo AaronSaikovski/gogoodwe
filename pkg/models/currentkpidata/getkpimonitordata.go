@@ -44,6 +44,5 @@ func (kpiData *KPIMonitorData) GetPowerData(ctx context.Context, authLoginInfo *
 		return err
 	}
 
-	// Process only the KPI data fields (Data.Kpi)
-	return apihelpers.ProcessData(kpiData.Data.Kpi)
+	return apihelpers.ProcessData(kpiData)
 }

@@ -39,11 +39,14 @@ func (powerFlowData *Powerflow) GetMonitorData(ctx context.Context, authLoginInf
 func (powerFlowData *Powerflow) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data
-	rawJSON, err := powerFlowData.GetMonitorData(ctx, authLoginInfo, powerFlowData)
+	//rawJSON, err := powerFlowData.GetMonitorData(ctx, authLoginInfo, powerFlowData)
+	_, err := powerFlowData.GetMonitorData(ctx, authLoginInfo, powerFlowData)
 	if err != nil {
 		return err
 	}
 
-	return apihelpers.ProcessRawJSON(rawJSON)
+	//return apihelpers.ProcessRawJSON(rawJSON)
+
+	return apihelpers.ProcessData(powerFlowData)
 
 }

@@ -39,11 +39,14 @@ func (summaryData *DailySummaryData) GetMonitorData(ctx context.Context, authLog
 func (summaryData *DailySummaryData) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data
-	rawJSON, err := summaryData.GetMonitorData(ctx, authLoginInfo, summaryData)
+	_, err := summaryData.GetMonitorData(ctx, authLoginInfo, summaryData)
+	//rawJSON, err := summaryData.GetMonitorData(ctx, authLoginInfo, summaryData)
 	if err != nil {
 		return err
 	}
 
-	return apihelpers.ProcessRawJSON(rawJSON)
+	//return apihelpers.ProcessRawJSON(rawJSON)
+
+	return apihelpers.ProcessData(summaryData)
 
 }
