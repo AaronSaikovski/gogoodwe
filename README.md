@@ -1,6 +1,6 @@
 <div align="center">
 
-## GoGoodwe v3.1.1
+## GoGoodwe v3.2.1
 
 A high-performance command-line tool to query GOODWE SEMS (Solar Energy Management System) APIs - written in 100% Go.
 
@@ -82,6 +82,13 @@ pkg/                    - Core library packages
   ├── auth/             - Authentication handling for SEMS API
   ├── apihelpers/       - HTTP request/response handling and API communication
   ├── models/           - Data structures for each report type
+  │   ├── currentkpidata/     - KPI monitoring data (new in v3.2.1)
+  │   ├── inverterallpoint/   - All inverter point data
+  │   ├── monitordetail/      - Detailed monitoring data
+  │   ├── monitorsummary/     - Summary monitoring data
+  │   ├── plantdetail/        - Plant detail data
+  │   ├── plantpowerchart/    - Plant power chart data
+  │   └── powerflow/          - Power flow data
   ├── interfaces/       - Interface definitions for type safety
   └── utils/            - Utilities for JSON, HTTP clients, and formatting
 ```
@@ -119,6 +126,7 @@ GoGoodwe uses [Cobra](https://github.com/spf13/cobra) for CLI argument parsing. 
 - `plant` or `3` - Plant Detail By Powerstation Id
 - `plantchart` or `4` - Plant Chart data for use in Charts and Graphs (API support varies)
 - `powerflow` or `5` - Powerflow Summary data
+- `kpidata` or `6` - KPI (Key Performance Indicator) data including generation, power, income, and yield metrics
 
 **Examples:**
 
@@ -133,6 +141,12 @@ GoGoodwe uses [Cobra](https://github.com/spf13/cobra) for CLI argument parsing. 
            -p 'password' \
            -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
            -r 'summary'
+
+# KPI data report (Key Performance Indicators)
+./gogoodwe -a 'user@email.com' \
+           -p 'password' \
+           -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
+           -r 'kpidata'
 
 # Using numeric report types (backward compatible)
 ./gogoodwe -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' -r 0
@@ -188,7 +202,17 @@ See `tests/README.md` for detailed test documentation.
 
 ## Recent Changes
 
-### Latest Updates
+### Version 3.2.1
+- **KPI Data Report Type** - New `kpidata` report type providing Key Performance Indicator metrics:
+  - Monthly generation data
+  - Current power (Pac) and total power metrics
+  - Income tracking (daily and total)
+  - Yield rate calculations
+  - Currency information
+- **Code Refactoring** - Unified data processing across all report types using `ProcessData()` for improved consistency and maintainability
+- **Dependency Updates** - Updated `fastjson` from v1.6.4 to v1.6.7 for improved JSON parsing performance
+
+### Previous Updates
 - **Cobra CLI Framework** - Replaced `go-arg` with [Cobra](https://github.com/spf13/cobra) for robust CLI argument parsing
 - **String-based Report Types** - Support for human-readable report type names (`detail`, `summary`, `point`, etc.) alongside numeric values for backward compatibility
 - **Comprehensive Test Suite** - Added 28 test cases covering CLI functionality with dedicated `tests/` directory
