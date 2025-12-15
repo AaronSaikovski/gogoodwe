@@ -100,6 +100,6 @@ func ParseReportType(reportTypeStr string) (int, error) {
 	case "kpidata", "6":
 		return KPIData, nil
 	default:
-		return -1, fmt.Errorf("invalid report type '%s'. Valid options are: detail, summary, point, plant, plantchart, powerflow", reportTypeStr)
+		return -1, fmt.Errorf("invalid report type '%s'. Valid options are: detail, summary, point, plant, plantchart, powerflow, kpidata", reportTypeStr)
 	}
 }

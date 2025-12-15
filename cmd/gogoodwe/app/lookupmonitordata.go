@@ -22,7 +22,6 @@ import (
 func lookupMonitorData(reportData int) interfaces.PowerData {
 
 	switch reportData {
-
 	case Point:
 		return inverteallpoint.NewInverterAllPoint()
 	case Detail:
