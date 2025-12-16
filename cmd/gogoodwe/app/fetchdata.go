@@ -27,6 +27,8 @@ func loginAndFetchData(ctx context.Context, apiLoginCreds auth.SemsLoginCredenti
 		SemsLoginResponse:    loginApiResponse,
 	}
 
+	//HERE
+
 	// fetch the data via the interface lookup
 	var dataService interfaces.PowerData = lookupMonitorData(ReportType)
 	if err := dataService.GetPowerData(ctx, loginInfo); err != nil {

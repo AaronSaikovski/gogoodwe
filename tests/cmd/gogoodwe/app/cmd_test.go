@@ -57,6 +57,12 @@ func TestParseReportType(t *testing.T) {
 			expected:  5, // PowerFlow constant
 			wantError: false,
 		},
+		{
+			name:      "kpidata string",
+			input:     "kpidata",
+			expected:  6, // KPIData constant
+			wantError: false,
+		},
 		// Test numeric-based report types
 		{
 			name:      "detail numeric",
@@ -92,6 +98,12 @@ func TestParseReportType(t *testing.T) {
 			name:      "powerflow numeric",
 			input:     "5",
 			expected:  5,
+			wantError: false,
+		},
+		{
+			name:      "kpidata numeric",
+			input:     "6",
+			expected:  6,
 			wantError: false,
 		},
 		// Test invalid inputs
@@ -351,5 +363,9 @@ func TestRootCmdDescription(t *testing.T) {
 
 	if !contains(cmd.Long, "detail") {
 		t.Error("Root command Long description missing report type examples")
+	}
+
+	if !contains(cmd.Long, "kpidata") {
+		t.Error("Root command Long description missing kpidata report type")
 	}
 }
