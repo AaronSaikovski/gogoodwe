@@ -44,6 +44,7 @@ Report Types:
 	rootCmd.Flags().StringVarP(&password, "password", "p", "", "SEMS Account password (required)")
 	rootCmd.Flags().StringVarP(&powerstationID, "powerstationid", "i", "", "SEMS Powerstation ID (required)")
 	rootCmd.Flags().StringVarP(&reportType, "reporttype", "r", "detail", "Report Type: detail, summary, point, plant, plantchart, powerflow, kpidata")
+	///rootCmd.Flags().StringVarP(&exporthistory, "export", "e", "", "Export Excel Station History Data")
 
 	// Mark required flags
 	rootCmd.MarkFlagRequired("account")

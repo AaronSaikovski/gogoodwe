@@ -2,6 +2,7 @@ package utils
 
 import "time"
 
+// isWithin7Days checks if the difference between two date strings is within 7 days.
 func isWithin7Days(dateStr1, dateStr2 string) (bool, error) {
 	layout := "2006-01-02 15:04"
 
