@@ -1,11 +1,6 @@
 package app
 
 import (
-	"context"
-	"fmt"
-
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
-	"github.com/AaronSaikovski/gogoodwe/pkg/auth"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +11,11 @@ var (
 	powerstationID string
 	reportType     string
 	versionString  string
+
+	// Export history flags
+	qryStart   string
+	qryTimeEnd string
+	targets    string
 )
 
 // NewRootCmd creates and returns the root Cobra command.
@@ -23,9 +23,25 @@ func NewRootCmd(version string) *cobra.Command {
 	versionString = version
 
 	rootCmd := &cobra.Command{
-		Use:   "gogoodwe",
-		Short: "GoGoodwe - A CLI tool to query your SEMS Solar Inverter API",
-		Long: `GoGoodwe is a command-line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API.
+		Use:     "gogoodwe",
+		Short:   "GoGoodwe - A CLI tool to query your SEMS Solar Inverter API",
+		Long:    `GoGoodwe is a command-line tool to query the GOODWE SEMS Portal APIs and Solar SEMS API.`,
+		Version: version,
+	}
+
+	// Add subcommands
+	rootCmd.AddCommand(newGetDataCmd())
+	rootCmd.AddCommand(newExportHistoryCmd())
+
+	return rootCmd
+}
+
+// newGetDataCmd creates and returns the getdata subcommand.
+func newGetDataCmd() *cobra.Command {
+	getDataCmd := &cobra.Command{
+		Use:   "getdata",
+		Short: "Get data from SEMS API",
+		Long: `Query the GOODWE SEMS Portal APIs and retrieve various types of data.
 
 Report Types:
   detail      - Detailed inverter monitoring data
@@ -33,74 +49,52 @@ Report Types:
   point       - All inverter point data
   plant       - Plant details
   plantchart  - Plant power chart data
-  powerflow   - Power flow data,
-  kpidata   - KPI data `,
-		Version: version,
-		RunE:    runRoot,
+  powerflow   - Power flow data
+  kpidata     - KPI data`,
+		RunE: runGetData,
 	}
 
-	// Define flags
-	rootCmd.Flags().StringVarP(&account, "account", "a", "", "SEMS Email Account (required)")
-	rootCmd.Flags().StringVarP(&password, "password", "p", "", "SEMS Account password (required)")
-	rootCmd.Flags().StringVarP(&powerstationID, "powerstationid", "i", "", "SEMS Powerstation ID (required)")
-	rootCmd.Flags().StringVarP(&reportType, "reporttype", "r", "detail", "Report Type: detail, summary, point, plant, plantchart, powerflow, kpidata")
-	///rootCmd.Flags().StringVarP(&exporthistory, "export", "e", "", "Export Excel Station History Data")
+	// Define flags for getdata command
+	getDataCmd.Flags().StringVarP(&account, "account", "a", "", "SEMS Email Account (required)")
+	getDataCmd.Flags().StringVarP(&password, "password", "p", "", "SEMS Account password (required)")
+	getDataCmd.Flags().StringVarP(&powerstationID, "powerstationid", "i", "", "SEMS Powerstation ID (required)")
+	getDataCmd.Flags().StringVarP(&reportType, "reporttype", "r", "detail", "Report Type: detail, summary, point, plant, plantchart, powerflow, kpidata")
 
 	// Mark required flags
-	rootCmd.MarkFlagRequired("account")
-	rootCmd.MarkFlagRequired("password")
-	rootCmd.MarkFlagRequired("powerstationid")
+	getDataCmd.MarkFlagRequired("account")
+	getDataCmd.MarkFlagRequired("password")
+	getDataCmd.MarkFlagRequired("powerstationid")
 
-	return rootCmd
+	return getDataCmd
 }
 
-// runRoot is the main execution function for the root command.
-func runRoot(cmd *cobra.Command, args []string) error {
-	// Create a context for the API call
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	// Check for valid email address input
-	if !utils.CheckValidEmail(account) {
-		return fmt.Errorf("invalid email address format: should be 'user@somedomain.com'")
+// newExportHistoryCmd creates and returns the exporthistory subcommand.
+func newExportHistoryCmd() *cobra.Command {
+	exportHistoryCmd := &cobra.Command{
+		Use:   "exporthistory",
+		Short: "Export Excel Station History Data",
+		Long:  `Export historical data from the SEMS API to Excel format with specified timespan and targets.`,
+		RunE:  runExportHistory,
 	}
 
-	// Check for valid powerstation ID
-	if !utils.CheckValidPowerstationID(powerstationID) {
-		return fmt.Errorf("invalid Powerstation ID format: should be 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'")
-	}
+	// Disable flag sorting to preserve definition order
+	exportHistoryCmd.Flags().SortFlags = false
 
-	// Convert report type string to integer
-	reportTypeInt, err := ParseReportType(reportType)
-	if err != nil {
-		return err
-	}
+	// Define flags for exporthistory command
+	exportHistoryCmd.Flags().StringVarP(&account, "account", "a", "", "SEMS Email Account (required)")
+	exportHistoryCmd.Flags().StringVarP(&password, "password", "p", "", "SEMS Account password (required)")
+	exportHistoryCmd.Flags().StringVarP(&powerstationID, "powerstationid", "i", "", "SEMS Powerstation ID (required)")
+	exportHistoryCmd.Flags().StringVarP(&qryStart, "timestart", "s", "", "Query start date/time (format: YYYY-MM-DD HH:MM)")
+	exportHistoryCmd.Flags().StringVarP(&qryTimeEnd, "timeend", "e", "", "Query end date/time (format: YYYY-MM-DD HH:MM)")
+	exportHistoryCmd.Flags().StringVarP(&targets, "targets", "t", "", "Comma-separated list of targets (e.g., Vpv1,Vpv2,Ipv1)")
 
-	// User account struct instance
-	apiLoginCreds := auth.NewSemsLoginCredentials(account, password, powerstationID)
+	// Mark required flags
+	exportHistoryCmd.MarkFlagRequired("account")
+	exportHistoryCmd.MarkFlagRequired("password")
+	exportHistoryCmd.MarkFlagRequired("powerstationid")
+	exportHistoryCmd.MarkFlagRequired("timestart")
+	exportHistoryCmd.MarkFlagRequired("timeend")
+	exportHistoryCmd.MarkFlagRequired("targets")
 
-	// Get the data from the API, return any errors
-	return loginAndFetchData(ctx, apiLoginCreds, reportTypeInt)
+	return exportHistoryCmd
 }
-
-// // ParseReportType converts a string report type to its integer constant.
-// func ParseReportType(reportTypeStr string) (int, error) {
-// 	switch reportTypeStr {
-// 	case "detail", "0":
-// 		return Detail, nil
-// 	case "summary", "1":
-// 		return Summary, nil
-// 	case "point", "2":
-// 		return Point, nil
-// 	case "plant", "3":
-// 		return Plant, nil
-// 	case "plantchart", "4":
-// 		return PlantChart, nil
-// 	case "powerflow", "5":
-// 		return PowerFlow, nil
-// 	case "kpidata", "6":
-// 		return KPIData, nil
-// 	default:
-// 		return -1, fmt.Errorf("invalid report type '%s'. Valid options are: detail, summary, point, plant, plantchart, powerflow, kpidata", reportTypeStr)
-// 	}
-// }
