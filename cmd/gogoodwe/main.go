@@ -20,7 +20,6 @@ var version string
 // If an error is returned, it logs the error message and exits the program.
 func main() {
 	rootCmd := app.NewRootCmd(version)
-
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}

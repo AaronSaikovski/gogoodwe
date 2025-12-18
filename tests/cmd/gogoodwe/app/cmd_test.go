@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/app"
+	fetchdata "github.com/AaronSaikovski/gogoodwe/internal/features/fetchdata"
+	"github.com/spf13/cobra"
 )
 
 // contains checks if a string contains a substring.
@@ -141,7 +143,7 @@ func TestParseReportType(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := app.ParseReportType(tt.input)
+			result, err := fetchdata.ParseReportType(tt.input)
 
 			if (err != nil) != tt.wantError {
 				t.Errorf("ParseReportType() error = %v, wantError %v", err, tt.wantError)
@@ -154,6 +156,62 @@ func TestParseReportType(t *testing.T) {
 
 			if tt.wantError && err == nil {
 				t.Errorf("ParseReportType() expected error but got none")
+			}
+		})
+	}
+}
+
+// TestParseReportTypeEdgeCases tests edge cases for parseReportType.
+func TestParseReportTypeEdgeCases(t *testing.T) {
+	tests := []struct {
+		name      string
+		input     string
+		expected  int
+		wantError bool
+	}{
+		{
+			name:      "whitespace before",
+			input:     " detail",
+			expected:  -1,
+			wantError: true,
+		},
+		{
+			name:      "whitespace after",
+			input:     "detail ",
+			expected:  -1,
+			wantError: true,
+		},
+		{
+			name:      "mixed case",
+			input:     "Detail",
+			expected:  -1,
+			wantError: true,
+		},
+		{
+			name:      "partial match",
+			input:     "det",
+			expected:  -1,
+			wantError: true,
+		},
+		{
+			name:      "double space",
+			input:     "  0",
+			expected:  -1,
+			wantError: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := fetchdata.ParseReportType(tt.input)
+
+			if (err != nil) != tt.wantError {
+				t.Errorf("ParseReportType() error = %v, wantError %v", err, tt.wantError)
+				return
+			}
+
+			if !tt.wantError && result != tt.expected {
+				t.Errorf("ParseReportType() got %d, want %d", result, tt.expected)
 			}
 		})
 	}
@@ -203,17 +261,92 @@ func TestNewRootCmd(t *testing.T) {
 				t.Errorf("NewRootCmd() Version = %s, want %s", cmd.Version, tt.version)
 			}
 
-			// Verify RunE is set
-			if cmd.RunE == nil {
-				t.Error("NewRootCmd() RunE is not set")
+			// Verify root command does NOT have RunE (it's a parent command)
+			if cmd.RunE != nil {
+				t.Error("NewRootCmd() should not have RunE set (it's a parent command)")
+			}
+
+			// Verify subcommands exist
+			if !cmd.HasSubCommands() {
+				t.Error("NewRootCmd() should have subcommands")
 			}
 		})
 	}
 }
 
-// TestRootCmdFlags tests that the root command has all required flags.
-func TestRootCmdFlags(t *testing.T) {
+// TestRootCmdHasSubcommands verifies the root command has the expected subcommands.
+func TestRootCmdHasSubcommands(t *testing.T) {
 	cmd := app.NewRootCmd("v1.0.0")
+
+	expectedSubcommands := []string{"getdata", "exporthistory"}
+
+	for _, subcmdName := range expectedSubcommands {
+		found := false
+		for _, subcmd := range cmd.Commands() {
+			if subcmd.Name() == subcmdName {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("NewRootCmd() missing expected subcommand: %s", subcmdName)
+		}
+	}
+}
+
+// TestGetDataSubcommand tests the getdata subcommand.
+func TestGetDataSubcommand(t *testing.T) {
+	rootCmd := app.NewRootCmd("v1.0.0")
+
+	// Find the getdata subcommand
+	var getDataCmd *cobra.Command
+	for _, cmd := range rootCmd.Commands() {
+		if cmd.Name() == "getdata" {
+			getDataCmd = cmd
+			break
+		}
+	}
+
+	if getDataCmd == nil {
+		t.Fatal("getdata subcommand not found")
+	}
+
+	// Verify RunE is set
+	if getDataCmd.RunE == nil {
+		t.Error("getdata subcommand should have RunE set")
+	}
+
+	// Verify short description
+	if getDataCmd.Short == "" {
+		t.Error("getdata subcommand Short description is empty")
+	}
+
+	// Verify long description contains report types
+	if !contains(getDataCmd.Long, "detail") {
+		t.Error("getdata subcommand Long description missing 'detail' report type")
+	}
+
+	if !contains(getDataCmd.Long, "kpidata") {
+		t.Error("getdata subcommand Long description missing 'kpidata' report type")
+	}
+}
+
+// TestGetDataFlags tests that the getdata subcommand has all required flags.
+func TestGetDataFlags(t *testing.T) {
+	rootCmd := app.NewRootCmd("v1.0.0")
+
+	// Find the getdata subcommand
+	var getDataCmd *cobra.Command
+	for _, cmd := range rootCmd.Commands() {
+		if cmd.Name() == "getdata" {
+			getDataCmd = cmd
+			break
+		}
+	}
+
+	if getDataCmd == nil {
+		t.Fatal("getdata subcommand not found")
+	}
 
 	tests := []struct {
 		flagName string
@@ -239,10 +372,10 @@ func TestRootCmdFlags(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.flagName, func(t *testing.T) {
-			flag := cmd.Flags().Lookup(tt.flagName)
+			flag := getDataCmd.Flags().Lookup(tt.flagName)
 
 			if flag == nil {
-				t.Errorf("Flag %s not found", tt.flagName)
+				t.Errorf("Flag %s not found in getdata subcommand", tt.flagName)
 				return
 			}
 
@@ -254,9 +387,22 @@ func TestRootCmdFlags(t *testing.T) {
 	}
 }
 
-// TestRootCmdFlagDefaults tests default values for flags.
-func TestRootCmdFlagDefaults(t *testing.T) {
-	cmd := app.NewRootCmd("v1.0.0")
+// TestGetDataFlagDefaults tests default values for getdata flags.
+func TestGetDataFlagDefaults(t *testing.T) {
+	rootCmd := app.NewRootCmd("v1.0.0")
+
+	// Find the getdata subcommand
+	var getDataCmd *cobra.Command
+	for _, cmd := range rootCmd.Commands() {
+		if cmd.Name() == "getdata" {
+			getDataCmd = cmd
+			break
+		}
+	}
+
+	if getDataCmd == nil {
+		t.Fatal("getdata subcommand not found")
+	}
 
 	tests := []struct {
 		flagName      string
@@ -270,10 +416,10 @@ func TestRootCmdFlagDefaults(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.flagName, func(t *testing.T) {
-			flag := cmd.Flags().Lookup(tt.flagName)
+			flag := getDataCmd.Flags().Lookup(tt.flagName)
 
 			if flag == nil {
-				t.Errorf("Flag %s not found", tt.flagName)
+				t.Errorf("Flag %s not found in getdata subcommand", tt.flagName)
 				return
 			}
 
@@ -284,72 +430,99 @@ func TestRootCmdFlagDefaults(t *testing.T) {
 	}
 }
 
-// TestParseReportTypeEdgeCases tests edge cases for parseReportType.
-func TestParseReportTypeEdgeCases(t *testing.T) {
+// TestExportHistorySubcommand tests the exporthistory subcommand.
+func TestExportHistorySubcommand(t *testing.T) {
+	rootCmd := app.NewRootCmd("v1.0.0")
+
+	// Find the exporthistory subcommand
+	var exportHistoryCmd *cobra.Command
+	for _, cmd := range rootCmd.Commands() {
+		if cmd.Name() == "exporthistory" {
+			exportHistoryCmd = cmd
+			break
+		}
+	}
+
+	if exportHistoryCmd == nil {
+		t.Fatal("exporthistory subcommand not found")
+	}
+
+	// Verify RunE is set
+	if exportHistoryCmd.RunE == nil {
+		t.Error("exporthistory subcommand should have RunE set")
+	}
+
+	// Verify short description
+	if exportHistoryCmd.Short == "" {
+		t.Error("exporthistory subcommand Short description is empty")
+	}
+}
+
+// TestExportHistoryFlags tests that the exporthistory subcommand has all required flags.
+func TestExportHistoryFlags(t *testing.T) {
+	rootCmd := app.NewRootCmd("v1.0.0")
+
+	// Find the exporthistory subcommand
+	var exportHistoryCmd *cobra.Command
+	for _, cmd := range rootCmd.Commands() {
+		if cmd.Name() == "exporthistory" {
+			exportHistoryCmd = cmd
+			break
+		}
+	}
+
+	if exportHistoryCmd == nil {
+		t.Fatal("exporthistory subcommand not found")
+	}
+
 	tests := []struct {
-		name      string
-		input     string
-		expected  int
-		wantError bool
+		flagName string
+		short    string
 	}{
 		{
-			name:      "whitespace before",
-			input:     " detail",
-			expected:  -1,
-			wantError: true,
+			flagName: "account",
+			short:    "a",
 		},
 		{
-			name:      "whitespace after",
-			input:     "detail ",
-			expected:  -1,
-			wantError: true,
+			flagName: "password",
+			short:    "p",
 		},
 		{
-			name:      "mixed case",
-			input:     "Detail",
-			expected:  -1,
-			wantError: true,
+			flagName: "powerstationid",
+			short:    "i",
 		},
 		{
-			name:      "partial match",
-			input:     "det",
-			expected:  -1,
-			wantError: true,
+			flagName: "timestart",
+			short:    "s",
 		},
 		{
-			name:      "double space",
-			input:     "  0",
-			expected:  -1,
-			wantError: true,
+			flagName: "timeend",
+			short:    "e",
+		},
+		{
+			flagName: "targets",
+			short:    "t",
 		},
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result, err := app.ParseReportType(tt.input)
+		t.Run(tt.flagName, func(t *testing.T) {
+			flag := exportHistoryCmd.Flags().Lookup(tt.flagName)
 
-			if (err != nil) != tt.wantError {
-				t.Errorf("ParseReportType() error = %v, wantError %v", err, tt.wantError)
+			if flag == nil {
+				t.Errorf("Flag %s not found in exporthistory subcommand", tt.flagName)
 				return
 			}
 
-			if !tt.wantError && result != tt.expected {
-				t.Errorf("ParseReportType() got %d, want %d", result, tt.expected)
+			// Verify short flag
+			if flag.Shorthand != tt.short {
+				t.Errorf("Flag %s shorthand = %s, want %s", tt.flagName, flag.Shorthand, tt.short)
 			}
 		})
 	}
 }
 
-// TestRootCmdHasRunE verifies that the root command has a RunE function.
-func TestRootCmdHasRunE(t *testing.T) {
-	cmd := app.NewRootCmd("v1.0.0")
-
-	if cmd.RunE == nil {
-		t.Error("NewRootCmd() RunE function is not set")
-	}
-}
-
-// TestRootCmdDescription verifies the command descriptions are non-empty.
+// TestRootCmdDescription verifies the root command description.
 func TestRootCmdDescription(t *testing.T) {
 	cmd := app.NewRootCmd("v1.0.0")
 
@@ -359,13 +532,5 @@ func TestRootCmdDescription(t *testing.T) {
 
 	if cmd.Long == "" {
 		t.Error("Root command Long description is empty")
-	}
-
-	if !contains(cmd.Long, "detail") {
-		t.Error("Root command Long description missing report type examples")
-	}
-
-	if !contains(cmd.Long, "kpidata") {
-		t.Error("Root command Long description missing kpidata report type")
 	}
 }

@@ -51,7 +51,7 @@ Report Types:
   plantchart  - Plant power chart data
   powerflow   - Power flow data
   kpidata     - KPI data`,
-		RunE: runGetData,
+		RunE: RunGetData,
 	}
 
 	// Define flags for getdata command
@@ -74,7 +74,7 @@ func newExportHistoryCmd() *cobra.Command {
 		Use:   "exporthistory",
 		Short: "Export Excel Station History Data",
 		Long:  `Export historical data from the SEMS API to Excel format with specified timespan and targets.`,
-		RunE:  runExportHistory,
+		RunE:  RunExportHistory,
 	}
 
 	// Disable flag sorting to preserve definition order

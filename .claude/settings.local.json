@@ -13,7 +13,11 @@
       "Bash(dir \"C:\\Development\\Personal\\Go\\gogoodwe\")",
       "Bash(del \"C:\\Development\\Personal\\Go\\gogoodwe\\cmd\\gogoodwe\\app\\cmd_test.go\")",
       "Bash(tree:*)",
-      "Bash(dir \"C:\\Development\\Personal\\Go\\gogoodwe\\pkg\\models\" /B)"
+      "Bash(dir \"C:\\Development\\Personal\\Go\\gogoodwe\\pkg\\models\" /B)",
+      "Bash(dir \"C:\\Development\\Personal\\Go\\gogoodwe\" /B)",
+      "Bash(for file in currentkpidata/getkpimonitordata.go inverterallpoint/getinverterallpointdata.go monitordetail/getmonitordetaildata.go monitorsummary/getmonitorsummarydata.go plantdetail/getplantdetaildata.go plantpowerchart/getplantchartdata.go powerflow/getpowerflowdata.go)",
+      "Bash(do sed -i 's/apihelpers\\.ProcessData/utils.ProcessData/g' \"$file\")",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

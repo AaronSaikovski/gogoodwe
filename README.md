@@ -63,34 +63,52 @@ To get started type,
 ## Project Architecture
 
 ```
-cmd/gogoodwe/           - Command-line application entry point
-  ├── main.go           - Entry point, initializes Cobra root command
-  └── app/
-      ├── cmd.go        - Cobra command definitions and flag configuration
-      ├── fetchdata.go  - Login and API data fetching logic
-      ├── enums.go      - Report type constants
-      └── lookupmonitordata.go - Report type routing
+cmd/
+  └── gogoodwe/         - Command-line application entry point
+      ├── main.go       - Entry point, initializes Cobra root command
+      └── app/          - Application command logic
+          ├── cmd.go        - Cobra root and subcommand definitions
+          ├── fetchdata.go  - GetData command: Login and API data fetching
+          └── exportdata.go - ExportHistory command: Historical data export
+
+internal/               - Internal application packages (not for external use)
+  ├── shared/           - Shared utilities and helpers
+  │   ├── auth/         - Authentication handling for SEMS API
+  │   │   ├── login.go          - Login logic and credentials
+  │   │   ├── loginutils.go     - Authentication utilities
+  │   │   └── utils.go          - Auth-related helper functions
+  │   ├── apihelpers/   - HTTP request/response handling
+  │   │   └── callmonitorapi.go - API communication layer
+  │   └── utils/        - Common utilities
+  │       ├── jsonutils.go      - JSON parsing and formatting
+  │       ├── httpclient.go     - HTTP client configuration
+  │       ├── processdata.go    - Data processing pipeline
+  │       └── datetime.go       - Date/time utilities
+  └── features/
+      └── fetchdata/    - Data fetching feature
+          ├── fetchdata.go      - Core fetch logic
+          ├── parsereporttype.go - Report type parsing
+          ├── lookupmonitordata.go - Report type routing
+          ├── common/           - Shared constants and types
+          │   └── enums.go      - Report type constants
+          ├── interfaces/       - Interface definitions
+          │   ├── powerdata.go  - Data fetching interface
+          │   ├── semsdata.go   - Type constraints
+          │   └── semslogin.go  - Login interface
+          └── [models]/         - Data structures for each report type
+              ├── currentkpidata/     - KPI monitoring data
+              ├── inverterallpoint/   - All inverter point data
+              ├── monitordetail/      - Detailed monitoring data
+              ├── monitorsummary/     - Summary monitoring data
+              ├── plantdetail/        - Plant detail data
+              ├── plantpowerchart/    - Plant power chart data
+              └── powerflow/          - Power flow data
 
 tests/                  - Comprehensive test suite
-  ├── cmd/
-  │   └── gogoodwe/
-  │       └── app/
-  │           └── cmd_test.go - CLI command tests
-  └── README.md         - Test documentation
-
-pkg/                    - Core library packages
-  ├── auth/             - Authentication handling for SEMS API
-  ├── apihelpers/       - HTTP request/response handling and API communication
-  ├── models/           - Data structures for each report type
-  │   ├── currentkpidata/     - KPI monitoring data (new in v3.2.1)
-  │   ├── inverterallpoint/   - All inverter point data
-  │   ├── monitordetail/      - Detailed monitoring data
-  │   ├── monitorsummary/     - Summary monitoring data
-  │   ├── plantdetail/        - Plant detail data
-  │   ├── plantpowerchart/    - Plant power chart data
-  │   └── powerflow/          - Power flow data
-  ├── interfaces/       - Interface definitions for type safety
-  └── utils/            - Utilities for JSON, HTTP clients, and formatting
+  └── cmd/
+      └── gogoodwe/
+          └── app/
+              └── cmd_test.go - CLI command and subcommand tests
 ```
 
 ### Performance Optimizations
@@ -117,10 +135,14 @@ Your Station ID is: `11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
 
 ### Command Line Usage
 
-GoGoodwe uses [Cobra](https://github.com/spf13/cobra) for CLI argument parsing. The Report Type parameter specifies which type of data report to generate:
+GoGoodwe uses [Cobra](https://github.com/spf13/cobra) with subcommands for CLI argument parsing.
+
+#### GetData Command
+
+Retrieves real-time data from your SEMS inverter. The Report Type parameter specifies which type of data report to generate:
 
 **Available Report Types:**
-- `detail` or `0` - Fully detailed inverter monitoring report
+- `detail` or `0` - Fully detailed inverter monitoring report (default)
 - `summary` or `1` - Summary Data report (reduced information)
 - `point` or `2` - Inverter All points data
 - `plant` or `3` - Plant Detail By Powerstation Id
@@ -132,35 +154,56 @@ GoGoodwe uses [Cobra](https://github.com/spf13/cobra) for CLI argument parsing. 
 
 ```bash
 # Using string-based report types (recommended)
-./gogoodwe --account 'user@email.com' \
-           --password 'password' \
-           --powerstationid '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
-           --reporttype 'detail'
+./gogoodwe getdata --account 'user@email.com' \
+                   --password 'password' \
+                   --powerstationid '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
+                   --reporttype 'detail'
 
-./gogoodwe -a 'user@email.com' \
-           -p 'password' \
-           -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
-           -r 'summary'
+./gogoodwe getdata -a 'user@email.com' \
+                   -p 'password' \
+                   -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
+                   -r 'summary'
 
 # KPI data report (Key Performance Indicators)
-./gogoodwe -a 'user@email.com' \
-           -p 'password' \
-           -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
-           -r 'kpidata'
+./gogoodwe getdata -a 'user@email.com' \
+                   -p 'password' \
+                   -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
+                   -r 'kpidata'
 
 # Using numeric report types (backward compatible)
-./gogoodwe -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' -r 0
+./gogoodwe getdata -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' -r 0
 
 # Report type is optional (defaults to 'detail')
-./gogoodwe -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff'
+./gogoodwe getdata -a 'user@email.com' -p 'password' -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff'
+```
+
+#### ExportHistory Command
+
+Exports historical data from your SEMS inverter to Excel format (coming soon).
+
+**Example:**
+
+```bash
+./gogoodwe exporthistory -a 'user@email.com' \
+                         -p 'password' \
+                         -i '11112222-aaaa-bbbb-cccc-ddddeeeeeffff' \
+                         --timestart '2024-01-01 00:00' \
+                         --timeend '2024-01-31 23:59' \
+                         --targets 'Vpv1,Vpv2,Ipv1'
 ```
 
 ### Getting Help
 
 ```bash
-# Display help message
+# Display main help message
 ./gogoodwe --help
 ./gogoodwe -h
+
+# Display help for getdata subcommand
+./gogoodwe getdata --help
+
+# Display help for exporthistory subcommand
+./gogoodwe exporthistory --help
 
 # Display version
 ./gogoodwe --version
@@ -191,16 +234,29 @@ go tool cover -html=coverage.out
 ### Test Suite
 
 - **Location**: `tests/cmd/gogoodwe/app/cmd_test.go`
-- **Coverage**: 28 comprehensive test cases
+- **Coverage**: Comprehensive test cases for all functionality
 - **Focus Areas**:
   - Report type parsing (string and numeric formats)
-  - CLI flag validation
-  - Command initialization
+  - Root command structure and subcommands
+  - CLI flag validation for getdata and exporthistory
+  - Command initialization and configuration
   - Edge cases and error handling
 
 See `tests/README.md` for detailed test documentation.
 
 ## Recent Changes
+
+### Version 3.3.0 (Current)
+- **Project Restructuring** - Major refactoring for better code organization:
+  - Moved from `pkg/` to `internal/` directory structure following Go best practices
+  - Separated shared utilities (`internal/shared/`) from feature-specific code (`internal/features/`)
+  - Consolidated authentication utilities in `internal/shared/auth/`
+  - Unified data processing in `internal/shared/utils/`
+- **Command Structure** - Enhanced CLI with subcommands:
+  - `getdata` - Retrieve real-time inverter data (replaces previous direct command)
+  - `exporthistory` - Export historical data (foundation for future Excel export feature)
+- **Code Cleanup** - Removed duplicate utility functions and improved import organization
+- **Test Suite Updates** - Updated all tests to reflect new command structure and subcommands
 
 ### Version 3.2.1
 - **KPI Data Report Type** - New `kpidata` report type providing Key Performance Indicator metrics:

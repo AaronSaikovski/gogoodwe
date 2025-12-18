@@ -2,12 +2,19 @@ package app
 
 import (
 	"fmt"
-	"github.com/AaronSaikovski/gogoodwe/cmd/gogoodwe/utils"
+	"github.com/AaronSaikovski/gogoodwe/internal/shared/utils"
 	"github.com/spf13/cobra"
 )
 
-// runExportHistory is the execution function for the exporthistory command.
-func runExportHistory(cmd *cobra.Command, args []string) error {
+// RunExportHistory is the execution function for the exporthistory command.
+func RunExportHistory(cmd *cobra.Command, args []string) error {
+	// Get flag values from command
+	account, _ := cmd.Flags().GetString("account")
+	powerstationID, _ := cmd.Flags().GetString("powerstationid")
+	qryStart, _ := cmd.Flags().GetString("timestart")
+	qryTimeEnd, _ := cmd.Flags().GetString("timeend")
+	targets, _ := cmd.Flags().GetString("targets")
+
 	// Check for valid email address input
 	if !utils.CheckValidEmail(account) {
 		return fmt.Errorf("invalid email address format: should be 'user@somedomain.com'")
