@@ -5,7 +5,6 @@ package fetchdata
 
 // 	"github.com/AaronSaikovski/gogoodwe/internal/shared/apihelpers"
 // 	"github.com/AaronSaikovski/gogoodwe/internal/shared/auth"
-// 	"github.com/AaronSaikovski/gogoodwe/internal/shared/utils"
 // )
 
 // func callMonitorApi[T any](

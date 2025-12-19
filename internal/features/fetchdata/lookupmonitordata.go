@@ -42,7 +42,7 @@ func LookupMonitorData(reportData int) interfaces.PowerData {
 	}
 }
 
-/// InverterAllPoint represents the data structure for inverter all point data.
+// / InverterAllPoint represents the data structure for inverter all point data.
 func LookupReportStruct(reportData int) interfaces.PowerData {
 	switch reportData {
 	case common.Point:
