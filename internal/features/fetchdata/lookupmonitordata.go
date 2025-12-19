@@ -41,3 +41,25 @@ func LookupMonitorData(reportData int) interfaces.PowerData {
 		return monitordetail.NewMonitorData()
 	}
 }
+
+/// InverterAllPoint represents the data structure for inverter all point data.
+func LookupReportStruct(reportData int) interfaces.PowerData {
+	switch reportData {
+	case common.Point:
+		return &inverteallpoint.InverterAllPoint{}
+	case common.Detail:
+		return &monitordetail.MonitorData{}
+	case common.Summary:
+		return &monitorsummary.DailySummaryData{}
+	case common.Plant:
+		return &plantdetail.PlantDetailByPowerstationId{}
+	case common.PlantChart:
+		return &plantchartdata.PlantPowerChart{}
+	case common.PowerFlow:
+		return &powerflow.Powerflow{}
+	case common.KPIData:
+		return &currentkpidata.KPIMonitorData{}
+	default:
+		return &monitordetail.MonitorData{}
+	}
+}

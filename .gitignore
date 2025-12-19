@@ -34,3 +34,5 @@ cpu.prof
 dist/
 
 .claude/
+
+.DS_Store
