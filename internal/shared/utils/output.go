@@ -7,15 +7,13 @@ import (
 	"github.com/valyala/fastjson"
 )
 
-// parseOutput parses the JSON output from the provided byte slice.
-//
-// Parameters:
-// - dataOutput: a byte slice containing the JSON output to be parsed.
-// Return type: (*fastjson.Value, error)
+var parserPool fastjson.ParserPool
+
+// ParseOutput parses the JSON output from the provided byte slice using a pooled parser.
 func ParseOutput(dataOutput []byte) (*fastjson.Value, error) {
-	// Parse JSON output using reusable parser from pool for better performance
-	var parser fastjson.Parser
-	return parser.ParseBytes(dataOutput)
+	p := parserPool.Get()
+	defer parserPool.Put(p)
+	return p.ParseBytes(dataOutput)
 }
 
 // printOutput prints the provided fastjson.Value in bright yellow color using the aurora package.

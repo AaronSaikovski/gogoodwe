@@ -4,7 +4,7 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/internal/shared/utils"
 )
 
-// ApiLoginCredentials - Struct to hold User login credentials
+// SemsLoginCredentials holds user login credentials for the SEMS API.
 type SemsLoginCredentials struct {
 	Account        string `json:"account"`
 	Password       string `json:"pwd"`

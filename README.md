@@ -1,6 +1,6 @@
 <div align="center">
 
-## GoGoodwe v3.2.1
+## GoGoodwe v3.4.0
 
 A high-performance command-line tool to query GOODWE SEMS (Solar Energy Management System) APIs - written in 100% Go.
 
@@ -13,7 +13,7 @@ A high-performance command-line tool to query GOODWE SEMS (Solar Energy Manageme
 
 ### Software Requirements:
 
-- [Go v1.25.3](https://www.go.dev/dl/) or later needs to be installed to build the code.
+- [Go v1.26.2](https://www.go.dev/dl/) or later needs to be installed to build the code.
 - [Taskfile](https://taskfile.dev/) to run the build chain commands listed below.
 
 ### Dependencies:
@@ -74,28 +74,33 @@ cmd/
 internal/               - Internal application packages (not for external use)
   ├── shared/           - Shared utilities and helpers
   │   ├── auth/         - Authentication handling for SEMS API
-  │   │   ├── login.go          - Login logic and credentials
-  │   │   ├── loginutils.go     - Authentication utilities
-  │   │   └── utils.go          - Auth-related helper functions
+  │   │   ├── login.go            - SEMS CrossLogin API authentication
+  │   │   ├── logincredentials.go  - Login credential struct and factory
+  │   │   ├── logininfo.go        - Combined login state (credentials + response)
+  │   │   ├── loginresponse.go    - API response struct
+  │   │   ├── loginutils.go       - Credential validation and header setup
+  │   │   └── utils.go            - Token/header JSON generation
   │   ├── apihelpers/   - HTTP request/response handling
-  │   │   └── callmonitorapi.go - API communication layer
+  │   │   └── callmonitorapi.go - API communication with SSRF protection
   │   └── utils/        - Common utilities
-  │       ├── jsonutils.go      - JSON parsing and formatting
-  │       ├── httpclient.go     - HTTP client configuration
-  │       ├── processdata.go    - Data processing pipeline
-  │       └── datetime.go       - Date/time utilities
+  │       ├── jsonutils.go      - JSON marshal/unmarshal helpers
+  │       ├── httpclient.go     - HTTP transport with connection pooling
+  │       ├── processdata.go    - Data processing pipeline (JSON -> output)
+  │       ├── response.go       - Response body reading with size limits
+  │       ├── output.go         - Colored terminal output via fastjson
+  │       ├── paramcheck.go     - Email and UUID input validation
+  │       ├── datetime.go       - Date formatting (YYYY-MM-DD)
+  │       └── dateutils.go      - Date range calculations
   └── features/
       └── fetchdata/    - Data fetching feature
-          ├── fetchdata.go      - Core fetch logic
-          ├── parsereporttype.go - Report type parsing
-          ├── lookupmonitordata.go - Report type routing
-          ├── common/           - Shared constants and types
-          │   └── enums.go      - Report type constants
-          ├── interfaces/       - Interface definitions
-          │   ├── powerdata.go  - Data fetching interface
-          │   ├── semsdata.go   - Type constraints
-          │   └── semslogin.go  - Login interface
-          └── [models]/         - Data structures for each report type
+          ├── parsereporttype.go    - Report type string/int conversion
+          ├── lookupmonitordata.go  - Factory: report type -> PowerData impl
+          ├── common/               - Shared constants
+          │   └── enums.go          - Report type constants (Detail..KPIData)
+          ├── interfaces/           - Interface definitions
+          │   ├── powerdata.go      - PowerData interface
+          │   └── semslogin.go      - SemsLogin interface
+          └── [report types]/       - One package per report type
               ├── currentkpidata/     - KPI monitoring data
               ├── inverterallpoint/   - All inverter point data
               ├── monitordetail/      - Detailed monitoring data
@@ -104,20 +109,23 @@ internal/               - Internal application packages (not for external use)
               ├── plantpowerchart/    - Plant power chart data
               └── powerflow/          - Power flow data
 
-tests/                  - Comprehensive test suite
-  └── cmd/
-      └── gogoodwe/
-          └── app/
-              └── cmd_test.go - CLI command and subcommand tests
+tests/                  - Black-box CLI tests (app_test package)
+  └── cmd/gogoodwe/app/cmd_test.go
 ```
 
 ### Performance Optimizations
 
-GoGoodwe includes several performance enhancements:
 - **HTTP Connection Pooling**: Reusable HTTP client with optimized transport settings (MaxIdleConns: 100, MaxConnsPerHost: 100)
-- **Efficient JSON Parsing**: Uses `fastjson` for high-performance JSON processing without double marshaling
-- **Optimized Timeouts**: HTTP response header timeout of 10 seconds with TLS handshake timeout
-- **Context Management**: Proper context handling with 60-second application timeout
+- **Efficient JSON Parsing**: Uses `fastjson` for high-performance JSON processing
+- **Optimized Timeouts**: HTTP response header timeout of 10s, TLS handshake timeout of 10s
+- **Context Management**: 60-second root timeout with per-request 20-second timeouts
+
+### Security Features
+
+- **SSRF Protection**: Server-provided API URLs are validated against an HTTPS + domain allowlist before use
+- **HTTP Status Checking**: Non-200 responses are rejected with informative errors in both login and data paths
+- **Response Size Limiting**: Response bodies are capped at 10MB to prevent memory exhaustion
+- **Input Validation**: Email format and UUID format validation on all user inputs
 
 ## Usage
 
@@ -212,73 +220,80 @@ Exports historical data from your SEMS inverter to Excel format (coming soon).
 
 ## Testing
 
-GoGoodwe includes comprehensive test coverage for CLI functionality:
+GoGoodwe includes comprehensive unit tests across all internal packages.
 
 ### Running Tests
 
 ```bash
 # Run all tests
-go test ./tests/... -v
+go test -v ./...
 
-# Run CLI command tests
-go test ./tests/cmd/gogoodwe/app -v
-
-# Run tests with coverage report
-go test ./tests/cmd/gogoodwe/app -cover
+# Run with coverage report
+go test -coverprofile=coverage.out ./internal/...
+go tool cover -func=coverage.out
 
 # Generate HTML coverage report
-go test ./tests/cmd/gogoodwe/app -coverprofile=coverage.out
 go tool cover -html=coverage.out
+
+# Run a single test
+go test -v -run TestParseReportType ./internal/features/fetchdata/...
 ```
 
-### Test Suite
+### Test Coverage
 
-- **Location**: `tests/cmd/gogoodwe/app/cmd_test.go`
-- **Coverage**: Comprehensive test cases for all functionality
-- **Focus Areas**:
-  - Report type parsing (string and numeric formats)
-  - Root command structure and subcommands
-  - CLI flag validation for getdata and exporthistory
-  - Command initialization and configuration
-  - Edge cases and error handling
+| Package | Coverage |
+|---------|----------|
+| `internal/shared/utils` | 97.4% |
+| `internal/shared/auth` | 85.4% |
+| `internal/features/fetchdata` | 100% |
+| `internal/shared/apihelpers` | 44.2% |
+| Report-type packages (x7) | 16.7% each |
+
+### What's Tested
+
+- **Input validation**: Email format, UUID format (case-insensitive), report type parsing
+- **Authentication**: Credential validation, header generation, token JSON, login response checking
+- **API helpers**: SSRF URL validation, nil/empty parameter guards, HTTP status handling
+- **Utilities**: JSON marshal/unmarshal, response body reading, date formatting, HTTP transport config
+- **CLI structure**: Command definitions, flag names, defaults, subcommand presence
+- **Factory pattern**: `LookupMonitorData` returns correct types for all 7 report types
 
 See `tests/README.md` for detailed test documentation.
 
 ## Recent Changes
 
-### Version 3.3.0 (Current)
-- **Project Restructuring** - Major refactoring for better code organization:
-  - Moved from `pkg/` to `internal/` directory structure following Go best practices
-  - Separated shared utilities (`internal/shared/`) from feature-specific code (`internal/features/`)
-  - Consolidated authentication utilities in `internal/shared/auth/`
-  - Unified data processing in `internal/shared/utils/`
-- **Command Structure** - Enhanced CLI with subcommands:
-  - `getdata` - Retrieve real-time inverter data (replaces previous direct command)
-  - `exporthistory` - Export historical data (foundation for future Excel export feature)
+### Version 3.4.0 (Current)
+- **Security Hardening**:
+  - Added SSRF protection: server-provided API URLs are validated against HTTPS + `*.semsportal.com` domain allowlist
+  - Added HTTP status code checking in both login and data API paths
+  - Removed credential echo from `exporthistory` debug output
+  - UUID validation now accepts uppercase hex (case-insensitive)
+- **Code Quality**:
+  - Removed verbatim code duplication (`FetchMonitorAPIData`, `ProcessData`, `ProcessRawJSON` had identical copies in two locations)
+  - Removed dead code: unused `HandleError()`, commented-out `getdata.go`, unused `SemsDataConstraint` interface, duplicate `LookupReportStruct()` factory
+  - Cleaned commented-out code from all 7 report-type files
+  - Added 60-second root context timeout (was `WithCancel` only, could hang indefinitely)
+  - Removed redundant `ctx.Err()` check after service call
+  - Extracted magic strings (`"v2.1.0"`, `"ios"`, `"en"`) to package-level constants
+  - Fixed non-idiomatic error messages (removed `**Error:` decorations)
+  - Fixed stale comment (`ApiLoginCredentials` -> `SemsLoginCredentials`)
+  - Compiled regex patterns once at package level instead of per-call
+- **Testing**: Comprehensive unit test suite added across all internal packages (64.7% overall coverage, 97.4% for utils, 85.4% for auth, 100% for fetchdata core)
+- **Updated Go version** to 1.26.2
+
+### Version 3.3.0
+- **Project Restructuring** - Moved from `pkg/` to `internal/` directory structure following Go best practices
+- **Command Structure** - Enhanced CLI with `getdata` and `exporthistory` subcommands
 - **Code Cleanup** - Removed duplicate utility functions and improved import organization
-- **Test Suite Updates** - Updated all tests to reflect new command structure and subcommands
 
 ### Version 3.2.1
-- **KPI Data Report Type** - New `kpidata` report type providing Key Performance Indicator metrics:
-  - Monthly generation data
-  - Current power (Pac) and total power metrics
-  - Income tracking (daily and total)
-  - Yield rate calculations
-  - Currency information
-- **Code Refactoring** - Unified data processing across all report types using `ProcessData()` for improved consistency and maintainability
-- **Dependency Updates** - Updated `fastjson` from v1.6.4 to v1.6.7 for improved JSON parsing performance
+- **KPI Data Report Type** - New `kpidata` report type with monthly generation, power, income, and yield metrics
+- **Code Refactoring** - Unified data processing across all report types using `ProcessData()`
+- **Dependency Updates** - Updated `fastjson` from v1.6.4 to v1.6.7
 
-### Previous Updates
-- **Cobra CLI Framework** - Replaced `go-arg` with [Cobra](https://github.com/spf13/cobra) for robust CLI argument parsing
-- **String-based Report Types** - Support for human-readable report type names (`detail`, `summary`, `point`, etc.) alongside numeric values for backward compatibility
-- **Comprehensive Test Suite** - Added 28 test cases covering CLI functionality with dedicated `tests/` directory
-- **Improved Documentation** - Updated help text and command descriptions with Cobra
-
-### Version 3.1.1
-- **Updated Go version** to 1.25.3 for latest language improvements and security patches
-- **Performance refactoring** with optimized HTTP client setup and connection pooling
-- **Improved context management** for better timeout handling and resource cleanup
-- **Code organization** - Renamed `root.go` to `main.go` for better clarity
+### Previous Versions
+- v3.1.1 - Go 1.25.3, performance refactoring, improved context management
+- v3.0.0 - Cobra CLI, string-based report types, comprehensive test suite
 
 ## Contributions
 

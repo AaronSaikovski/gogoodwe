@@ -9,12 +9,7 @@ import (
 )
 
 const (
-
-	// Powerstation API Url
 	powerStationURL string = "v3/PowerStation/GetMonitorDetailByPowerstationId"
-
-	// Default timeout value
-	HTTPTimeout int = 20
 )
 
 // GetKPIMonitorData retrieves KPI monitor data using login credentials and response, storing it in inverterOutput.
@@ -26,7 +21,7 @@ const (
 // Return type: ([]byte, error) - returns raw JSON bytes and error
 func (kpiData *KPIMonitorData) GetMonitorData(ctx context.Context, authLoginInfo *auth.LoginInfo, inverterOutput interface{}) ([]byte, error) {
 
-	return apihelpers.FetchMonitorAPIData(ctx, authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
+	return apihelpers.FetchMonitorAPIData(ctx, authLoginInfo, powerStationURL, inverterOutput)
 }
 
 // GetPowerData retrieves the power data for a detailed inverter using the provided authentication information.
@@ -40,10 +35,10 @@ func (kpiData *KPIMonitorData) GetMonitorData(ctx context.Context, authLoginInfo
 func (kpiData *KPIMonitorData) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
 	// Get monitor data and unmarshal into struct
-	_, err := kpiData.GetMonitorData(ctx, authLoginInfo, kpiData)
+	rawJSON, err := kpiData.GetMonitorData(ctx, authLoginInfo, kpiData)
 	if err != nil {
 		return err
 	}
 
-	return utils.ProcessData(kpiData)
+	return utils.ProcessRawJSON(rawJSON)
 }

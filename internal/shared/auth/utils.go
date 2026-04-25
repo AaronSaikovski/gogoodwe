@@ -7,7 +7,13 @@ import (
 	"github.com/AaronSaikovski/gogoodwe/internal/shared/utils"
 )
 
-// setHeaders sets the headers for the SEMS Data API.
+const (
+	apiVersion  = "v2.1.0"
+	apiClient   = "ios"
+	apiLanguage = "en"
+)
+
+// SetHeaders sets the headers for the SEMS Data API.
 //
 // It takes an http.Request pointer 'r' and a byte slice 'tokenstring' as parameters.
 func SetHeaders(r *http.Request, tokenstring []byte) {
@@ -50,9 +56,9 @@ func DataTokenJSON(semsResponseData *SemsLoginResponse) ([]byte, error) {
 		UID       string `json:"uid"`
 		Token     string `json:"token"`
 	}{
-		Version:   "v2.1.0",
-		Client:    "ios",
-		Language:  "en",
+		Version:   apiVersion,
+		Client:    apiClient,
+		Language:  apiLanguage,
 		Timestamp: semsResponseData.Data.Timestamp,
 		UID:       semsResponseData.Data.UID,
 		Token:     semsResponseData.Data.Token,

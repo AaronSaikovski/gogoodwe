@@ -4,23 +4,17 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"net/http"
-	"time"
 
 	"github.com/AaronSaikovski/gogoodwe/internal/shared/utils"
 )
 
 const (
 	AuthLoginURL = "https://www.semsportal.com/api/v2/Common/CrossLogin"
-	HTTPTimeout  = 20 // seconds
 )
 
-var (
-	// Reusable HTTP client for better performance
-	httpClient = &http.Client{
-		Transport: utils.NewHTTPTransport(),
-	}
-)
+var httpClient = utils.SharedHTTPClient
 
 // SemsLogin is a method on the SemsLoginCredentials struct that performs a Sems login.
 //
@@ -43,9 +37,6 @@ func (loginCredentials *SemsLoginCredentials) SemsLogin(ctx context.Context) (*S
 		return nil, fmt.Errorf("failed to create login request: %w", err)
 	}
 
-	// Add context with timeout
-	ctx, cancel := context.WithTimeout(ctx, HTTPTimeout*time.Second)
-	defer cancel()
 	req = req.WithContext(ctx)
 
 	// Add headers
@@ -57,6 +48,12 @@ func (loginCredentials *SemsLoginCredentials) SemsLogin(ctx context.Context) (*S
 		return nil, fmt.Errorf("login request failed: %w", err)
 	}
 	defer resp.Body.Close()
+
+	// Check HTTP status code
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(io.LimitReader(resp.Body, 512))
+		return nil, fmt.Errorf("login request returned HTTP %d: %s", resp.StatusCode, body)
+	}
 
 	// Get the response body
 	respBody, err := utils.FetchResponseBody(resp.Body)

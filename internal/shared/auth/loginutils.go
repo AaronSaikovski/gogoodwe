@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-const tokenHeaderValue = `{"version":"v2.1.0","client":"ios","language":"en"}`
+const tokenHeaderValue = `{"version":"` + apiVersion + `","client":"` + apiClient + `","language":"` + apiLanguage + `"}`
 
 // setHeaders sets the headers for the SEMS API login.
 //
@@ -25,7 +25,7 @@ func setHeaders(r *http.Request) {
 // Return type: error
 func checkUserLoginResponse(loginResponse string) error {
 	if loginResponse != "Successful" {
-		return fmt.Errorf("**API Login Error: %s", loginResponse)
+		return fmt.Errorf("API login error: %s", loginResponse)
 	}
 	return nil
 }
@@ -37,14 +37,7 @@ func checkUserLoginResponse(loginResponse string) error {
 func checkUserLoginInfo(userLogin *SemsLoginCredentials) error {
 	// Check individual required fields instead of comparing entire struct
 	if userLogin == nil || userLogin.Account == "" || userLogin.Password == "" || userLogin.PowerStationID == "" {
-		return errors.New("**Error: User Login details are empty or invalid**")
+		return errors.New("user login details are empty or invalid")
 	}
 	return nil
 }
-
-// setPowerPlantHeaders sets the headers for the Power Plant API.
-// func setPowerPlantHeaders(r *http.Request) {
-// 	r.Header.Add("Content-Type", "application/json")
-// 	r.Header.Add("Token", "{\"version\":\"v2.1.0\",\"client\":\"ios\",\"language\":\"en\"}")
-// 	r.Header.Add("data", "{\"id\":\"GUID\",\"date\":\"2024-06-21\"}")
-// }

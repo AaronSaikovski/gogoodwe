@@ -9,12 +9,7 @@ import (
 )
 
 const (
-
-	// Powerstation API Url
 	powerStationURL string = "v3/PowerStation/GetMonitorDetailByPowerstationId"
-
-	// Default timeout value
-	HTTPTimeout int = 20
 )
 
 // GetMonitorData retrieves monitor data using login credentials and response, storing it in inverterOutput.
@@ -26,7 +21,7 @@ const (
 // Return type: []byte, error
 func (summaryData *DailySummaryData) GetMonitorData(ctx context.Context, authLoginInfo *auth.LoginInfo, inverterOutput interface{}) ([]byte, error) {
 
-	return apihelpers.FetchMonitorAPIData(ctx, authLoginInfo, powerStationURL, HTTPTimeout, inverterOutput)
+	return apihelpers.FetchMonitorAPIData(ctx, authLoginInfo, powerStationURL, inverterOutput)
 }
 
 // GetPowerData retrieves the power data for a daily summary using the provided authentication information.
@@ -39,15 +34,11 @@ func (summaryData *DailySummaryData) GetMonitorData(ctx context.Context, authLog
 // - error: an error if there was a problem retrieving the power data.
 func (summaryData *DailySummaryData) GetPowerData(ctx context.Context, authLoginInfo *auth.LoginInfo) error {
 
-	// Get monitor data
-	_, err := summaryData.GetMonitorData(ctx, authLoginInfo, summaryData)
-	//rawJSON, err := summaryData.GetMonitorData(ctx, authLoginInfo, summaryData)
+	rawJSON, err := summaryData.GetMonitorData(ctx, authLoginInfo, summaryData)
 	if err != nil {
 		return err
 	}
 
-	//return apihelpers.ProcessRawJSON(rawJSON)
-
-	return utils.ProcessData(summaryData)
+	return utils.ProcessRawJSON(rawJSON)
 
 }

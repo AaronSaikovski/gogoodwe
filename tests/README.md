@@ -1,79 +1,89 @@
 # GoGoodwe Tests
 
-This directory contains test cases for the GoGoodwe CLI application.
+This directory contains black-box CLI tests using the `app_test` package. The majority of unit tests live alongside the source code in the `internal/` packages.
 
 ## Test Structure
 
 ```
 tests/
-└── cmd/
-    └── gogoodwe/
-        └── app/
-            └── cmd_test.go          # CLI command tests
+└── cmd/gogoodwe/app/
+    └── cmd_test.go          # CLI command structure and flag tests
+
+internal/ (co-located tests)
+├── shared/
+│   ├── auth/
+│   │   ├── login_test.go            # SemsLogin validation, context cancellation
+│   │   ├── logincredentials_test.go  # Credential factory
+│   │   ├── loginutils_test.go       # Login info validation, response checking, headers
+│   │   └── utils_test.go            # Token JSON, header setting, powerstation JSON
+│   ├── apihelpers/
+│   │   └── callmonitorapi_test.go   # SSRF URL validation, nil/empty guards
+│   └── utils/
+│       ├── paramcheck_test.go       # Email and UUID validation
+│       ├── datetime_test.go         # Date formatting
+│       ├── dateutils_test.go        # Date range calculation
+│       ├── jsonutils_test.go        # JSON marshal/unmarshal
+│       ├── response_test.go         # Response body reading, size limits
+│       ├── httpclient_test.go       # HTTP transport configuration
+│       ├── output_test.go           # JSON parsing
+│       └── processdata_test.go      # Data processing pipeline
+└── features/fetchdata/
+    ├── parsereporttype_test.go      # Report type string/int conversion
+    ├── lookupmonitordata_test.go    # Factory returns correct types
+    └── [7 report-type packages]/    # Constructor tests
 ```
 
 ## Running Tests
 
-### Run all tests
 ```bash
-go test ./tests/... -v
+# Run all tests
+go test -v ./...
+
+# Run only CLI tests
+go test -v ./tests/...
+
+# Run only internal package tests
+go test -v ./internal/...
+
+# Run with coverage
+go test -coverprofile=coverage.out ./internal/...
+go tool cover -func=coverage.out
+
+# Run a specific test
+go test -v -run TestCheckValidEmail ./internal/shared/utils/...
 ```
 
-### Run specific package tests
-```bash
-go test ./tests/cmd/gogoodwe/app -v
-```
+## Test Cases Summary
 
-### Run tests with coverage
-```bash
-go test ./tests/cmd/gogoodwe/app -cover
-```
+### CLI Tests (`tests/cmd/gogoodwe/app/cmd_test.go`)
 
-### Generate coverage report
-```bash
-go test ./tests/cmd/gogoodwe/app -coverprofile=coverage.out
-go tool cover -html=coverage.out
-```
+| Test | Subtests | Description |
+|------|----------|-------------|
+| TestParseReportType | 19 | String/numeric report types, invalid inputs |
+| TestParseReportTypeEdgeCases | 5 | Whitespace, case sensitivity, partial matches |
+| TestNewRootCmd | 3 | Command creation with version strings |
+| TestRootCmdHasSubcommands | 1 | Verifies getdata and exporthistory exist |
+| TestGetDataSubcommand | 1 | Subcommand name and description |
+| TestGetDataFlags | 4 | Flag names and shortcuts |
+| TestGetDataFlagDefaults | 1 | Default report type is "detail" |
+| TestExportHistorySubcommand | 1 | Subcommand name and description |
+| TestExportHistoryFlags | 6 | Flag names and shortcuts |
+| TestRootCmdDescription | 1 | Command description validation |
 
-## Test Cases
+### Internal Package Tests
 
-### cmd_test.go
+| Package | Tests | Key Coverage |
+|---------|-------|-------------|
+| `utils` | 47 | Email/UUID validation, JSON, response body, HTTP transport, dates |
+| `auth` | 18 | Credential validation, headers, token JSON, login flow |
+| `apihelpers` | 13 | SSRF URL validation, parameter guards |
+| `fetchdata` | 31 | Report type parsing, factory pattern, constructors |
 
-**TestParseReportType** (17 subtests)
-- Tests string-based report types (detail, summary, point, plant, plantchart, powerflow)
-- Tests numeric values (0-5)
-- Tests invalid inputs (invalid strings, numbers, empty, negative, wrong case)
-
-**TestNewRootCmd** (3 subtests)
-- Tests command creation with different version strings
-- Verifies command name, descriptions, and version
-
-**TestRootCmdFlags** (4 subtests)
-- Verifies all CLI flags exist with correct names and shortcuts
-- Checks account, password, powerstationid, and reporttype flags
-
-**TestRootCmdFlagDefaults** (1 subtest)
-- Validates default values for flags
-- Ensures reporttype defaults to "detail"
-
-**TestParseReportTypeEdgeCases** (5 subtests)
-- Tests boundary conditions and edge cases
-- Whitespace handling, case sensitivity, partial matches
-
-**TestRootCmdHasRunE** (1 subtest)
-- Verifies the root command has an execution handler
-
-**TestRootCmdDescription** (1 subtest)
-- Validates command descriptions are meaningful
-
-## Test Results
-
-- **Total Tests:** 28
-- **Status:** All PASS ✅
-- **Package:** `github.com/AaronSaikovski/gogoodwe/tests/cmd/gogoodwe/app`
+**Total: 100+ test cases across all packages**
 
 ## Notes
 
-- Tests use black-box testing pattern (app_test package) for better isolation
-- Tests validate the public API of the CLI command package
-- ParseReportType function is exported to allow external testing
+- Tests use table-driven patterns with subtests throughout
+- Black-box testing (`app_test` package) for CLI tests
+- White-box testing (same package) for internal packages to test unexported functions
+- Report-type `GetPowerData`/`GetMonitorData` methods are not unit-tested as they require live API access; they are thin wrappers around the well-tested `apihelpers.FetchMonitorAPIData`

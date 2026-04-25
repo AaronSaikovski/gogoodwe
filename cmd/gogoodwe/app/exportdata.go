@@ -36,8 +36,6 @@ func RunExportHistory(cmd *cobra.Command, args []string) error {
 	fmt.Printf("  Start Time: %s\n", qryStart)
 	fmt.Printf("  End Time: %s\n", qryTimeEnd)
 	fmt.Printf("  Targets: %s\n", targets)
-	fmt.Printf("  Account: %s\n", account)
-	fmt.Printf("  Powerstation ID: %s\n", powerstationID)
 
 	return nil
 }

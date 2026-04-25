@@ -4,6 +4,7 @@ package app
 import (
 	"context"
 	"fmt"
+	"time"
 
 	fetchdata "github.com/AaronSaikovski/gogoodwe/internal/features/fetchdata"
 	"github.com/AaronSaikovski/gogoodwe/internal/features/fetchdata/interfaces"
@@ -37,18 +38,14 @@ func loginAndFetchData(ctx context.Context, apiLoginCreds auth.SemsLoginCredenti
 		return fmt.Errorf("data retrieval failed: %w", err)
 	}
 
-	if err := ctx.Err(); err != nil {
-		return fmt.Errorf("context error: %w", err)
-	}
-
 	return nil
 
 }
 
 // RunGetData is the main execution function for the getdata command.
 func RunGetData(cmd *cobra.Command, args []string) error {
-	// Create a context for the API call
-	ctx, cancel := context.WithCancel(context.Background())
+	// Create a context with timeout for the API call
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	// Get flag values from command
