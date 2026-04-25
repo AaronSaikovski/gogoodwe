@@ -4,4 +4,6 @@ package auth
 type LoginInfo struct {
 	SemsLoginCredentials *SemsLoginCredentials
 	SemsLoginResponse    *SemsLoginResponse
+	StartDate            string
+	EndDate              string
 }

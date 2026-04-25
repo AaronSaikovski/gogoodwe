@@ -86,7 +86,7 @@ func newExportHistoryCmd() *cobra.Command {
 	exportHistoryCmd.Flags().StringVarP(&powerstationID, "powerstationid", "i", "", "SEMS Powerstation ID (required)")
 	exportHistoryCmd.Flags().StringVarP(&qryStart, "timestart", "s", "", "Query start date/time (format: YYYY-MM-DD HH:MM)")
 	exportHistoryCmd.Flags().StringVarP(&qryTimeEnd, "timeend", "e", "", "Query end date/time (format: YYYY-MM-DD HH:MM)")
-	exportHistoryCmd.Flags().StringVarP(&targets, "targets", "t", "", "Comma-separated list of targets (e.g., Vpv1,Vpv2,Ipv1)")
+	exportHistoryCmd.Flags().StringVarP(&targets, "targets", "t", "", "Comma-separated list of targets (e.g., Vpv1,Vpv2,Ipv1). Defaults to all targets if omitted")
 
 	// Mark required flags
 	exportHistoryCmd.MarkFlagRequired("account")
@@ -94,7 +94,6 @@ func newExportHistoryCmd() *cobra.Command {
 	exportHistoryCmd.MarkFlagRequired("powerstationid")
 	exportHistoryCmd.MarkFlagRequired("timestart")
 	exportHistoryCmd.MarkFlagRequired("timeend")
-	exportHistoryCmd.MarkFlagRequired("targets")
 
 	return exportHistoryCmd
 }
