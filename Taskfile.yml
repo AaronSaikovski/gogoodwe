@@ -24,25 +24,28 @@
 
 version: "3"
 
-#ENV VARS
-env:
-  TARGET: gogoodwe.exe #Change this to suit
-  APPPATH: ./cmd/gogoodwe/main.go #Change this to suit
-  PROJECT_NAME: go-cli-starter #Change this to suit
+vars:
+  BINARY_NAME: gogoodwe
+  APPPATH: ./cmd/gogoodwe/main.go
+  PROJECT_NAME: gogoodwe
+  # Cross-platform binary extension: .exe on Windows, empty on others
+  EXE: '{{if eq OS "windows"}}.exe{{end}}'
 
 ###########################################################################
 
 tasks:
   ## release - Builds the project in preparation for (local)release
   release:
+    desc: "Builds a release binary with stripped symbols."
     deps: [lint]
     cmds:
-      - go build -ldflags="-s -w" -o bin/$TARGET $APPPATH
+      - go build -ldflags="-s -w" -o bin/{{.BINARY_NAME}}{{.EXE}} {{.APPPATH}}
 
   ###############################################################################
 
   ## goreleaser - Builds the project in preparation for release
   goreleaser:
+    desc: "Builds a cross-platform snapshot release using goreleaser."
     cmds:
       - goreleaser release --snapshot --clean
 
@@ -50,53 +53,67 @@ tasks:
 
   ## build - Builds the project in preparation for debug
   build:
+    desc: "Builds the project in preparation for debug."
     cmds:
-      - go build -o bin/$TARGET $APPPATH
+      - go build -o bin/{{.BINARY_NAME}}{{.EXE}} {{.APPPATH}}
 
   ###############################################################################
 
   ## run - builds and runs the program on the target platform
   run:
+    desc: "Builds and runs the program."
     cmds:
-      - go run $APPPATH
+      - go run {{.APPPATH}}
 
   ###############################################################################
 
   ## clean - Remove the old builds and any debug information
   clean:
+    desc: "Removes old builds, caches, and build artifacts."
     cmds:
       - go clean -cache
       - go clean
-      - cmd /c "rmdir /s /q dist || exit 0"
-      - cmd /c "rmdir /s /q bin || exit 0"
+      - rm -rf dist bin
 
   ###############################################################################
 
   ## test - executes unit tests
   test:
+    desc: "Runs all unit tests with verbose output."
     cmds:
-      - go test -v ./tests/...
+      - go test -v ./...
+
+  ###############################################################################
+
+  ## test-coverage - runs tests with coverage report
+  test-coverage:
+    desc: "Runs tests and generates a coverage report."
+    cmds:
+      - go test -coverprofile=coverage.out ./internal/...
+      - go tool cover -func=coverage.out
 
   ###############################################################################
 
   ## deps - fetches any external dependencies and updates
   deps:
+    desc: "Tidies and downloads module dependencies."
     cmds:
       - go mod tidy
       - go mod download
-      - go get -u ./...
 
   ###############################################################################
 
   ## vet - Vet examines Go source code and reports suspicious constructs
   vet:
+    desc: "Examines Go source code and reports suspicious constructs."
     cmds:
       - go vet ./...
 
   ###############################################################################
 
-  ## staticcheck - Runs static code analyzer staticcheck - currently broken
+  ## staticcheck - Runs static code analyzer staticcheck
   staticcheck:
+    desc: "Runs the staticcheck static analyzer."
     cmds:
       - staticcheck ./...
 
@@ -104,6 +121,7 @@ tasks:
 
   ## seccheck - Code vulnerability check
   seccheck:
+    desc: "Runs govulncheck for known vulnerabilities."
     cmds:
       - govulncheck ./...
 
@@ -111,25 +129,26 @@ tasks:
 
   ## lint - format code and tidy modules
   lint:
+    desc: "Formats code and tidies modules."
     cmds:
       - go fmt ./...
       - go mod tidy -v
-      #- golangci-lint run ./...
 
   ###############################################################################
 
   ## generate - update build version
   generate:
+    desc: "Runs go generate to update the embedded version."
     cmds:
-      - go generate $APPPATH
+      - go generate {{.APPPATH}}
 
   ###############################################################################
 
   ## docker-build - builds a docker image based on the docker file.
   docker-build:
-    desc: "Builds a docker image based on the docker file."
+    desc: "Builds a docker image based on the Dockerfile."
     cmds:
-      - docker build --platform linux/arm64 -t $PROJECT_NAME:latest .
+      - docker build --platform linux/arm64 -t {{.PROJECT_NAME}}:latest .
 
   ###############################################################################
 
@@ -138,6 +157,6 @@ tasks:
     desc: "Runs the docker container."
     deps: [docker-build]
     cmds:
-      - docker run $PROJECT_NAME:latest
+      - docker run {{.PROJECT_NAME}}:latest
 
   ###############################################################################
