@@ -32,3 +32,5 @@ cpu.prof
 .idea/
 # Added by goreleaser init:
 dist/
+
+.claude/
