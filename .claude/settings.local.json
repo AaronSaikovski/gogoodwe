@@ -26,20 +26,7 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git push *)",
-      "Bash(task *)",
-      "Bash(./bin/gogoodwe *)",
-      "Bash(ls *)",
-      "Bash(git checkout *)",
-      "Bash(git clean *)",
-      "Bash(git -C /Users/aaronsaikovski/Developer/Personal/go/gogoodwe status --short)",
-      "Bash(git -C /Users/aaronsaikovski/Developer/Personal/go/gogoodwe ls-files --others --exclude-standard)",
-      "Bash(git -C /Users/aaronsaikovski/Developer/Personal/go/gogoodwe ls-tree -r HEAD --name-only)",
-      "Bash(git -C /Users/aaronsaikovski/Developer/Personal/go/gogoodwe/.claude/worktrees/date-range-report ls-tree -r HEAD --name-only)",
-      "Bash(git -C /Users/aaronsaikovski/Developer/Personal/go/gogoodwe/.claude/worktrees/date-range-report rev-parse HEAD)",
-      "Bash(git -C /Users/aaronsaikovski/Developer/Personal/go/gogoodwe rev-parse HEAD)",
-      "Bash(git -C /Users/aaronsaikovski/Developer/Personal/go/gogoodwe log --oneline d7c7800..HEAD)",
-      "Bash(git merge *)",
-      "Bash(git stash *)"
+      "Bash(task *)"
     ],
     "deny": [],
     "ask": []

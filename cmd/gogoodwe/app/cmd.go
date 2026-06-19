@@ -16,6 +16,9 @@ var (
 	qryStart   string
 	qryTimeEnd string
 	targets    string
+	inverterSN string
+	pwName     string
+	pwAddress  string
 )
 
 // NewRootCmd creates and returns the root Cobra command.
@@ -87,6 +90,9 @@ func newExportHistoryCmd() *cobra.Command {
 	exportHistoryCmd.Flags().StringVarP(&qryStart, "timestart", "s", "", "Query start date/time (format: YYYY-MM-DD HH:MM)")
 	exportHistoryCmd.Flags().StringVarP(&qryTimeEnd, "timeend", "e", "", "Query end date/time (format: YYYY-MM-DD HH:MM)")
 	exportHistoryCmd.Flags().StringVarP(&targets, "targets", "t", "", "Comma-separated list of targets (e.g., Vpv1,Vpv2,Ipv1). Defaults to all targets if omitted")
+	exportHistoryCmd.Flags().StringVarP(&inverterSN, "invertersn", "n", "", "Inverter serial number (required)")
+	exportHistoryCmd.Flags().StringVar(&pwName, "pwname", "", "Powerstation owner name (required)")
+	exportHistoryCmd.Flags().StringVar(&pwAddress, "pwaddress", "", "Powerstation address (optional)")
 
 	// Mark required flags
 	exportHistoryCmd.MarkFlagRequired("account")
@@ -94,6 +100,8 @@ func newExportHistoryCmd() *cobra.Command {
 	exportHistoryCmd.MarkFlagRequired("powerstationid")
 	exportHistoryCmd.MarkFlagRequired("timestart")
 	exportHistoryCmd.MarkFlagRequired("timeend")
+	exportHistoryCmd.MarkFlagRequired("invertersn")
+	exportHistoryCmd.MarkFlagRequired("pwname")
 
 	return exportHistoryCmd
 }

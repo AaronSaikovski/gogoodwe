@@ -12,13 +12,12 @@ import (
 )
 
 const (
-	historyDataURL = "https://au.semsportal.com/api/HistoryData/ExportExcelStationHistoryData"
+	historyDataPath = "HistoryData/ExportExcelStationHistoryData"
 )
 
 // FetchHistoryExportData fetches historical data from the ExportExcelStationHistoryData API.
 //
-// Unlike FetchMonitorAPIData, this sends a custom JSON request body
-// to a fixed URL (not derived from the login response API base).
+// Uses the login response API base URL with the history data path.
 func FetchHistoryExportData(ctx context.Context, authLoginInfo *auth.LoginInfo, requestBody []byte, output interface{}) ([]byte, error) {
 	if authLoginInfo == nil || authLoginInfo.SemsLoginResponse == nil {
 		return nil, fmt.Errorf("invalid authentication information")
@@ -30,8 +29,11 @@ func FetchHistoryExportData(ctx context.Context, authLoginInfo *auth.LoginInfo, 
 		return nil, fmt.Errorf("failed to create token JSON: %w", err)
 	}
 
+	// Build URL from login response API base
+	apiURL := authLoginInfo.SemsLoginResponse.API + historyDataPath
+
 	// Create a new HTTP request
-	req, err := http.NewRequest(http.MethodPost, historyDataURL, bytes.NewReader(requestBody))
+	req, err := http.NewRequest(http.MethodPost, apiURL, bytes.NewReader(requestBody))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
@@ -40,6 +42,7 @@ func FetchHistoryExportData(ctx context.Context, authLoginInfo *auth.LoginInfo, 
 
 	// Add headers
 	auth.SetHeaders(req, apiResponseJSONData)
+	req.Header.Set("Accept", "application/json, text/plain, */*")
 
 	// Make the API call
 	resp, err := httpClient.Do(req)

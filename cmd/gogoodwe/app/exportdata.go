@@ -24,6 +24,9 @@ func RunExportHistory(cmd *cobra.Command, args []string) error {
 	qryTimeStart, _ := cmd.Flags().GetString("timestart")
 	qryTimeEnd, _ := cmd.Flags().GetString("timeend")
 	targetsStr, _ := cmd.Flags().GetString("targets")
+	inverterSN, _ := cmd.Flags().GetString("invertersn")
+	pwName, _ := cmd.Flags().GetString("pwname")
+	pwAddress, _ := cmd.Flags().GetString("pwaddress")
 
 	// Check for valid email address input
 	if !utils.CheckValidEmail(account) {
@@ -69,5 +72,5 @@ func RunExportHistory(cmd *cobra.Command, args []string) error {
 	}
 
 	// Fetch and display the export history data
-	return exporthistory.FetchExportHistory(ctx, loginInfo, qryTimeStart, qryTimeEnd, targets)
+	return exporthistory.FetchExportHistory(ctx, loginInfo, qryTimeStart, qryTimeEnd, inverterSN, pwName, pwAddress, targets)
 }

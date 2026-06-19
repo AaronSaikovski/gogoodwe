@@ -75,7 +75,7 @@ func ParseTargets(targetsStr string) ([]Target, error) {
 }
 
 // BuildRequest constructs the HistoryDataRequest from parameters
-func BuildRequest(loginInfo *auth.LoginInfo, qryTimeStart, qryTimeEnd string, targets []Target) (*HistoryDataRequest, error) {
+func BuildRequest(loginInfo *auth.LoginInfo, qryTimeStart, qryTimeEnd, inverterSN, pwName, pwAddress string, targets []Target) (*HistoryDataRequest, error) {
 	startTime, err := time.Parse(dateTimeFormat, qryTimeStart)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse start time: %w", err)
@@ -97,12 +97,12 @@ func BuildRequest(loginInfo *auth.LoginInfo, qryTimeStart, qryTimeEnd string, ta
 		PwsHistorys: []PwsHistory{
 			{
 				ID:        loginInfo.SemsLoginCredentials.PowerStationID,
-				PwName:    loginInfo.SemsLoginCredentials.Account,
+				PwName:    pwName,
 				Status:    1,
-				PwAddress: "",
+				PwAddress: pwAddress,
 				Inverters: []Inverter{
 					{
-						SN:         loginInfo.SemsLoginCredentials.PowerStationID,
+						SN:         inverterSN,
 						Name:       loginInfo.SemsLoginCredentials.Account,
 						ChangeNum:  0,
 						ChangeType: 0,
@@ -116,8 +116,8 @@ func BuildRequest(loginInfo *auth.LoginInfo, qryTimeStart, qryTimeEnd string, ta
 }
 
 // FetchExportHistory calls the ExportExcelStationHistoryData API and prints the response.
-func FetchExportHistory(ctx context.Context, loginInfo *auth.LoginInfo, qryTimeStart, qryTimeEnd string, targets []Target) error {
-	request, err := BuildRequest(loginInfo, qryTimeStart, qryTimeEnd, targets)
+func FetchExportHistory(ctx context.Context, loginInfo *auth.LoginInfo, qryTimeStart, qryTimeEnd, inverterSN, pwName, pwAddress string, targets []Target) error {
+	request, err := BuildRequest(loginInfo, qryTimeStart, qryTimeEnd, inverterSN, pwName, pwAddress, targets)
 	if err != nil {
 		return err
 	}

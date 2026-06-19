@@ -6,8 +6,8 @@ type Inverter struct {
 	Name         string `json:"name"`
 	ChangeNum    int    `json:"change_num"`
 	ChangeType   int    `json:"change_type"`
-	RelationSN   any    `json:"relation_sn,omitempty"`
-	RelationName any    `json:"relation_name,omitempty"`
+	RelationSN   any    `json:"relation_sn"`
+	RelationName any    `json:"relation_name"`
 	Status       int    `json:"status"`
 }
 
@@ -41,11 +41,9 @@ type HistoryDataRequest struct {
 // HistoryDataResponse is the response from the ExportExcelStationHistoryData API
 type HistoryDataResponse struct {
 	HasError        bool   `json:"hasError"`
-	Code            int    `json:"code"`
+	Code            any    `json:"code"`
 	Msg             string `json:"msg"`
-	Data            struct {
-		QryKey string `json:"qry_key"`
-	} `json:"data"`
+	Data any `json:"data"`
 	TranslationCode string `json:"translationCode"`
 	Components      struct {
 		Para         any    `json:"para"`

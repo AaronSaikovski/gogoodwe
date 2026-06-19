@@ -137,7 +137,7 @@ func TestBuildRequest(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			req, err := BuildRequest(loginInfo, tt.startTime, tt.endTime, targets)
+			req, err := BuildRequest(loginInfo, tt.startTime, tt.endTime, "55000DSC22CW3619", "Test User", "123 Test St", targets)
 
 			if (err != nil) != tt.wantError {
 				t.Errorf("BuildRequest() error = %v, wantError %v", err, tt.wantError)
