@@ -25,7 +25,7 @@ type PlantDetailByPowerstationId struct {
 			OrgCode          string  `json:"org_code,omitempty"`
 			OrgName          string  `json:"org_name,omitempty"`
 			LocalDate        string  `json:"local_date,omitempty"`
-		} `json:"info,omitempty"`
+		} `json:"info"`
 		Kpi struct {
 			MonthGeneration float64 `json:"month_generation,omitempty"`
 			Pac             float64 `json:"pac,omitempty"`
@@ -35,7 +35,7 @@ type PlantDetailByPowerstationId struct {
 			TotalIncome     float64 `json:"total_income,omitempty"`
 			YieldRate       float64 `json:"yield_rate,omitempty"`
 			Currency        string  `json:"currency,omitempty"`
-		} `json:"kpi,omitempty"`
+		} `json:"kpi"`
 		IsEvcharge         bool   `json:"isEvcharge,omitempty"`
 		IsTigo             bool   `json:"isTigo,omitempty"`
 		IsPowerflow        bool   `json:"isPowerflow,omitempty"`
@@ -64,14 +64,14 @@ type PlantDetailByPowerstationId struct {
 		} `json:"chartsTypesByPlant,omitempty"`
 		Soc         []any `json:"soc,omitempty"`
 		IndustrySoc []any `json:"industrySoc,omitempty"`
-	} `json:"data,omitempty"`
+	} `json:"data"`
 	Components struct {
 		Para         string `json:"para,omitempty"`
 		LangVer      int    `json:"langVer,omitempty"`
 		TimeSpan     int    `json:"timeSpan,omitempty"`
 		API          string `json:"api,omitempty"`
 		MsgSocketAdr any    `json:"msgSocketAdr,omitempty"`
-	} `json:"components,omitempty"`
+	} `json:"components"`
 }
 
 func NewGetPlantDetailByPowerstationId() *PlantDetailByPowerstationId {

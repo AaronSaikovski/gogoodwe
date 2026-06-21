@@ -13,7 +13,7 @@ import (
 )
 
 // EXPERIMENTAL!!
-func FetchMonitorAPIDataNew(wg *sync.WaitGroup, authLoginInfo *auth.LoginInfo, powerStationURL string, HTTPTimeout int, inverterOutput interface{}, ch chan<- string) error {
+func FetchMonitorAPIDataNew(wg *sync.WaitGroup, authLoginInfo *auth.LoginInfo, powerStationURL string, HTTPTimeout int, inverterOutput any, ch chan<- string) error {
 	defer wg.Done() // signal to WaitGroup that this goroutine is done
 
 	// Get the Token header data

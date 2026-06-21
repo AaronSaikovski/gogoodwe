@@ -28,14 +28,14 @@ type PlantPowerChart struct {
 				Z any     `json:"z,omitempty"`
 			} `json:"xy,omitempty"`
 		} `json:"lines,omitempty"`
-	} `json:"data,omitempty"`
+	} `json:"data"`
 	Components struct {
-		Para         time.Time `json:"para,omitempty"`
+		Para         time.Time `json:"para"`
 		LangVer      int       `json:"langVer,omitempty"`
 		TimeSpan     int       `json:"timeSpan,omitempty"`
 		API          string    `json:"api,omitempty"`
 		MsgSocketAdr any       `json:"msgSocketAdr,omitempty"`
-	} `json:"components,omitempty"`
+	} `json:"components"`
 }
 
 func NewPlantPowerChart() *PlantPowerChart {

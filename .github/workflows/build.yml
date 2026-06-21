@@ -11,27 +11,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: ">=1.20.0"
+          go-version: ">=1.26.0"
 
-      - name: Verify dependencies
-        run: go mod verify
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libx11-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev libgl-dev libxxf86vm-dev
 
-      # - name: Run go vet
-      #   run: go vet ./...
+      - name: Install Go dependencies
+        run: go mod download
 
-      # - name: Install staticcheck
-      #   run: go install honnef.co/go/tools/cmd/staticcheck@latest
-
-      # - name: Run staticcheck
-      #   run: staticcheck ./...
-
-      # - name: Run tests
-      #   run: go test -v ./...
+      - name: Lint
+        run: |
+          go vet ./...
+          go fmt ./... && git diff --exit-code
 
       - name: Build
-        run: go build -v ./...
+        run: go build -o bin/godaleks ./main.go

@@ -16,7 +16,7 @@ import (
 //
 // Returns:
 // - error: An error if any of the processing steps fail, otherwise nil.
-func ProcessData(inverterData interface{}) error {
+func ProcessData(inverterData any) error {
 
 	// Get data JSON
 	dataOutput, err := utils.MarshalStructToJSON(inverterData)
