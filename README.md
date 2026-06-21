@@ -1,10 +1,8 @@
 <div align="center">
 
-## GoGoodwe v3.1.1
+## GoGoodwe
 
 A high-performance command-line tool to query GOODWE SEMS (Solar Energy Management System) APIs - written in 100% Go.
-
-
 
 [![Test](https://github.com/AaronSaikovski/gogoodwe/actions/workflows/test.yml/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions/workflows/test.yml)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)
@@ -19,6 +17,7 @@ A high-performance command-line tool to query GOODWE SEMS (Solar Energy Manageme
 ### Dependencies:
 
 GoGoodwe uses minimal external dependencies for a lightweight binary:
+
 - `github.com/spf13/cobra` - CLI command framework
 - `github.com/logrusorgru/aurora` - Terminal color output
 - `github.com/valyala/fastjson` - High-performance JSON parsing
@@ -97,6 +96,7 @@ pkg/                    - Core library packages
 ### Performance Optimizations
 
 GoGoodwe includes several performance enhancements:
+
 - **HTTP Connection Pooling**: Reusable HTTP client with optimized transport settings (MaxIdleConns: 100, MaxConnsPerHost: 100)
 - **Efficient JSON Parsing**: Uses `fastjson` for high-performance JSON processing without double marshaling
 - **Optimized Timeouts**: HTTP response header timeout of 10 seconds with TLS handshake timeout
@@ -112,7 +112,7 @@ GoGoodwe retrieves real-time and historical data from your GoodWe solar inverter
 2. Navigate to your power plant status page
 3. The Station ID (UUID format) will appear in the URL:
 
-    `https://www.semsportal.com/powerstation/powerstatussnmin/11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
+   `https://www.semsportal.com/powerstation/powerstatussnmin/11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
 
 Your Station ID is: `11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
 
@@ -121,6 +121,7 @@ Your Station ID is: `11112222-aaaa-bbbb-cccc-ddddeeeeeffff`
 GoGoodwe uses [Cobra](https://github.com/spf13/cobra) for CLI argument parsing. The Report Type parameter specifies which type of data report to generate:
 
 **Available Report Types:**
+
 - `detail` or `0` - Fully detailed inverter monitoring report
 - `summary` or `1` - Summary Data report (reduced information)
 - `point` or `2` - Inverter All points data
@@ -198,6 +199,7 @@ All tests use table-driven test patterns following Go best practices.
 ## Recent Changes
 
 ### Latest Updates
+
 - **CI/CD Pipeline** — GitHub Actions workflows for automated testing (on every push/PR) and GoReleaser releases (on tags)
 - **Expanded Test Suite** — Added 50+ test cases across utils, auth, and apihelpers packages using table-driven patterns
 - **Static Analysis** — `staticcheck` and `govulncheck` integrated into CI pipeline and Taskfile
@@ -213,6 +215,7 @@ All tests use table-driven test patterns following Go best practices.
 - **Improved Documentation** - Updated help text and command descriptions with Cobra
 
 ### Version 3.2.0 (Unreleased)
+
 - **CI/CD Pipeline** — GitHub Actions for automated testing and GoReleaser v2 releases
 - **Expanded Test Suite** — 50+ test cases across utils, auth, and apihelpers packages
 - **Static Analysis** — `staticcheck` and `govulncheck` in CI pipeline
@@ -224,6 +227,7 @@ All tests use table-driven test patterns following Go best practices.
 - **Updated fastjson dependency** to v1.6.10
 
 ### Version 3.1.1
+
 - **Updated Go version** to 1.25.3 for latest language improvements and security patches
 - **Performance refactoring** with optimized HTTP client setup and connection pooling
 - **Improved context management** for better timeout handling and resource cleanup
