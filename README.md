@@ -58,6 +58,16 @@ To get started type,
 - `task build` - to build debug version for your target environment architecture.
 - `task release` - Builds a release version for your target environment architecture - outputs to /bin folder.
 
+### macOS Security
+
+If you downloaded a pre-built binary from a GitHub Release and macOS blocks it with "App can't be opened because Apple cannot check it for malicious software", run:
+
+```bash
+xattr -d com.apple.quarantine ./gogoodwe
+```
+
+Alternatively, right-click the binary and select **Open** from the context menu, then confirm when prompted.
+
 ## Project Architecture
 
 ```
