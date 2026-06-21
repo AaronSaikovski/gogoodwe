@@ -4,11 +4,12 @@
 
 version: "3"
 
-#ENV VARS
-env:
-  TARGET: gogoodwe.exe #Change this to suit
+# Task variables
+vars:
   APPPATH: ./cmd/gogoodwe/main.go #Change this to suit
   PROJECT_NAME: go-cli-starter #Change this to suit
+  TARGET:
+    sh: if [ "$(go env GOOS)" = "windows" ]; then echo "gogoodwe.exe"; else echo "gogoodwe"; fi
 
 ###########################################################################
 
@@ -17,7 +18,7 @@ tasks:
   release:
     deps: [lint]
     cmds:
-      - go build -ldflags="-s -w" -o bin/$TARGET $APPPATH
+      - go build -ldflags="-s -w" -o bin/{{.TARGET}} {{.APPPATH}}
 
   ###############################################################################
 
@@ -31,14 +32,14 @@ tasks:
   ## build - Builds the project in preparation for debug
   build:
     cmds:
-      - go build -o bin/$TARGET $APPPATH
+      - go build -o bin/{{.TARGET}} {{.APPPATH}}
 
   ###############################################################################
 
   ## run - builds and runs the program on the target platform
   run:
     cmds:
-      - go run $APPPATH
+      - go run {{.APPPATH}}
 
   ###############################################################################
 
@@ -47,8 +48,12 @@ tasks:
     cmds:
       - go clean -cache
       - go clean
-      - cmd /c "rmdir /s /q dist || exit 0"
-      - cmd /c "rmdir /s /q bin || exit 0"
+      - cmd: rm -rf dist bin
+        platforms: ["darwin", "linux"]
+      - cmd: cmd /c "rmdir /s /q dist || exit 0"
+        platforms: ["windows"]
+      - cmd: cmd /c "rmdir /s /q bin || exit 0"
+        platforms: ["windows"]
 
   ###############################################################################
 
@@ -75,23 +80,24 @@ tasks:
 
   ###############################################################################
 
-  ## staticcheck - Runs static code analyzer staticcheck - currently broken
+  ## staticcheck - Runs static code analyzer staticcheck
   staticcheck:
     cmds:
-      - staticcheck ./...
+      - go run honnef.co/go/tools/cmd/staticcheck@latest ./...
 
   ###############################################################################
 
   ## seccheck - Code vulnerability check
   seccheck:
     cmds:
-      - govulncheck ./...
+      - go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
   ###############################################################################
 
-  ## lint - format code and tidy modules
+  ## lint - format code, fix issues, and tidy modules
   lint:
     cmds:
+      - go fix ./...
       - go fmt ./...
       - go mod tidy -v
       #- golangci-lint run ./...
@@ -101,23 +107,6 @@ tasks:
   ## generate - update build version
   generate:
     cmds:
-      - go generate $APPPATH
-
-  ###############################################################################
-
-  ## docker-build - builds a docker image based on the docker file.
-  docker-build:
-    desc: "Builds a docker image based on the docker file."
-    cmds:
-      - docker build --platform linux/arm64 -t $PROJECT_NAME:latest .
-
-  ###############################################################################
-
-  ## docker-run - runs the docker container.
-  docker-run:
-    desc: "Runs the docker container."
-    deps: [docker-build]
-    cmds:
-      - docker run $PROJECT_NAME:latest
+      - go generate {{.APPPATH}}
 
   ###############################################################################

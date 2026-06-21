@@ -6,14 +6,14 @@ A high-performance command-line tool to query GOODWE SEMS (Solar Energy Manageme
 
 
 
-[![Build Status](https://github.com/AaronSaikovski/gogoodwe/workflows/build/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions)
+[![Test](https://github.com/AaronSaikovski/gogoodwe/actions/workflows/test.yml/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions/workflows/test.yml)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)
 
 </div>
 
 ### Software Requirements:
 
-- [Go v1.25.3](https://www.go.dev/dl/) or later needs to be installed to build the code.
+- [Go v1.26.4](https://www.go.dev/dl/) or later needs to be installed to build the code.
 - [Taskfile](https://taskfile.dev/) to run the build chain commands listed below.
 
 ### Dependencies:
@@ -33,19 +33,17 @@ The list of commands is as follows:
 * build:             Builds the project in preparation for debug.
 * clean:             Removes the old builds and any debug information from the source tree.
 * deps:              Fetches any external dependencies and updates.
-* destroy:           Destroy Azure resources for testing.
-* docs:              Updates the swagger docs - For APIs.
-* generate:          update binary build version using gogenerate.
+* docker-build:      Builds a Docker image based on the Dockerfile.
+* docker-run:        Runs the Docker container.
+* generate:          Update binary build version using gogenerate.
 * goreleaser:        Builds a cross platform release using goreleaser.
-* lint:              Lint, format and tidy code.
-* release:           Builds the project in preparation for (local)release.
+* lint:              Lint, format, tidy code, and run go fix.
+* release:           Builds the project in preparation for (local) release.
 * run:               Builds and runs the program on the target platform.
-* seccheck:          Code vulnerability scanner check.
+* seccheck:          Code vulnerability scanner check (govulncheck).
 * staticcheck:       Runs static code analyzer staticcheck.
 * test:              Executes unit tests.
-* version:           Get the Go version.
 * vet:               Vet examines Go source code and reports suspicious constructs.
-* watch:             Use air server for hot reloading.
 ```
 
 Execute using the taskfile utility:
@@ -71,11 +69,11 @@ cmd/gogoodwe/           - Command-line application entry point
       ├── enums.go      - Report type constants
       └── lookupmonitordata.go - Report type routing
 
-tests/                  - Comprehensive test suite
-  ├── cmd/
-  │   └── gogoodwe/
-  │       └── app/
-  │           └── cmd_test.go - CLI command tests
+tests/                  - Legacy test directory (CLI tests)
+  └── cmd/
+      └── gogoodwe/
+          └── app/
+              └── cmd_test.go - CLI command tests
   └── README.md         - Test documentation
 
 pkg/                    - Core library packages
@@ -155,44 +153,65 @@ GoGoodwe uses [Cobra](https://github.com/spf13/cobra) for CLI argument parsing. 
 
 ## Testing
 
-GoGoodwe includes comprehensive test coverage for CLI functionality:
+GoGoodwe includes comprehensive test coverage across CLI functionality, utilities, authentication, and API helpers:
 
 ### Running Tests
 
 ```bash
 # Run all tests
-go test ./tests/... -v
+go test ./... -v
 
-# Run CLI command tests
-go test ./tests/cmd/gogoodwe/app -v
+# Run with Taskfile
+task test
 
 # Run tests with coverage report
-go test ./tests/cmd/gogoodwe/app -cover
+go test ./... -cover
 
 # Generate HTML coverage report
-go test ./tests/cmd/gogoodwe/app -coverprofile=coverage.out
+go test ./... -coverprofile=coverage.out
 go tool cover -html=coverage.out
+
+# Static analysis
+task staticcheck
+task seccheck
 ```
 
 ### Test Suite
 
-- **Location**: `tests/cmd/gogoodwe/app/cmd_test.go`
-- **Coverage**: 28 comprehensive test cases
-- **Focus Areas**:
-  - Report type parsing (string and numeric formats)
-  - CLI flag validation
-  - Command initialization
-  - Edge cases and error handling
+- **CLI Tests**: `tests/cmd/gogoodwe/app/cmd_test.go` — Report type parsing, flag validation, command initialization
+- **Utils Tests**: `cmd/gogoodwe/utils/` and `pkg/utils/` — Email/powerstation validation, JSON marshaling, HTTP transport, date formatting
+- **Auth Tests**: `pkg/auth/` — Login credentials, header setting, login response validation
+- **API Tests**: `pkg/apihelpers/` — Token generation, header configuration, power station ID JSON
 
-See `tests/README.md` for detailed test documentation.
+All tests use table-driven test patterns following Go best practices.
 
 ## Recent Changes
 
 ### Latest Updates
+- **CI/CD Pipeline** — GitHub Actions workflows for automated testing (on every push/PR) and GoReleaser releases (on tags)
+- **Expanded Test Suite** — Added 50+ test cases across utils, auth, and apihelpers packages using table-driven patterns
+- **Static Analysis** — `staticcheck` and `govulncheck` integrated into CI pipeline and Taskfile
+- **GoReleaser v2** — Updated to GoReleaser v2 with automatic cross-platform builds (Linux, macOS, Windows) and GitHub release creation
+- **Taskfile Fixes** — `staticcheck` and `seccheck` tasks now use `go run` for zero-install setup
+- **Cross-platform Taskfile** — macOS, Linux, and Windows support with platform-specific command routing
+- **`go fix` integration** — automatic code fixes applied during lint
+- **Docker tasks** — `docker-build` and `docker-run` for containerized builds
+- **Security check task** — `seccheck` for `govulncheck` vulnerability scanning
+- **Updated Go version** to 1.26.4
 - **Cobra CLI Framework** - Replaced `go-arg` with [Cobra](https://github.com/spf13/cobra) for robust CLI argument parsing
 - **String-based Report Types** - Support for human-readable report type names (`detail`, `summary`, `point`, etc.) alongside numeric values for backward compatibility
-- **Comprehensive Test Suite** - Added 28 test cases covering CLI functionality with dedicated `tests/` directory
 - **Improved Documentation** - Updated help text and command descriptions with Cobra
+
+### Version 3.2.0 (Unreleased)
+- **CI/CD Pipeline** — GitHub Actions for automated testing and GoReleaser v2 releases
+- **Expanded Test Suite** — 50+ test cases across utils, auth, and apihelpers packages
+- **Static Analysis** — `staticcheck` and `govulncheck` in CI pipeline
+- **Cross-platform Taskfile** — fully compatible with macOS, Linux, and Windows
+- **`go fix` integration** — automatic code fixes applied during lint
+- **Docker tasks** — `docker-build` and `docker-run` for containerized builds
+- **Security check task** — `seccheck` for `govulncheck` vulnerability scanning
+- **Updated Go version** to 1.26.4
+- **Updated fastjson dependency** to v1.6.10
 
 ### Version 3.1.1
 - **Updated Go version** to 1.25.3 for latest language improvements and security patches

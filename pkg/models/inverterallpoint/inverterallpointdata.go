@@ -29,7 +29,7 @@ type InverterAllPoint struct {
 					IsFaultMsg   int    `json:"isFaultMsg,omitempty"`
 					FaultMsgCode int    `json:"faultMsgCode,omitempty"`
 				} `json:"right,omitempty"`
-			} `json:"dict,omitempty"`
+			} `json:"dict"`
 			Points []struct {
 				TargetIndex   int    `json:"target_index,omitempty"`
 				TargetName    string `json:"target_name,omitempty"`
@@ -59,14 +59,14 @@ type InverterAllPoint struct {
 			IsShowOutput    bool    `json:"is_showOutput,omitempty"`
 			LocalDate       string  `json:"local_date,omitempty"`
 		} `json:"inverterPoints,omitempty"`
-	} `json:"data,omitempty"`
+	} `json:"data"`
 	Components struct {
 		Para         string `json:"para,omitempty"`
 		LangVer      int    `json:"langVer,omitempty"`
 		TimeSpan     int    `json:"timeSpan,omitempty"`
 		API          string `json:"api,omitempty"`
 		MsgSocketAdr any    `json:"msgSocketAdr,omitempty"`
-	} `json:"components,omitempty"`
+	} `json:"components"`
 }
 
 func NewInverterAllPoint() *InverterAllPoint {

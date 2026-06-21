@@ -15,13 +15,10 @@ var (
 	password       string
 	powerstationID string
 	reportType     string
-	versionString  string
 )
 
 // NewRootCmd creates and returns the root Cobra command.
 func NewRootCmd(version string) *cobra.Command {
-	versionString = version
-
 	rootCmd := &cobra.Command{
 		Use:   "gogoodwe",
 		Short: "GoGoodwe - A CLI tool to query your SEMS Solar Inverter API",
