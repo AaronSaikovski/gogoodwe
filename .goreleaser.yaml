@@ -49,6 +49,7 @@ changelog:
       - "^test:"
 
 release:
+  overwrite_existing_release: true
   footer: >-
 
     ---
