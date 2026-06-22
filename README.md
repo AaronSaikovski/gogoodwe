@@ -32,9 +32,7 @@ The list of commands is as follows:
 * build:             Builds the project in preparation for debug.
 * clean:             Removes the old builds and any debug information from the source tree.
 * deps:              Fetches any external dependencies and updates.
-* docker-build:      Builds a Docker image based on the Dockerfile.
-* docker-run:        Runs the Docker container.
-* generate:          Update binary build version using gogenerate.
+* generate:          Update binary build version using go generate.
 * goreleaser:        Builds a cross platform release using goreleaser.
 * lint:              Lint, format, tidy code, and run go fix.
 * release:           Builds the project in preparation for (local) release.
@@ -72,35 +70,65 @@ Alternatively, right-click the binary and select **Open** from the context menu,
 ```
 cmd/gogoodwe/           - Command-line application entry point
   ├── main.go           - Entry point, initializes Cobra root command
-  └── app/
-      ├── cmd.go        - Cobra command definitions and flag configuration
-      ├── fetchdata.go  - Login and API data fetching logic
-      ├── enums.go      - Report type constants
-      └── lookupmonitordata.go - Report type routing
+  ├── get_version.sh    - Shell script for version generation
+  ├── version.txt       - Version string file
+  ├── app/
+  │   ├── cmd.go        - Cobra command definitions and flag configuration
+  │   ├── enums.go      - Report type constants
+  │   ├── fetchdata.go  - Login and API data fetching logic
+  │   ├── lookupmonitordata.go - Report type routing to model implementations
+  │   └── main.go       - Package declaration
+  └── utils/
+      ├── errorhandler.go - Error handling utilities
+      ├── jsonutils.go    - JSON formatting utilities
+      ├── output.go       - Output formatting
+      ├── paramcheck.go   - Email and powerstation ID validation
+      └── response.go     - Response formatting
 
-tests/                  - Legacy test directory (CLI tests)
+tests/                  - CLI integration tests
   └── cmd/
       └── gogoodwe/
           └── app/
-              └── cmd_test.go - CLI command tests
+              └── cmd_test.go - CLI command tests (28 subtests)
   └── README.md         - Test documentation
 
 pkg/                    - Core library packages
-  ├── auth/             - Authentication handling for SEMS API
   ├── apihelpers/       - HTTP request/response handling and API communication
-  ├── models/           - Data structures for each report type
+  │   ├── fetchdata.go
+  │   ├── fetchdatanew.go
+  │   ├── processdata.go
+  │   └── utils.go
+  ├── auth/             - Authentication handling for SEMS API
+  │   ├── login.go
+  │   ├── logincredentials.go
+  │   ├── logininfo.go
+  │   ├── loginresponse.go
+  │   └── loginutils.go
   ├── interfaces/       - Interface definitions for type safety
-  └── utils/            - Utilities for JSON, HTTP clients, and formatting
+  │   ├── powerdata.go  - PowerData interface
+  │   ├── semsdata.go   - SemsDataConstraint type constraint
+  │   └── semslogin.go  - SemsLogin interface
+  ├── models/           - Data structures for each report type
+  │   ├── inverterallpoint/  - Report type 2: Inverter All points
+  │   ├── monitordetail/    - Report type 0: Detailed inverter monitoring
+  │   ├── monitorsummary/   - Report type 1: Daily summary
+  │   ├── plantdetail/      - Report type 3: Plant details
+  │   ├── plantpowerchart/  - Report type 4: Plant power chart
+  │   └── powerflow/        - Report type 5: Power flow data
+  └── utils/            - Shared utilities
+      ├── datetime.go
+      ├── httpclient.go
+      ├── jsonutils.go
+      └── output.go
 ```
 
 ### Performance Optimizations
 
 GoGoodwe includes several performance enhancements:
 
-- **HTTP Connection Pooling**: Reusable HTTP client with optimized transport settings (MaxIdleConns: 100, MaxConnsPerHost: 100)
-- **Efficient JSON Parsing**: Uses `fastjson` for high-performance JSON processing without double marshaling
-- **Optimized Timeouts**: HTTP response header timeout of 10 seconds with TLS handshake timeout
-- **Context Management**: Proper context handling with 60-second application timeout
+- **HTTP Connection Pooling**: Reusable HTTP client with optimized transport settings (MaxIdleConns: 100, MaxConnsPerHost: 100, MaxIdleConnsPerHost: 10)
+- **Efficient JSON Parsing**: Uses `fastjson` for high-performance JSON processing
+- **Optimized Timeouts**: HTTP response header timeout of 10 seconds with TLS handshake timeout and 20-second request context timeout
 
 ## Usage
 
@@ -189,39 +217,21 @@ task seccheck
 
 ### Test Suite
 
-- **CLI Tests**: `tests/cmd/gogoodwe/app/cmd_test.go` — Report type parsing, flag validation, command initialization
-- **Utils Tests**: `cmd/gogoodwe/utils/` and `pkg/utils/` — Email/powerstation validation, JSON marshaling, HTTP transport, date formatting
-- **Auth Tests**: `pkg/auth/` — Login credentials, header setting, login response validation
-- **API Tests**: `pkg/apihelpers/` — Token generation, header configuration, power station ID JSON
+- **CLI Tests**: `tests/cmd/gogoodwe/app/cmd_test.go` — 7 test functions with 28 subtests covering report type parsing, flag validation, command initialization, edge cases
+- **Utils Tests**: `cmd/gogoodwe/utils/` and `pkg/utils/` — Email/powerstation validation, JSON marshaling, HTTP transport, date formatting, output formatting
+- **Auth Tests**: `pkg/auth/` — Login credentials, login response validation
+- **API Tests**: `pkg/apihelpers/` — Utility functions
 
 All tests use table-driven test patterns following Go best practices.
 
 ## Recent Changes
 
-### Latest Updates
+### Version 3.2.0
 
-- **CI/CD Pipeline** — GitHub Actions workflows for automated testing (on every push/PR) and GoReleaser releases (on tags)
-- **Expanded Test Suite** — Added 50+ test cases across utils, auth, and apihelpers packages using table-driven patterns
-- **Static Analysis** — `staticcheck` and `govulncheck` integrated into CI pipeline and Taskfile
-- **GoReleaser v2** — Updated to GoReleaser v2 with automatic cross-platform builds (Linux, macOS, Windows) and GitHub release creation
-- **Taskfile Fixes** — `staticcheck` and `seccheck` tasks now use `go run` for zero-install setup
-- **Cross-platform Taskfile** — macOS, Linux, and Windows support with platform-specific command routing
+- **Expanded Test Suite** — 50+ test cases across utils, auth, and apihelpers packages using table-driven patterns
+- **Static Analysis** — `staticcheck` and `govulncheck` integrated into Taskfile
+- **Taskfile improvements** — `staticcheck` and `seccheck` tasks use `go run` for zero-install setup
 - **`go fix` integration** — automatic code fixes applied during lint
-- **Docker tasks** — `docker-build` and `docker-run` for containerized builds
-- **Security check task** — `seccheck` for `govulncheck` vulnerability scanning
-- **Updated Go version** to 1.26.4
-- **Cobra CLI Framework** - Replaced `go-arg` with [Cobra](https://github.com/spf13/cobra) for robust CLI argument parsing
-- **String-based Report Types** - Support for human-readable report type names (`detail`, `summary`, `point`, etc.) alongside numeric values for backward compatibility
-- **Improved Documentation** - Updated help text and command descriptions with Cobra
-
-### Version 3.2.0 (Unreleased)
-
-- **CI/CD Pipeline** — GitHub Actions for automated testing and GoReleaser v2 releases
-- **Expanded Test Suite** — 50+ test cases across utils, auth, and apihelpers packages
-- **Static Analysis** — `staticcheck` and `govulncheck` in CI pipeline
-- **Cross-platform Taskfile** — fully compatible with macOS, Linux, and Windows
-- **`go fix` integration** — automatic code fixes applied during lint
-- **Docker tasks** — `docker-build` and `docker-run` for containerized builds
 - **Security check task** — `seccheck` for `govulncheck` vulnerability scanning
 - **Updated Go version** to 1.26.4
 - **Updated fastjson dependency** to v1.6.10
