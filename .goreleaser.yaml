@@ -25,7 +25,6 @@ builds:
       - darwin
     ldflags:
       - -s -w
-    trimpath: true
 
 archives:
   - formats: [tar.gz]
