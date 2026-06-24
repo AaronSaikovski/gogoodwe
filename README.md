@@ -1,10 +1,8 @@
 <div align="center">
 
-## GoGoodwe v3.4.0
+## GoGoodwe v3.3.0
 
 A high-performance command-line tool to query GOODWE SEMS (Solar Energy Management System) APIs - written in 100% Go.
-
-
 
 [![Build Status](https://github.com/AaronSaikovski/gogoodwe/workflows/build/badge.svg)](https://github.com/AaronSaikovski/gogoodwe/actions)
 [![Licence](https://img.shields.io/github/license/AaronSaikovski/gogoodwe)](LICENSE)
@@ -13,7 +11,7 @@ A high-performance command-line tool to query GOODWE SEMS (Solar Energy Manageme
 
 ### Software Requirements:
 
-- [Go v1.26.2](https://www.go.dev/dl/) or later needs to be installed to build the code.
+- [Go v1.26.4](https://www.go.dev/dl/) or later needs to be installed to build the code.
 - [Taskfile](https://taskfile.dev/) to run the build chain commands listed below.
 
 ### Dependencies:
@@ -31,21 +29,20 @@ The list of commands is as follows:
 
 ```bash
 * build:             Builds the project in preparation for debug.
-* clean:             Removes the old builds and any debug information from the source tree.
+* clean:             Removes old builds, caches, and build artifacts.
 * deps:              Fetches any external dependencies and updates.
-* destroy:           Destroy Azure resources for testing.
-* docs:              Updates the swagger docs - For APIs.
-* generate:          update binary build version using gogenerate.
-* goreleaser:        Builds a cross platform release using goreleaser.
-* lint:              Lint, format and tidy code.
-* release:           Builds the project in preparation for (local)release.
-* run:               Builds and runs the program on the target platform.
-* seccheck:          Code vulnerability scanner check.
-* staticcheck:       Runs static code analyzer staticcheck.
-* test:              Executes unit tests.
-* version:           Get the Go version.
-* vet:               Vet examines Go source code and reports suspicious constructs.
-* watch:             Use air server for hot reloading.
+* generate:          Runs go generate to update the embedded version.
+* goreleaser:        Builds a cross-platform snapshot release using goreleaser.
+* lint:              Formats code and tidies modules.
+* release:           Builds a release binary with stripped symbols.
+* run:               Builds and runs the program.
+* seccheck:          Runs govulncheck for known vulnerabilities.
+* staticcheck:       Runs the staticcheck static analyzer.
+* test:              Runs all unit tests with verbose output.
+* test-coverage:     Runs tests and generates a coverage report.
+* vet:               Examines Go source code and reports suspicious constructs.
+* docker-build:      Builds a docker image based on the Dockerfile.
+* docker-run:        Runs the docker container.
 ```
 
 Execute using the taskfile utility:
@@ -63,51 +60,61 @@ To get started type,
 ## Project Architecture
 
 ```
-cmd/
-  └── gogoodwe/         - Command-line application entry point
-      ├── main.go       - Entry point, initializes Cobra root command
-      └── app/          - Application command logic
-          ├── cmd.go        - Cobra root and subcommand definitions
-          ├── fetchdata.go  - GetData command: Login and API data fetching
-          └── exportdata.go - ExportHistory command: Historical data export
+cmd/gogoodwe/           - Command-line application entry point
+  ├── root/             - Application root files
+  │   ├── main.go       - Entry point, initializes Cobra root command
+  │   ├── get_version.sh - Shell script for version generation
+  │   └── version.txt   - Version string file
+  ├── app/
+  │   ├── cmd.go        - Cobra command definitions and flag configuration
+  │   ├── enums.go      - Report type constants
+  │   ├── fetchdata.go  - Login and API data fetching logic
+  │   └── exportdata.go - Historical data export logic
+  └── utils/
+      ├── errorhandler.go - Error handling utilities
+      ├── jsonutils.go    - JSON formatting utilities
+      ├── output.go       - Output formatting
+      ├── paramcheck.go   - Email and powerstation ID validation
+      └── response.go     - Response formatting
 
 internal/               - Internal application packages (not for external use)
-  ├── shared/           - Shared utilities and helpers
-  │   ├── auth/         - Authentication handling for SEMS API
-  │   │   ├── login.go            - SEMS CrossLogin API authentication
-  │   │   ├── logincredentials.go  - Login credential struct and factory
-  │   │   ├── logininfo.go        - Combined login state (credentials + response)
-  │   │   ├── loginresponse.go    - API response struct
-  │   │   ├── loginutils.go       - Credential validation and header setup
-  │   │   └── utils.go            - Token/header JSON generation
-  │   ├── apihelpers/   - HTTP request/response handling
-  │   │   └── callmonitorapi.go - API communication with SSRF protection
-  │   └── utils/        - Common utilities
-  │       ├── jsonutils.go      - JSON marshal/unmarshal helpers
-  │       ├── httpclient.go     - HTTP transport with connection pooling
-  │       ├── processdata.go    - Data processing pipeline (JSON -> output)
-  │       ├── response.go       - Response body reading with size limits
-  │       ├── output.go         - Colored terminal output via fastjson
-  │       ├── paramcheck.go     - Email and UUID input validation
-  │       ├── datetime.go       - Date formatting (YYYY-MM-DD)
-  │       └── dateutils.go      - Date range calculations
-  └── features/
-      └── fetchdata/    - Data fetching feature
-          ├── parsereporttype.go    - Report type string/int conversion
-          ├── lookupmonitordata.go  - Factory: report type -> PowerData impl
-          ├── common/               - Shared constants
-          │   └── enums.go          - Report type constants (Detail..KPIData)
-          ├── interfaces/           - Interface definitions
-          │   ├── powerdata.go      - PowerData interface
-          │   └── semslogin.go      - SemsLogin interface
-          └── [report types]/       - One package per report type
-              ├── currentkpidata/     - KPI monitoring data
-              ├── inverterallpoint/   - All inverter point data
-              ├── monitordetail/      - Detailed monitoring data
-              ├── monitorsummary/     - Summary monitoring data
-              ├── plantdetail/        - Plant detail data
-              ├── plantpowerchart/    - Plant power chart data
-              └── powerflow/          - Power flow data
+  ├── features/
+  │   ├── fetchdata/    - Data fetching feature
+  │   │   ├── common/               - Shared constants
+  │   │   │   └── enums.go          - Report type constants (Detail..KPIData)
+  │   │   ├── interfaces/           - Interface definitions
+  │   │   │   ├── powerdata.go      - PowerData interface
+  │   │   │   └── semslogin.go      - SemsLogin interface
+  │   │   ├── lookupmonitordata.go  - Factory: report type -> PowerData impl
+  │   │   ├── parsereporttype.go    - Report type string/int conversion
+  │   │   ├── fetchdata.go          - Data fetching logic
+  │   │   ├── processdata.go        - Data processing pipeline
+  │   │   ├── currentkpidata/       - KPI monitoring data
+  │   │   ├── inverterallpoint/     - All inverter point data
+  │   │   ├── monitordetail/        - Detailed monitoring data
+  │   │   ├── monitorsummary/       - Summary monitoring data
+  │   │   ├── plantdetail/          - Plant detail data
+  │   │   ├── plantpowerchart/      - Plant power chart data
+  │   │   └── powerflow/            - Power flow data
+  │   └── exporthistory/    - Historical data export feature
+  └── shared/           - Shared utilities and helpers
+      ├── auth/         - Authentication handling for SEMS API
+      │   ├── login.go            - SEMS CrossLogin API authentication
+      │   ├── logincredentials.go - Login credential struct and factory
+      │   ├── logininfo.go        - Combined login state
+      │   ├── loginresponse.go    - API response struct
+      │   └── loginutils.go       - Credential validation and header setup
+      ├── apihelpers/   - HTTP request/response handling
+      │   └── callmonitorapi.go - API communication with SSRF protection
+      └── utils/        - Common utilities
+          ├── jsonutils.go      - JSON marshal/unmarshal helpers
+          ├── httpclient.go     - HTTP transport with connection pooling
+          ├── processdata.go    - Data processing pipeline
+          ├── response.go       - Response body reading with size limits
+          ├── output.go         - Colored terminal output via fastjson
+          ├── paramcheck.go     - Email and UUID input validation
+          ├── datetime.go       - Date formatting (YYYY-MM-DD)
+          └── dateutils.go      - Date range calculations
 
 tests/                  - Black-box CLI tests (app_test package)
   └── cmd/gogoodwe/app/cmd_test.go
@@ -115,7 +122,7 @@ tests/                  - Black-box CLI tests (app_test package)
 
 ### Performance Optimizations
 
-- **HTTP Connection Pooling**: Reusable HTTP client with optimized transport settings (MaxIdleConns: 100, MaxConnsPerHost: 100)
+- **HTTP Connection Pooling**: Reusable HTTP client with optimized transport settings (MaxIdleConns: 2, MaxConnsPerHost: 2)
 - **Efficient JSON Parsing**: Uses `fastjson` for high-performance JSON processing
 - **Optimized Timeouts**: HTTP response header timeout of 10s, TLS handshake timeout of 10s
 - **Context Management**: 60-second root timeout with per-request 20-second timeouts
@@ -187,7 +194,7 @@ Retrieves real-time data from your SEMS inverter. The Report Type parameter spec
 
 #### ExportHistory Command
 
-Exports historical data from your SEMS inverter to Excel format (coming soon).
+Exports historical data from your SEMS inverter to Excel format.
 
 **Example:**
 
@@ -262,7 +269,8 @@ See `tests/README.md` for detailed test documentation.
 
 ## Recent Changes
 
-### Version 3.4.0 (Current)
+### Version 3.3.0
+
 - **Security Hardening**:
   - Added SSRF protection: server-provided API URLs are validated against HTTPS + `*.semsportal.com` domain allowlist
   - Added HTTP status code checking in both login and data API paths
@@ -279,12 +287,8 @@ See `tests/README.md` for detailed test documentation.
   - Fixed stale comment (`ApiLoginCredentials` -> `SemsLoginCredentials`)
   - Compiled regex patterns once at package level instead of per-call
 - **Testing**: Comprehensive unit test suite added across all internal packages (64.7% overall coverage, 97.4% for utils, 85.4% for auth, 100% for fetchdata core)
-- **Updated Go version** to 1.26.2
-
-### Version 3.3.0
-- **Project Restructuring** - Moved from `pkg/` to `internal/` directory structure following Go best practices
-- **Command Structure** - Enhanced CLI with `getdata` and `exporthistory` subcommands
-- **Code Cleanup** - Removed duplicate utility functions and improved import organization
+- **Updated Go version** to 1.26.4
+- **Updated fastjson dependency** to v1.6.10
 
 ### Version 3.2.1
 - **KPI Data Report Type** - New `kpidata` report type with monthly generation, power, income, and yield metrics

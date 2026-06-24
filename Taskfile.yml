@@ -26,7 +26,7 @@ version: "3"
 
 vars:
   BINARY_NAME: gogoodwe
-  APPPATH: ./cmd/gogoodwe/main.go
+  APPPATH: ./cmd/gogoodwe/root/main.go
   PROJECT_NAME: gogoodwe
   # Cross-platform binary extension: .exe on Windows, empty on others
   EXE: '{{if eq OS "windows"}}.exe{{end}}'
