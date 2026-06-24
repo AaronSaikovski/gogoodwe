@@ -1,6 +1,6 @@
 module github.com/AaronSaikovski/gogoodwe
 
-go 1.26.2
+go 1.26.4
 
 require (
 	github.com/logrusorgru/aurora v2.0.3+incompatible

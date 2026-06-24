@@ -14,12 +14,12 @@ type DailySummaryData struct {
 			DayIncome       float64 `json:"day_income,omitempty"`
 			TotalIncome     float64 `json:"total_income,omitempty"`
 			Currency        string  `json:"currency,omitempty"`
-		} `json:"kpi,omitempty"`
+		} `json:"kpi"`
 		Inverter []struct {
 			TotalGeneration string `json:"total_generation,omitempty"`
 			DailyGeneration string `json:"daily_generation,omitempty"`
 		} `json:"inverter,omitempty"`
-	} `json:"data,omitempty"`
+	} `json:"data"`
 }
 
 func NewDailySummaryData() *DailySummaryData {

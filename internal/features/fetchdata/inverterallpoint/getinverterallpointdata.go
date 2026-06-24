@@ -19,7 +19,7 @@ const (
 // - authLoginInfo: pointer to the LoginInfo struct containing the login credentials and API response
 // - inverterOutput: pointer to the data output
 // Return type: ([]byte, error)
-func (inverterData *InverterAllPoint) GetMonitorData(ctx context.Context, authLoginInfo *auth.LoginInfo, inverterOutput interface{}) ([]byte, error) {
+func (inverterData *InverterAllPoint) GetMonitorData(ctx context.Context, authLoginInfo *auth.LoginInfo, inverterOutput any) ([]byte, error) {
 
 	return apihelpers.FetchMonitorAPIData(ctx, authLoginInfo, powerStationURL, inverterOutput)
 }

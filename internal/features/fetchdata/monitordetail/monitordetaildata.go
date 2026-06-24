@@ -17,7 +17,7 @@ type MonitorData struct {
 			TotalIncome     float64 `json:"total_income,omitempty"`
 			YieldRate       float64 `json:"yield_rate,omitempty"`
 			Currency        string  `json:"currency,omitempty"`
-		} `json:"kpi,omitempty"`
+		} `json:"kpi"`
 		PowercontrolStatus int   `json:"powercontrol_status,omitempty"`
 		Images             []any `json:"images,omitempty"`
 		Inverter           []struct {
@@ -88,7 +88,7 @@ type MonitorData struct {
 				Istr14                float64 `json:"istr14,omitempty"`
 				Istr15                float64 `json:"istr15,omitempty"`
 				Istr16                float64 `json:"istr16,omitempty"`
-			} `json:"d,omitempty"`
+			} `json:"d"`
 			ItChangeFlag bool    `json:"it_change_flag,omitempty"`
 			Tempperature float64 `json:"tempperature,omitempty"`
 			CheckCode    string  `json:"check_code,omitempty"`
@@ -97,11 +97,11 @@ type MonitorData struct {
 			NextDevice   struct {
 				Sn       any  `json:"sn,omitempty"`
 				IsStored bool `json:"isStored,omitempty"`
-			} `json:"next_device,omitempty"`
+			} `json:"next_device"`
 			PrevDevice struct {
 				Sn       any  `json:"sn,omitempty"`
 				IsStored bool `json:"isStored,omitempty"`
-			} `json:"prev_device,omitempty"`
+			} `json:"prev_device"`
 			InvertFull struct {
 				CtSolutionType          int     `json:"ct_solution_type,omitempty"`
 				Cts                     any     `json:"cts,omitempty"`
@@ -245,7 +245,7 @@ type MonitorData struct {
 				GensetPower             any     `json:"genset_power,omitempty"`
 				GensetEday              float64 `json:"genset_eday,omitempty"`
 				AllEday                 float64 `json:"all_eday,omitempty"`
-			} `json:"invert_full,omitempty"`
+			} `json:"invert_full"`
 			Time                     string  `json:"time,omitempty"`
 			Battery                  string  `json:"battery,omitempty"`
 			FirmwareVersion          float64 `json:"firmware_version,omitempty"`
@@ -294,11 +294,11 @@ type MonitorData struct {
 			Co2  float64 `json:"co2,omitempty"`
 			Tree float64 `json:"tree,omitempty"`
 			Coal float64 `json:"coal,omitempty"`
-		} `json:"hjgx,omitempty"`
+		} `json:"hjgx"`
 		HomKit struct {
 			HomeKitLimit bool `json:"homeKitLimit,omitempty"`
 			Sn           any  `json:"sn,omitempty"`
-		} `json:"homKit,omitempty"`
+		} `json:"homKit"`
 		IsTigo                 bool `json:"isTigo,omitempty"`
 		TigoIntervalTimeMinute int  `json:"tigoIntervalTimeMinute,omitempty"`
 		SmuggleInfo            struct {
@@ -306,7 +306,7 @@ type MonitorData struct {
 			IsSmuggle       bool `json:"isSmuggle,omitempty"`
 			DescriptionText any  `json:"descriptionText,omitempty"`
 			Sns             any  `json:"sns,omitempty"`
-		} `json:"smuggleInfo,omitempty"`
+		} `json:"smuggleInfo"`
 		HasPowerflow              bool `json:"hasPowerflow,omitempty"`
 		Powerflow                 any  `json:"powerflow,omitempty"`
 		HasGridLoad               bool `json:"hasGridLoad,omitempty"`
@@ -331,7 +331,7 @@ type MonitorData struct {
 			DisCharge         float64 `json:"disCharge,omitempty"`
 			GensetGen         float64 `json:"gensetGen,omitempty"`
 			HasGenset         bool    `json:"hasGenset,omitempty"`
-		} `json:"energeStatisticsCharts,omitempty"`
+		} `json:"energeStatisticsCharts"`
 		EnergeStatisticsTotals struct {
 			ContributingRate  float64 `json:"contributingRate,omitempty"`
 			SelfUseRate       float64 `json:"selfUseRate,omitempty"`
@@ -349,11 +349,11 @@ type MonitorData struct {
 			DisCharge         float64 `json:"disCharge,omitempty"`
 			GensetGen         float64 `json:"gensetGen,omitempty"`
 			HasGenset         bool    `json:"hasGenset,omitempty"`
-		} `json:"energeStatisticsTotals,omitempty"`
+		} `json:"energeStatisticsTotals"`
 		Soc struct {
 			Power  int `json:"power,omitempty"`
 			Status int `json:"status,omitempty"`
-		} `json:"soc,omitempty"`
+		} `json:"soc"`
 		Environmental []any `json:"environmental,omitempty"`
 		Equipment     []struct {
 			Type                 string `json:"type,omitempty"`
@@ -376,7 +376,7 @@ type MonitorData struct {
 			ExportPowerlimit     any    `json:"exportPowerlimit,omitempty"`
 			TitleSn              any    `json:"titleSn,omitempty"`
 		} `json:"equipment,omitempty"`
-	} `json:"data,omitempty"`
+	} `json:"data"`
 }
 
 func NewMonitorData() *MonitorData {
