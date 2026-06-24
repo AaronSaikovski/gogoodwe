@@ -52,6 +52,6 @@ func TestLookupMonitorDataReturnsDifferentTypes(t *testing.T) {
 	}
 }
 
-func typeString(v interface{}) string {
+func typeString(v any) string {
 	return fmt.Sprintf("%T", v)
 }

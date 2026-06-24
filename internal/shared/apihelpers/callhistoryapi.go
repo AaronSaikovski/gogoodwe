@@ -18,7 +18,7 @@ const (
 // FetchHistoryExportData fetches historical data from the ExportExcelStationHistoryData API.
 //
 // Uses the login response API base URL with the history data path.
-func FetchHistoryExportData(ctx context.Context, authLoginInfo *auth.LoginInfo, requestBody []byte, output interface{}) ([]byte, error) {
+func FetchHistoryExportData(ctx context.Context, authLoginInfo *auth.LoginInfo, requestBody []byte, output any) ([]byte, error) {
 	if authLoginInfo == nil || authLoginInfo.SemsLoginResponse == nil {
 		return nil, fmt.Errorf("invalid authentication information")
 	}

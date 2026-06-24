@@ -16,8 +16,8 @@ type KPIMonitorData struct {
 			TotalIncome     float64 `json:"total_income,omitempty"`
 			YieldRate       float64 `json:"yield_rate,omitempty"`
 			Currency        string  `json:"currency,omitempty"`
-		} `json:"kpi,omitempty"`
-	} `json:"data,omitempty"`
+		} `json:"kpi"`
+	} `json:"data"`
 }
 
 func NewKPIMonitorData() *KPIMonitorData {

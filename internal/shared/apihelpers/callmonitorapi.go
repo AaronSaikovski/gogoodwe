@@ -36,7 +36,7 @@ func validateAPIURL(rawURL string) error {
 // It takes in the context, authentication information, the URL of the power station,
 // the HTTP timeout, and a pointer to a struct to store the output.
 // It returns the raw JSON bytes and an error if there was a problem with the API call.
-func FetchMonitorAPIData(ctx context.Context, authLoginInfo *auth.LoginInfo, powerStationURL string, inverterOutput interface{}) ([]byte, error) {
+func FetchMonitorAPIData(ctx context.Context, authLoginInfo *auth.LoginInfo, powerStationURL string, inverterOutput any) ([]byte, error) {
 	// Validate input parameters
 	if authLoginInfo == nil || authLoginInfo.SemsLoginResponse == nil || authLoginInfo.SemsLoginCredentials == nil {
 		return nil, fmt.Errorf("invalid authentication information")

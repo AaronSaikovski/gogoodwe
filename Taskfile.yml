@@ -1,25 +1,3 @@
-# MIT License
-
-# # Copyright (c) 2025 Aaron Saikovski
-
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 # using - https://taskfile.dev/
 
 version: "3"
@@ -39,7 +17,7 @@ tasks:
     desc: "Builds a release binary with stripped symbols."
     deps: [lint]
     cmds:
-      - go build -ldflags="-s -w" -o bin/{{.BINARY_NAME}}{{.EXE}} {{.APPPATH}}
+      - go build -ldflags="-s -w" -o bin/{{.TARGET}} {{.APPPATH}}
 
   ###############################################################################
 
@@ -115,7 +93,7 @@ tasks:
   staticcheck:
     desc: "Runs the staticcheck static analyzer."
     cmds:
-      - staticcheck ./...
+      - go run honnef.co/go/tools/cmd/staticcheck@latest ./...
 
   ###############################################################################
 
@@ -123,7 +101,7 @@ tasks:
   seccheck:
     desc: "Runs govulncheck for known vulnerabilities."
     cmds:
-      - govulncheck ./...
+      - go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
   ###############################################################################
 
@@ -133,6 +111,7 @@ tasks:
     cmds:
       - go fmt ./...
       - go mod tidy -v
+      - go fix ./...
 
   ###############################################################################
 
@@ -141,22 +120,5 @@ tasks:
     desc: "Runs go generate to update the embedded version."
     cmds:
       - go generate {{.APPPATH}}
-
-  ###############################################################################
-
-  ## docker-build - builds a docker image based on the docker file.
-  docker-build:
-    desc: "Builds a docker image based on the Dockerfile."
-    cmds:
-      - docker build --platform linux/arm64 -t {{.PROJECT_NAME}}:latest .
-
-  ###############################################################################
-
-  ## docker-run - runs the docker container.
-  docker-run:
-    desc: "Runs the docker container."
-    deps: [docker-build]
-    cmds:
-      - docker run {{.PROJECT_NAME}}:latest
 
   ###############################################################################
