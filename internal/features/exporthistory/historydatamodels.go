@@ -43,7 +43,7 @@ type HistoryDataResponse struct {
 	HasError        bool   `json:"hasError"`
 	Code            any    `json:"code"`
 	Msg             string `json:"msg"`
-	Data any `json:"data"`
+	Data            any    `json:"data"`
 	TranslationCode string `json:"translationCode"`
 	Components      struct {
 		Para         any    `json:"para"`

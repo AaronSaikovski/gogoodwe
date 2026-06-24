@@ -97,11 +97,11 @@ func TestBuildRequest(t *testing.T) {
 	}
 
 	tests := []struct {
-		name         string
-		startTime    string
-		endTime      string
-		wantTimes    int
-		wantError    bool
+		name      string
+		startTime string
+		endTime   string
+		wantTimes int
+		wantError bool
 	}{
 		{
 			name:      "valid 5 day range",

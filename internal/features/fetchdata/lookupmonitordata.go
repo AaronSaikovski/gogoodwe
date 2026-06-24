@@ -41,4 +41,3 @@ func LookupMonitorData(reportData int) interfaces.PowerData {
 		return monitordetail.NewMonitorData()
 	}
 }
-
